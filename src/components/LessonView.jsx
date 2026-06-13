@@ -992,6 +992,7 @@ export default function LessonView({ user, day, onBack, onComplete, onUserUpdate
                 setIsMuted(true);
               } catch (e) {}
             }
+            hasAutoUnmuted.current = false;
           } else if (elapsed >= 5 && !hasAutoUnmuted.current) {
             if (playerRef.current && typeof playerRef.current.unMute === 'function') {
               try {
