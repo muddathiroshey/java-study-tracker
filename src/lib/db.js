@@ -217,29 +217,6 @@ export async function dbInit() {
               ]
             );
 
-            // Seed Classmates
-            for (const c of DEFAULT_CLASSMATES) {
-              await client.query(
-                `INSERT INTO java_study_users 
-                (id, username, email, password, enrolled_date, streak, last_active_date, total_study_time, is_admin, lessons_progress, tasks_progress, submissions, settings)
-                VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13)`,
-                [
-                  c.id,
-                  c.username,
-                  c.email,
-                  c.password,
-                  c.enrolledDate,
-                  c.streak,
-                  c.lastActiveDate,
-                  c.totalStudyTime,
-                  c.isAdmin,
-                  JSON.stringify(c.lessonsProgress),
-                  JSON.stringify(c.tasksProgress),
-                  JSON.stringify(c.submissions),
-                  JSON.stringify(c.settings)
-                ]
-              );
-            }
           }
         } catch (err) {
           dbInitPromise = null; // Reset promise on error to allow retries
@@ -251,7 +228,7 @@ export async function dbInit() {
         // Initialize Local File Database
         if (!fs.existsSync(LOCAL_DB_PATH)) {
           const data = {
-            users: [DEFAULT_ADMIN, ...DEFAULT_CLASSMATES],
+            users: [DEFAULT_ADMIN],
             schedule: []
           };
           fs.writeFileSync(LOCAL_DB_PATH, JSON.stringify(data, null, 2), 'utf8');

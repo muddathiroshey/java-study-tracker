@@ -94,11 +94,6 @@ export default function Auth({ onLogin }) {
       <div className="w-full max-w-md relative z-10 shrink-0" style={{ width: '100%', maxWidth: '448px' }}>
         {/* Logo / Header */}
         <div className="text-center mb-10 flex flex-col items-center justify-center">
-          <img 
-            src="/java_logo.jpg" 
-            alt="Java Logo" 
-            className="h-20 w-auto object-contain rounded-xl shadow-md mb-4"
-          />
           <p className="text-body-md text-on-surface-variant mt-1">
             {mode === 'login' ? 'Sign in to continue your journey' : 'Create your account to start'}
           </p>
