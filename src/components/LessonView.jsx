@@ -805,10 +805,18 @@ export default function LessonView({ user, day, onBack, onComplete, onUserUpdate
               console.error("Error getting user session in onReady", err);
             }
 
-            if (player && typeof player.seekTo === 'function') {
+             if (player && typeof player.seekTo === 'function') {
               player.seekTo(startPosition, true);
             }
-            if (isCompleted && player && typeof player.pauseVideo === 'function') {
+            
+            // If the user is on the code/project tab when the player mounts, ensure it is paused
+            if (activeTab !== 'video') {
+              try {
+                if (player && typeof player.pauseVideo === 'function') {
+                  player.pauseVideo();
+                }
+              } catch (e) {}
+            } else if (isCompleted && player && typeof player.pauseVideo === 'function') {
               try {
                 player.pauseVideo();
               } catch (e) {}
@@ -817,6 +825,13 @@ export default function LessonView({ user, day, onBack, onComplete, onUserUpdate
           },
           onStateChange: (e) => {
             if (e.data === window.YT.PlayerState.PLAYING) {
+              // Block background playback if they switched tabs while player was loading/buffering
+              if (activeTab !== 'video') {
+                try {
+                  e.target.pauseVideo();
+                } catch (err) {}
+                return;
+              }
               setIsPlaying(true);
               setIsBuffering(false);
               startPolling();
