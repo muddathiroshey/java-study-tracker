@@ -62,6 +62,7 @@ export function AppProvider({ children }) {
   const handleLogout = useCallback(async () => {
     await logoutUser();
     sessionStorage.removeItem('dailyLessons_scrollY');
+    sessionStorage.removeItem('dailyLessons_expandedWeeks');
     setUser(null);
     router.push('/');
   }, [router]);

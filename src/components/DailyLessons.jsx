@@ -34,7 +34,23 @@ export default function DailyLessons({
 }) {
   const { globalConfig } = useApp();
   const current = new Date(currentDate);
-  const [expandedWeeks, setExpandedWeeks] = useState({});
+  const [expandedWeeks, setExpandedWeeks] = useState(() => {
+    if (typeof window !== 'undefined') {
+      const saved = sessionStorage.getItem('dailyLessons_expandedWeeks');
+      if (saved) {
+        try {
+          return JSON.parse(saved);
+        } catch (e) {}
+      }
+    }
+    return {};
+  });
+
+  useEffect(() => {
+    if (Object.keys(expandedWeeks).length > 0) {
+      sessionStorage.setItem('dailyLessons_expandedWeeks', JSON.stringify(expandedWeeks));
+    }
+  }, [expandedWeeks]);
   const scrollContainerRef = useRef(null);
   const scrollRestoredRef = useRef(false);
   const SCROLL_KEY = 'dailyLessons_scrollY';
@@ -207,22 +223,25 @@ export default function DailyLessons({
   useEffect(() => {
     if (!schedule.length) return;
 
-    const cameFromLesson = sessionStorage.getItem('dailyLessons_fromLesson') === '1';
     const savedScroll = sessionStorage.getItem(SCROLL_KEY);
-    const initialExpanded = {};
+    const savedExpanded = sessionStorage.getItem('dailyLessons_expandedWeeks');
 
-    if (cameFromLesson && savedScroll !== null) {
-      // ── BACK-NAVIGATION from a lesson: restore saved scroll exactly ──
-      sessionStorage.removeItem('dailyLessons_fromLesson'); // consume the flag
-      for (let w = 1; w <= 9; w++) {
-        const { locked } = getWeekLockState(w);
-        if (!locked) {
-          const { completed } = getWeekProgress(w);
-          initialExpanded[w] = !completed;
+    if (savedScroll !== null) {
+      // ── RESTORE PREVIOUS SESSION STATE ──
+      // If we don't have saved expanded weeks, calculate default initial expanded weeks
+      if (!savedExpanded) {
+        const initialExpanded = {};
+        for (let w = 1; w <= 9; w++) {
+          const { locked } = getWeekLockState(w);
+          if (!locked) {
+            const { completed } = getWeekProgress(w);
+            initialExpanded[w] = !completed;
+          }
         }
+        setExpandedWeeks(prev => ({ ...initialExpanded, ...prev }));
       }
-      setExpandedWeeks(prev => ({ ...initialExpanded, ...prev }));
 
+      // Restore scroll exactly
       requestAnimationFrame(() => {
         requestAnimationFrame(() => {
           const el = scrollContainerRef.current;
@@ -231,8 +250,8 @@ export default function DailyLessons({
         });
       });
     } else {
-      // ── FRESH LOAD / REFRESH / LOGIN: smart-scroll to last lesson ──
-      sessionStorage.removeItem(SCROLL_KEY); // clear stale scroll from previous session
+      // ── FRESH LOAD / LOGIN: smart-scroll to last lesson ──
+      const initialExpanded = {};
       let firstActiveFound = false;
       for (let w = 1; w <= 9; w++) {
         const { locked } = getWeekLockState(w);
