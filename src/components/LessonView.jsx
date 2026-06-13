@@ -1526,25 +1526,6 @@ export default function LessonView({ user, day, onBack, onComplete, onUserUpdate
 
               </div>
 
-              {/* Book Companion Website Resources Link */}
-              <div className="mt-md p-md bg-surface-container-low border border-outline-variant/60 rounded-xl flex items-center justify-between shadow-sm select-none">
-                <div className="flex items-center gap-3">
-                  <span className="material-symbols-outlined text-primary text-xl">menu_book</span>
-                  <div>
-                    <p className="text-body-sm font-bold text-on-surface">Liang Java Companion Resources</p>
-                    <p className="text-[10px] text-on-surface-variant">Companion website for Introduction to Java Programming (12th Edition)</p>
-                  </div>
-                </div>
-                <a 
-                  href="https://media.pearsoncmg.com/ph/php8/sites/ecs/ecs_liang_java_12/cw/"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="px-md py-1.5 bg-primary text-on-primary rounded font-bold text-caption hover:opacity-90 transition-opacity cursor-pointer text-center"
-                >
-                  Open Website
-                </a>
-              </div>
-
               {day.slides && (
                 <div className="mt-md p-md bg-surface-container-low border border-outline-variant/60 rounded-xl flex items-center justify-between shadow-sm select-none">
                   <div className="flex items-center gap-3">

@@ -85,7 +85,7 @@ export default function AppLayoutWrapper({ children }) {
     }
     if (pathname === '/leaderboard') return 'Leaderboard';
     if (pathname === '/tasks') return 'Tasks Board';
-    if (pathname === '/textbook') return 'Textbook';
+    if (pathname === '/resources') return 'Resources';
     if (pathname === '/settings') return 'Settings';
     if (pathname === '/admin') return 'Admin Panel';
     return 'Java Mastery';

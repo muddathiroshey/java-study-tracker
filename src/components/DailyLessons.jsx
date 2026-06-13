@@ -560,18 +560,6 @@ export default function DailyLessons({
                                           );
                                         })()}
                                       </div>
-
-                                      {/* Book Companion website resources link */}
-                                      <a 
-                                        href="https://media.pearsoncmg.com/ph/php8/sites/ecs/ecs_liang_java_12/cw/"
-                                        target="_blank"
-                                        rel="noopener noreferrer"
-                                        onClick={(e) => e.stopPropagation()}
-                                        className="text-[11px] text-primary hover:underline flex items-center gap-1 font-semibold select-none w-fit"
-                                      >
-                                        <span className="material-symbols-outlined text-[15px]">menu_book</span>
-                                        Book Resources
-                                      </a>
                                       
                                       <div className="mt-auto flex items-center justify-between pt-2 border-t border-outline-variant/30">
                                         {isVidCompleted ? (
