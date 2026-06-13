@@ -192,6 +192,9 @@ export async function dbInit() {
             );
           `);
 
+          // Clean up old placeholder classmates if they exist in active DB
+          await client.query("DELETE FROM java_study_users WHERE id LIKE 'classmate_%'");
+
           // Seed if empty
           const res = await client.query('SELECT COUNT(*) FROM java_study_users');
           if (parseInt(res.rows[0].count) === 0) {
