@@ -10,6 +10,7 @@ export default function AppLayoutWrapper({ children }) {
   const { 
     user, 
     loaded, 
+    dbError,
     onUserUpdate, 
     onLogout, 
     currentDate, 
@@ -24,6 +25,39 @@ export default function AppLayoutWrapper({ children }) {
 
   const pathname = usePathname();
   const router = useRouter();
+
+  if (dbError) {
+    return (
+      <div className="min-h-screen bg-slate-50 dark:bg-zinc-950 flex items-center justify-center p-4">
+        <div className="flex flex-col items-center gap-5 max-w-md text-center p-8 bg-white dark:bg-zinc-900 border border-slate-200 dark:border-zinc-800 rounded-3xl shadow-xl">
+          <div className="w-16 h-16 bg-rose-50 dark:bg-rose-950/30 text-rose-500 rounded-full flex items-center justify-center shadow-md animate-pulse">
+            <span className="material-symbols-outlined text-3xl font-bold">cloud_off</span>
+          </div>
+          <div>
+            <h2 className="text-xl font-extrabold text-slate-800 dark:text-zinc-100">Database Connection Issue</h2>
+            <p className="text-sm text-slate-500 dark:text-zinc-400 mt-2">
+              We couldn't connect to your database. This is usually caused by an incorrect database connection string or missing credentials.
+            </p>
+          </div>
+          
+          <div className="bg-slate-50 dark:bg-zinc-950/50 border border-slate-100 dark:border-zinc-850 p-4 rounded-xl text-left text-xs font-mono w-full overflow-x-auto max-h-32 text-rose-600 dark:text-rose-400 scrollbar-thin">
+            {dbError}
+          </div>
+          
+          <div className="text-xs text-slate-500 dark:text-zinc-400 leading-relaxed bg-amber-50/50 dark:bg-amber-950/10 border border-amber-100 dark:border-amber-900/30 p-4 rounded-xl">
+            💡 <strong>If you just deployed to Vercel:</strong> Ensure the <code>DATABASE_URL</code> environment variable is added to Vercel and that you replaced <code>[YOUR-PASSWORD]</code> with your actual Supabase password.
+          </div>
+          
+          <button 
+            onClick={() => window.location.reload()} 
+            className="w-full py-3 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl text-sm font-semibold transition-all duration-200 shadow-md hover:shadow-lg transform active:scale-[0.98] cursor-pointer"
+          >
+            Retry Connection
+          </button>
+        </div>
+      </div>
+    );
+  }
 
   if (!loaded) {
     return (

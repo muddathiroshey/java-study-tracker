@@ -14,18 +14,26 @@ export function AppProvider({ children }) {
   const [schedule, setSchedule] = useState([]);
   const [globalConfig, setGlobalConfig] = useState({ openAvailabilityForAll: false });
   const [loaded, setLoaded] = useState(false);
+  const [dbError, setDbError] = useState(null);
   const router = useRouter();
 
   // Load state on mount and add listeners for synchronization
   useEffect(() => {
     const syncData = async () => {
-      const session = await getCurrentUserSession();
-      setUser(session);
-      const s = await getStoredSchedule(courseSchedule);
-      setSchedule(s);
-      const config = await getGlobalConfig();
-      setGlobalConfig(config || { openAvailabilityForAll: false });
-      setLoaded(true);
+      try {
+        const session = await getCurrentUserSession();
+        setUser(session);
+        const s = await getStoredSchedule(courseSchedule);
+        setSchedule(s);
+        const config = await getGlobalConfig();
+        setGlobalConfig(config || { openAvailabilityForAll: false });
+        setDbError(null);
+      } catch (err) {
+        console.error("Failed to sync database data:", err);
+        setDbError(err.message || "Database connection error");
+      } finally {
+        setLoaded(true);
+      }
     };
 
     // Load initial data
@@ -126,6 +134,7 @@ export function AppProvider({ children }) {
     schedule,
     setSchedule,
     loaded,
+    dbError,
     currentDate: getEffectiveDate(),
     overallProgress: getOverallProgress(),
     userPoints: calculateUserPoints(user),
