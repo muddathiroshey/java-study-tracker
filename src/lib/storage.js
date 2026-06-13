@@ -1,4 +1,5 @@
 // Database helper mapping client actions to server-side SQL/Actions
+import { getLocalDateString } from './dateUtils';
 import {
   getCurrentUserSessionAction,
   loginUserAction,
@@ -81,7 +82,7 @@ export async function createAdminAccount(name, email, password) {
 }
 
 export function checkAndUpdateStreak(user) {
-  const todayStr = new Date().toISOString().split('T')[0];
+  const todayStr = getLocalDateString(user);
   const lastActive = user.lastActiveDate;
   
   if (!lastActive) {

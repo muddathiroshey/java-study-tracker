@@ -4,6 +4,7 @@ import { createContext, useContext, useState, useEffect, useCallback } from 'rea
 import { useRouter } from 'next/navigation';
 import { getCurrentUserSession, logoutUser, getStoredSchedule, calculateUserPoints, getGlobalConfig } from '../lib/storage';
 import { courseSchedule } from '../lib/courseData';
+import { getLocalDateString } from '../lib/dateUtils';
 
 const AppContext = createContext(null);
 
@@ -76,11 +77,7 @@ export function AppProvider({ children }) {
   }, []);
 
   const getEffectiveDate = useCallback(() => {
-    if (!user) return new Date().toISOString().split('T')[0];
-    if (user.settings?.devWarpTime && user.settings?.currentFakeDate) {
-      return user.settings.currentFakeDate;
-    }
-    return new Date().toISOString().split('T')[0];
+    return getLocalDateString(user);
   }, [user]);
 
   const getOverallProgress = useCallback(() => {

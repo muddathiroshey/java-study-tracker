@@ -1,6 +1,7 @@
 'use client';
 
 import { useApp } from '../context/AppContext';
+import { getLocalDateString } from '../lib/dateUtils';
 
 // Material Symbols used via className="material-symbols-outlined"
 
@@ -17,7 +18,7 @@ export default function Sidebar({
   const { mobileSidebarOpen, setMobileSidebarOpen } = useApp();
   const isAdmin = user?.username?.toLowerCase() === 'muddathiradmin' || user?.isAdmin === true;
   
-  const todayStr = new Date().toISOString().split('T')[0];
+  const todayStr = getLocalDateString(user);
   const isStreakActive = user?.lastActiveDate === todayStr;
 
   const menuItems = [

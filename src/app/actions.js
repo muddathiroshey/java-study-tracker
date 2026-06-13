@@ -1,6 +1,7 @@
 'use server';
 
 import { cookies } from 'next/headers';
+import { getLocalDateString, getLocalISOString } from '../lib/dateUtils';
 import {
   dbGetUserByUsernameOrEmail,
   dbCreateUser,
@@ -73,7 +74,7 @@ export async function getCurrentUserSessionAction() {
             
             if (pct >= 99 || entry.lastPosition >= vEnd - 3) {
               entry.completed = true;
-              entry.dateCompleted = new Date().toISOString().split('T')[0];
+              entry.dateCompleted = getLocalDateString(user);
               needsUpdate = true;
             }
           }
@@ -82,7 +83,7 @@ export async function getCurrentUserSessionAction() {
     });
 
     if (needsUpdate) {
-      const todayStr = new Date().toISOString().split('T')[0];
+      const todayStr = getLocalDateString(user);
       const lastActive = user.lastActiveDate;
       
       // Calculate new streak
@@ -112,7 +113,7 @@ export async function getCurrentUserSessionAction() {
 
   // Double-check if the user completed any video, task, or submission today
   // If they did, ensure their lastActiveDate is todayStr and their streak is at least 1 (fixes overwritten/reset streaks)
-  const todayStr = new Date().toISOString().split('T')[0];
+  const todayStr = getLocalDateString(user);
   let hasActivityToday = false;
 
   if (user.lessonsProgress) {

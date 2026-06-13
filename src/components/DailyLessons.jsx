@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { useApp } from '../context/AppContext';
+import { getLocalDateString, getLocalISOString } from '../lib/dateUtils';
 
 // Icons rendered as Material Symbols spans
 const timeToSecs = (t) => {
@@ -208,15 +209,26 @@ export default function DailyLessons({
     return null;
   }, [schedule, user]);
 
-  // ── Save scroll position while scrolling ────────────────────────────────────
+  // ── Save scroll position while scrolling (debounced to avoid unmount/nav reset) ──
   useEffect(() => {
     const el = scrollContainerRef.current;
     if (!el) return;
+    
+    let timeoutId = null;
     const onScroll = () => {
-      sessionStorage.setItem(SCROLL_KEY, String(el.scrollTop));
+      if (timeoutId) clearTimeout(timeoutId);
+      timeoutId = setTimeout(() => {
+        if (el && el.scrollHeight > el.clientHeight) {
+          sessionStorage.setItem(SCROLL_KEY, String(el.scrollTop));
+        }
+      }, 100);
     };
+    
     el.addEventListener('scroll', onScroll, { passive: true });
-    return () => el.removeEventListener('scroll', onScroll);
+    return () => {
+      el.removeEventListener('scroll', onScroll);
+      if (timeoutId) clearTimeout(timeoutId);
+    };
   }, []);
 
   // ── Auto-expand weeks + scroll on mount ────────────────────────────────────
@@ -243,14 +255,28 @@ export default function DailyLessons({
         setExpandedWeeks(prev => ({ ...initialExpanded, ...prev }));
       }
 
-      // Restore scroll exactly
-      requestAnimationFrame(() => {
-        requestAnimationFrame(() => {
+      // Restore scroll exactly with retries to handle dynamic height loading
+      const savedScrollVal = parseInt(savedScroll, 10);
+      if (savedScrollVal > 0) {
+        let retries = 0;
+        const tryRestore = () => {
           const el = scrollContainerRef.current;
-          if (el) el.scrollTop = parseInt(savedScroll, 10);
-          scrollRestoredRef.current = true;
-        });
-      });
+          if (el) {
+            el.scrollTop = savedScrollVal;
+            if (Math.abs(el.scrollTop - savedScrollVal) < 2 || retries > 20) {
+              scrollRestoredRef.current = true;
+              return;
+            }
+          }
+          retries++;
+          setTimeout(tryRestore, 30);
+        };
+        setTimeout(tryRestore, 30);
+      } else {
+        const el = scrollContainerRef.current;
+        if (el) el.scrollTop = 0;
+        scrollRestoredRef.current = true;
+      }
     } else {
       // ── FRESH LOAD / LOGIN: smart-scroll to last lesson ──
       const initialExpanded = {};
@@ -273,21 +299,24 @@ export default function DailyLessons({
       }
       setExpandedWeeks(prev => ({ ...initialExpanded, ...prev }));
 
-      // Scroll to current position after DOM settles
+      // Scroll to current position after DOM settles with retries
       const pos = findCurrentPosition();
       if (pos) {
-        requestAnimationFrame(() => {
-          requestAnimationFrame(() => {
-            const targetId = pos.dayNum
-              ? `day-${pos.dayNum}`
-              : `week-${pos.weekNum}`;
-            const el = document.getElementById(targetId);
-            if (el) {
-              el.scrollIntoView({ behavior: 'smooth', block: 'center' });
-            }
+        let retries = 0;
+        const tryScrollToPos = () => {
+          const targetId = pos.dayNum ? `day-${pos.dayNum}` : `week-${pos.weekNum}`;
+          const targetEl = document.getElementById(targetId);
+          if (targetEl) {
+            targetEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
             scrollRestoredRef.current = true;
-          });
-        });
+            return;
+          }
+          if (retries < 20) {
+            retries++;
+            setTimeout(tryScrollToPos, 30);
+          }
+        };
+        setTimeout(tryScrollToPos, 30);
       }
     }
   }, [schedule, user]);

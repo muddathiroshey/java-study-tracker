@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { getDB, calculateUserPoints } from '../lib/storage';
+import { getLocalDateString } from '../lib/dateUtils';
 
 const TIER_COLORS = {
   'Grandmaster': 'bg-purple-500 text-white',
@@ -41,7 +42,7 @@ export default function Leaderboard({ user }) {
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState('all'); // 'all' | 'top5' | 'active'
-  const todayStr = new Date().toISOString().split('T')[0];
+  const todayStr = getLocalDateString(user);
 
   const reload = async () => {
     const db = await getDB();

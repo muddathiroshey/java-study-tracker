@@ -4,6 +4,7 @@ import { useState, useEffect, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import { useApp } from '../context/AppContext';
 import { updateUserProgress, checkAndUpdateStreak, getCurrentUserSession, runJavaCode } from '../lib/storage';
+import { getLocalDateString, getLocalISOString } from '../lib/dateUtils';
 
 // Utility to parse hh:mm:ss into seconds
 const timeToSecs = (t) => {
@@ -1033,7 +1034,7 @@ export default function LessonView({ user, day, onBack, onComplete, onUserUpdate
     
     const updated = await updateUserProgress(dbUser.username, (u) => {
       const prog = { ...u.lessonsProgress };
-      prog[video.videoId + "_day" + day.day] = { completed: true, dateCompleted: new Date().toISOString().split('T')[0] };
+      prog[video.videoId + "_day" + day.day] = { completed: true, dateCompleted: getLocalDateString(user) };
       const streaked = checkAndUpdateStreak({ ...u, lessonsProgress: prog });
       return streaked;
     });
@@ -1110,7 +1111,7 @@ export default function LessonView({ user, day, onBack, onComplete, onUserUpdate
         setTaskCompleted(true);
         const updated = await updateUserProgress(user.username, (u) => {
           const tp = { ...u.tasksProgress };
-          tp[day.task.taskId] = { completed: true, code, submittedAt: new Date().toISOString() };
+          tp[day.task.taskId] = { completed: true, code, submittedAt: getLocalISOString(user) };
           const streaked = checkAndUpdateStreak({ ...u, tasksProgress: tp });
           return streaked;
         });
@@ -1133,7 +1134,7 @@ export default function LessonView({ user, day, onBack, onComplete, onUserUpdate
       subs[day.day] = {
         githubUrl: projectRepo.trim(),
         notes: projectNotes.trim(),
-        submittedAt: new Date().toISOString(),
+        submittedAt: getLocalISOString(user),
         projectName: day.title
       };
       const streaked = checkAndUpdateStreak({ ...u, submissions: subs });
