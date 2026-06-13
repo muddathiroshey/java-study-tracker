@@ -419,6 +419,7 @@ export default function LessonView({ user, day, onBack, onComplete, onUserUpdate
 
   const playerRef = useRef(null);
   const pollInterval = useRef(null);
+  const hasAutoUnmuted = useRef(false);
 
   const startSecs = timeToSecs(video?.assignedStart || '00:00:00');
   const endSecs = timeToSecs(video?.assignedEnd || video?.duration || '00:00:00');
@@ -549,6 +550,7 @@ export default function LessonView({ user, day, onBack, onComplete, onUserUpdate
         if (isMuted) {
           if (typeof playerRef.current.unMute === 'function') playerRef.current.unMute();
           setIsMuted(false);
+          hasAutoUnmuted.current = true;
         } else {
           if (typeof playerRef.current.mute === 'function') playerRef.current.mute();
           setIsMuted(true);
@@ -568,11 +570,14 @@ export default function LessonView({ user, day, onBack, onComplete, onUserUpdate
         if (typeof playerRef.current.setVolume === 'function') {
           playerRef.current.setVolume(vol);
         }
-        if (vol > 0 && isMuted) {
-          if (typeof playerRef.current.unMute === 'function') {
-            playerRef.current.unMute();
+        if (vol > 0) {
+          if (isMuted) {
+            if (typeof playerRef.current.unMute === 'function') {
+              playerRef.current.unMute();
+            }
+            setIsMuted(false);
           }
-          setIsMuted(false);
+          hasAutoUnmuted.current = true;
         }
       } catch (err) {
         console.error("Error setting volume", err);
@@ -698,6 +703,7 @@ export default function LessonView({ user, day, onBack, onComplete, onUserUpdate
     setShowReplayOverlay(false);
     setCurrentTime(0);
     setIsPlaying(true);
+    hasAutoUnmuted.current = false;
     if (playerRef.current && typeof playerRef.current.seekTo === 'function') {
       playerRef.current.seekTo(startSecs, true);
       playerRef.current.playVideo();
@@ -719,6 +725,7 @@ export default function LessonView({ user, day, onBack, onComplete, onUserUpdate
   // Load YouTube Player
   useEffect(() => {
     if (!video) return;
+    hasAutoUnmuted.current = false;
 
     const currentVideo = video;
     const currentStart = startSecs;
@@ -803,6 +810,16 @@ export default function LessonView({ user, day, onBack, onComplete, onUserUpdate
               }
             } catch (err) {
               console.error("Error getting user session in onReady", err);
+            }
+
+            // Auto-mute first 5 seconds of videos starting from the beginning
+            if (startSecs === 0 && startPosition < 5) {
+              try {
+                if (player && typeof player.mute === 'function') {
+                  player.mute();
+                  setIsMuted(true);
+                }
+              } catch (e) {}
             }
 
              if (player && typeof player.seekTo === 'function') {
@@ -944,6 +961,27 @@ export default function LessonView({ user, day, onBack, onComplete, onUserUpdate
         }
         
         const elapsed = Math.max(0, t - startSecs);
+
+        // Auto-mute first 5 seconds of videos starting from the beginning
+        if (startSecs === 0) {
+          if (elapsed < 5) {
+            if (playerRef.current && typeof playerRef.current.isMuted === 'function' && !playerRef.current.isMuted() && !hasAutoUnmuted.current) {
+              try {
+                playerRef.current.mute();
+                setIsMuted(true);
+              } catch (e) {}
+            }
+          } else if (elapsed >= 5 && !hasAutoUnmuted.current) {
+            if (playerRef.current && typeof playerRef.current.unMute === 'function') {
+              try {
+                playerRef.current.unMute();
+                setIsMuted(false);
+              } catch (e) {}
+            }
+            hasAutoUnmuted.current = true;
+          }
+        }
+
         const pct = Math.min(100, (elapsed / segmentDuration) * 100);
         setSegmentProgress(Math.round(pct));
         setWatchTime(Math.round(elapsed));
