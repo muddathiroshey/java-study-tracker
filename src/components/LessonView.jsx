@@ -427,7 +427,14 @@ export default function LessonView({ user, day, onBack, onComplete, onUserUpdate
   const [watchTime, setWatchTime] = useState(0);
 
   const saveVideoProgress = async (absoluteTime, targetVideo = video, targetStartSecs = startSecs, targetEndSecs = endSecs) => {
-    if (!targetVideo) return;
+    if (!targetVideo || videoCompleted) return;
+    
+    // If we are already near the end of the assigned segment, do not save "in-progress" state
+    // to avoid concurrent database writes that could overwrite completion logs
+    if (absoluteTime >= targetEndSecs - 2.5) {
+      return;
+    }
+
     // Query directly from session/database to prevent stale closure states
     const dbUser = await getCurrentUserSession();
     if (!dbUser) return;
@@ -783,6 +790,13 @@ export default function LessonView({ user, day, onBack, onComplete, onUserUpdate
                 if (savedProg.completed) {
                   setShowReplayOverlay(true);
                   isCompleted = true;
+                } else if (savedProg.lastPosition >= endSecs - 2.5) {
+                  // Auto-complete if they finished it but it was saved as incomplete (e.g. due to race conditions)
+                  setShowReplayOverlay(true);
+                  isCompleted = true;
+                  if (markVideoCompleteRef.current) {
+                    markVideoCompleteRef.current();
+                  }
                 } else if (savedProg.lastPosition > startSecs + 1) {
                   startPosition = savedProg.lastPosition;
                 }
@@ -998,10 +1012,11 @@ export default function LessonView({ user, day, onBack, onComplete, onUserUpdate
       if (results.every(r => r.passed)) {
         const wasCompleted = taskCompleted;
         setTaskCompleted(true);
-        const updated = await updateUserProgress(user.username, (u) => {
+         const updated = await updateUserProgress(user.username, (u) => {
           const tp = { ...u.tasksProgress };
           tp[day.task.taskId] = { completed: true, code, submittedAt: new Date().toISOString() };
-          return { ...u, tasksProgress: tp };
+          const streaked = checkAndUpdateStreak({ ...u, tasksProgress: tp });
+          return streaked;
         });
         if (updated) onUserUpdate(updated);
         if (!wasCompleted) {
@@ -1025,7 +1040,8 @@ export default function LessonView({ user, day, onBack, onComplete, onUserUpdate
         submittedAt: new Date().toISOString(),
         projectName: day.title
       };
-      return { ...u, submissions: subs };
+      const streaked = checkAndUpdateStreak({ ...u, submissions: subs });
+      return streaked;
     });
     if (updated) {
       onUserUpdate(updated);
@@ -1316,22 +1332,22 @@ export default function LessonView({ user, day, onBack, onComplete, onUserUpdate
 
                   {/* Replay Overlay */}
                   {showReplayOverlay && (
-                    <div className="absolute inset-0 bg-on-background/95 backdrop-blur-md flex flex-col items-center justify-center p-6 text-center z-50 rounded-xl">
-                      <div className="p-4 rounded-full bg-primary/10 border border-primary/20 text-primary mb-4">
-                        <span className="material-symbols-outlined text-3xl animate-spin">replay</span>
+                    <div className="absolute inset-0 bg-[#0b1c30]/90 backdrop-blur-md flex flex-col items-center justify-center p-4 text-center z-50 rounded-xl select-none">
+                      <div className="p-3 rounded-full bg-primary/10 border border-primary/20 text-primary mb-3">
+                        <span className="material-symbols-outlined text-2xl">replay</span>
                       </div>
-                      <h3 className="text-sm font-bold text-white mb-1">Today's Video Segment Finished</h3>
-                      <p className="text-[10px] text-white/70 max-w-xs mb-5 leading-relaxed">
-                        You have completed today's assigned segment for this lesson:
-                        <span className="block mt-1 font-semibold text-primary font-mono text-xs">
+                      <h3 className="text-xs sm:text-sm font-bold text-white mb-1">Today's Segment Finished</h3>
+                      <p className="text-[9px] sm:text-[10px] text-white/70 max-w-[200px] sm:max-w-xs mb-4 leading-normal">
+                        You've completed the assigned segment for this lesson:
+                        <span className="block mt-1 font-semibold text-primary font-mono text-[10px] sm:text-xs">
                           {video.assignedStart || "00:00:00"} - {video.assignedEnd || video.duration}
                         </span>
                       </p>
                       <button
                         onClick={handleReplaySegment}
-                        className="px-5 py-2.5 rounded-xl bg-primary text-on-primary text-xs font-bold flex items-center gap-2 cursor-pointer shadow-lg transition-all border border-primary/20"
+                        className="px-4 py-2 rounded-xl bg-primary text-on-primary text-[10px] sm:text-xs font-bold flex items-center gap-1.5 cursor-pointer shadow-md hover:shadow-lg transition-all border border-primary/20 active:scale-95"
                       >
-                        <span className="material-symbols-outlined text-sm font-bold">play_arrow</span>
+                        <span className="material-symbols-outlined text-xs sm:text-sm font-bold">play_arrow</span>
                         Replay Segment
                       </button>
                     </div>

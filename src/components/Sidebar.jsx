@@ -16,6 +16,9 @@ export default function Sidebar({
 }) {
   const { mobileSidebarOpen, setMobileSidebarOpen } = useApp();
   const isAdmin = user?.username?.toLowerCase() === 'muddathiradmin' || user?.isAdmin === true;
+  
+  const todayStr = new Date().toISOString().split('T')[0];
+  const isStreakActive = user?.lastActiveDate === todayStr;
 
   const menuItems = [
     { id: 'dashboard', name: 'Daily Lessons', icon: 'calendar_today' },
@@ -83,8 +86,15 @@ export default function Sidebar({
         </div>
 
         {/* Streak Info */}
-        <div className="mt-sm flex items-center gap-1.5 text-caption font-bold text-orange-color">
-          <span className="material-symbols-outlined text-[16px]" style={{ fontVariationSettings: "'FILL' 1" }}>local_fire_department</span>
+        <div className={`mt-sm flex items-center gap-1.5 text-caption font-bold transition-all duration-300 ${
+          isStreakActive ? 'text-orange-color' : 'text-slate-400 dark:text-zinc-500'
+        }`}>
+          <span 
+            className="material-symbols-outlined text-[16px] transition-all duration-300" 
+            style={{ fontVariationSettings: isStreakActive ? "'FILL' 1" : "'FILL' 0" }}
+          >
+            local_fire_department
+          </span>
           <span>{user?.streak || 0} Day Streak</span>
         </div>
       </div>
