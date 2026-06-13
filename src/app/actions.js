@@ -13,6 +13,7 @@ import {
   dbGetGlobalConfig,
   dbSaveGlobalConfig
 } from '../lib/db';
+import { courseSchedule } from '../lib/courseData';
 
 const SESSION_COOKIE_NAME = 'java_study_session';
 
@@ -44,6 +45,70 @@ export async function getCurrentUserSessionAction() {
   if (!session || !session.value) return null;
   
   const user = await dbGetUserByUsernameOrEmail(session.value);
+  if (!user) return null;
+
+  // Auto-repair 100% watched progress and streaks on startup (corrects race conditions from previous builds)
+  if (user.lessonsProgress) {
+    let needsUpdate = false;
+    const prog = { ...user.lessonsProgress };
+    
+    courseSchedule.forEach(day => {
+      if (day.type === 'video' && day.videos) {
+        day.videos.forEach(vid => {
+          const key = vid.videoId + "_day" + day.day;
+          const entry = prog[key];
+          if (entry && !entry.completed) {
+            const timeToSecs = (str) => {
+              if (!str) return 0;
+              const parts = str.split(':').map(Number);
+              if (parts.length === 3) return parts[0] * 3600 + parts[1] * 60 + parts[2];
+              return parts[0] * 60 + parts[1];
+            };
+            const vStart = timeToSecs(vid.assignedStart || '00:00:00');
+            const vEnd = timeToSecs(vid.assignedEnd || vid.duration || '00:00:00');
+            const vDur = Math.max(1, vEnd - vStart);
+            const currentPos = entry.lastPosition - vStart;
+            const pct = (currentPos / vDur) * 100;
+            
+            if (pct >= 99 || entry.lastPosition >= vEnd - 3) {
+              entry.completed = true;
+              entry.dateCompleted = new Date().toISOString().split('T')[0];
+              needsUpdate = true;
+            }
+          }
+        });
+      }
+    });
+
+    if (needsUpdate) {
+      const todayStr = new Date().toISOString().split('T')[0];
+      const lastActive = user.lastActiveDate;
+      
+      // Calculate new streak
+      let newStreak = user.streak || 0;
+      if (!lastActive) {
+        newStreak = 1;
+      } else if (lastActive !== todayStr) {
+        const lastDate = new Date(lastActive);
+        const todayDate = new Date(todayStr);
+        const diffTime = Math.abs(todayDate - lastDate);
+        const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+        if (diffDays === 1) {
+          newStreak += 1;
+        } else if (diffDays > 1) {
+          newStreak = 1;
+        }
+      }
+      
+      const updated = await dbUpdateUserProgress(user.username, prog, user.tasksProgress, user.submissions, user.settings, newStreak, todayStr);
+      if (updated) {
+        user.lessonsProgress = updated.lessonsProgress;
+        user.streak = updated.streak;
+        user.lastActiveDate = updated.lastActiveDate;
+      }
+    }
+  }
+  
   return user;
 }
 

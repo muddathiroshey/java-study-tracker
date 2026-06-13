@@ -981,6 +981,29 @@ export default function LessonView({ user, day, onBack, onComplete, onUserUpdate
       setTimeout(() => {
         textarea.selectionStart = textarea.selectionEnd = start + 4;
       }, 0);
+    } else if (e.key === 'Enter') {
+      e.preventDefault();
+      const textarea = e.target;
+      const start = textarea.selectionStart;
+      const end = textarea.selectionEnd;
+
+      // Get code before the cursor and find the current line
+      const beforeCursor = code.substring(0, start);
+      const lines = beforeCursor.split('\n');
+      const currentLine = lines[lines.length - 1];
+
+      // Match leading spaces or tabs on the current line
+      const match = currentLine.match(/^([ \t]*)/);
+      const leadingWhitespace = match ? match[1] : '';
+
+      // Construct new code with matching indentation on the newline
+      const newValue = code.substring(0, start) + '\n' + leadingWhitespace + code.substring(end);
+      setCode(newValue);
+
+      // Set cursor position after the state update
+      setTimeout(() => {
+        textarea.selectionStart = textarea.selectionEnd = start + 1 + leadingWhitespace.length;
+      }, 0);
     }
   };
 
