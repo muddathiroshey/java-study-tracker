@@ -156,104 +156,110 @@ function mapDbUser(row) {
   };
 }
 
-let dbInitialized = false;
+let dbInitPromise = null;
 
 export async function dbInit() {
-  if (dbInitialized) return;
-  const p = getPool();
+  if (!dbInitPromise) {
+    dbInitPromise = (async () => {
+      const p = getPool();
 
-  if (p) {
-    // Initialize PostgreSQL
-    const client = await p.connect();
-    try {
-      await client.query(`
-        CREATE TABLE IF NOT EXISTS java_study_users (
-          id TEXT PRIMARY KEY,
-          username TEXT UNIQUE NOT NULL,
-          email TEXT UNIQUE,
-          password TEXT NOT NULL,
-          enrolled_date TEXT NOT NULL,
-          streak INTEGER DEFAULT 0,
-          last_active_date TEXT,
-          total_study_time INTEGER DEFAULT 0,
-          is_admin BOOLEAN DEFAULT FALSE,
-          lessons_progress JSONB DEFAULT '{}'::jsonb,
-          tasks_progress JSONB DEFAULT '{}'::jsonb,
-          submissions JSONB DEFAULT '{}'::jsonb,
-          settings JSONB DEFAULT '{}'::jsonb
-        );
-      `);
+      if (p) {
+        // Initialize PostgreSQL
+        const client = await p.connect();
+        try {
+          await client.query(`
+            CREATE TABLE IF NOT EXISTS java_study_users (
+              id TEXT PRIMARY KEY,
+              username TEXT UNIQUE NOT NULL,
+              email TEXT UNIQUE,
+              password TEXT NOT NULL,
+              enrolled_date TEXT NOT NULL,
+              streak INTEGER DEFAULT 0,
+              last_active_date TEXT,
+              total_study_time INTEGER DEFAULT 0,
+              is_admin BOOLEAN DEFAULT FALSE,
+              lessons_progress JSONB DEFAULT '{}'::jsonb,
+              tasks_progress JSONB DEFAULT '{}'::jsonb,
+              submissions JSONB DEFAULT '{}'::jsonb,
+              settings JSONB DEFAULT '{}'::jsonb
+            );
+          `);
 
-      await client.query(`
-        CREATE TABLE IF NOT EXISTS java_study_schedule (
-          key TEXT PRIMARY KEY,
-          data JSONB NOT NULL
-        );
-      `);
+          await client.query(`
+            CREATE TABLE IF NOT EXISTS java_study_schedule (
+              key TEXT PRIMARY KEY,
+              data JSONB NOT NULL
+            );
+          `);
 
-      // Seed if empty
-      const res = await client.query('SELECT COUNT(*) FROM java_study_users');
-      if (parseInt(res.rows[0].count) === 0) {
-        // Seed Admin
-        await client.query(
-          `INSERT INTO java_study_users 
-          (id, username, email, password, enrolled_date, streak, last_active_date, total_study_time, is_admin, lessons_progress, tasks_progress, submissions, settings)
-          VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13)`,
-          [
-            DEFAULT_ADMIN.id,
-            DEFAULT_ADMIN.username,
-            DEFAULT_ADMIN.email,
-            DEFAULT_ADMIN.password,
-            DEFAULT_ADMIN.enrolledDate,
-            DEFAULT_ADMIN.streak,
-            DEFAULT_ADMIN.lastActiveDate,
-            DEFAULT_ADMIN.totalStudyTime,
-            DEFAULT_ADMIN.isAdmin,
-            JSON.stringify(DEFAULT_ADMIN.lessonsProgress),
-            JSON.stringify(DEFAULT_ADMIN.tasksProgress),
-            JSON.stringify(DEFAULT_ADMIN.submissions),
-            JSON.stringify(DEFAULT_ADMIN.settings)
-          ]
-        );
+          // Seed if empty
+          const res = await client.query('SELECT COUNT(*) FROM java_study_users');
+          if (parseInt(res.rows[0].count) === 0) {
+            // Seed Admin
+            await client.query(
+              `INSERT INTO java_study_users 
+              (id, username, email, password, enrolled_date, streak, last_active_date, total_study_time, is_admin, lessons_progress, tasks_progress, submissions, settings)
+              VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13)`,
+              [
+                DEFAULT_ADMIN.id,
+                DEFAULT_ADMIN.username,
+                DEFAULT_ADMIN.email,
+                DEFAULT_ADMIN.password,
+                DEFAULT_ADMIN.enrolledDate,
+                DEFAULT_ADMIN.streak,
+                DEFAULT_ADMIN.lastActiveDate,
+                DEFAULT_ADMIN.totalStudyTime,
+                DEFAULT_ADMIN.isAdmin,
+                JSON.stringify(DEFAULT_ADMIN.lessonsProgress),
+                JSON.stringify(DEFAULT_ADMIN.tasksProgress),
+                JSON.stringify(DEFAULT_ADMIN.submissions),
+                JSON.stringify(DEFAULT_ADMIN.settings)
+              ]
+            );
 
-        // Seed Classmates
-        for (const c of DEFAULT_CLASSMATES) {
-          await client.query(
-            `INSERT INTO java_study_users 
-            (id, username, email, password, enrolled_date, streak, last_active_date, total_study_time, is_admin, lessons_progress, tasks_progress, submissions, settings)
-            VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13)`,
-            [
-              c.id,
-              c.username,
-              c.email,
-              c.password,
-              c.enrolledDate,
-              c.streak,
-              c.lastActiveDate,
-              c.totalStudyTime,
-              c.isAdmin,
-              JSON.stringify(c.lessonsProgress),
-              JSON.stringify(c.tasksProgress),
-              JSON.stringify(c.submissions),
-              JSON.stringify(c.settings)
-            ]
-          );
+            // Seed Classmates
+            for (const c of DEFAULT_CLASSMATES) {
+              await client.query(
+                `INSERT INTO java_study_users 
+                (id, username, email, password, enrolled_date, streak, last_active_date, total_study_time, is_admin, lessons_progress, tasks_progress, submissions, settings)
+                VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13)`,
+                [
+                  c.id,
+                  c.username,
+                  c.email,
+                  c.password,
+                  c.enrolledDate,
+                  c.streak,
+                  c.lastActiveDate,
+                  c.totalStudyTime,
+                  c.isAdmin,
+                  JSON.stringify(c.lessonsProgress),
+                  JSON.stringify(c.tasksProgress),
+                  JSON.stringify(c.submissions),
+                  JSON.stringify(c.settings)
+                ]
+              );
+            }
+          }
+        } catch (err) {
+          dbInitPromise = null; // Reset promise on error to allow retries
+          throw err;
+        } finally {
+          client.release();
+        }
+      } else {
+        // Initialize Local File Database
+        if (!fs.existsSync(LOCAL_DB_PATH)) {
+          const data = {
+            users: [DEFAULT_ADMIN, ...DEFAULT_CLASSMATES],
+            schedule: []
+          };
+          fs.writeFileSync(LOCAL_DB_PATH, JSON.stringify(data, null, 2), 'utf8');
         }
       }
-    } finally {
-      client.release();
-    }
-  } else {
-    // Initialize Local File Database
-    if (!fs.existsSync(LOCAL_DB_PATH)) {
-      const data = {
-        users: [DEFAULT_ADMIN, ...DEFAULT_CLASSMATES],
-        schedule: []
-      };
-      fs.writeFileSync(LOCAL_DB_PATH, JSON.stringify(data, null, 2), 'utf8');
-    }
+    })();
   }
-  dbInitialized = true;
+  return dbInitPromise;
 }
 
 export async function dbGetUserByUsernameOrEmail(usernameOrEmail) {
