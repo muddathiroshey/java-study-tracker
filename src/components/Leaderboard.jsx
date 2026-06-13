@@ -41,6 +41,7 @@ export default function Leaderboard({ user }) {
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState('all'); // 'all' | 'top5' | 'active'
+  const todayStr = new Date().toISOString().split('T')[0];
 
   const reload = async () => {
     const db = await getDB();
@@ -134,8 +135,7 @@ export default function Leaderboard({ user }) {
                 <tr class="bg-surface-container-low text-on-surface-variant border-b border-outline-variant">
                   <th className="py-md px-lg font-label-md">Rank</th>
                   <th className="py-md px-lg font-label-md">Learner</th>
-                  <th className="py-md px-lg font-label-md hidden md:table-cell">Curriculum Area</th>
-                  <th className="py-md px-lg font-label-md hidden md:table-cell text-center">Tier</th>
+                  <th className="py-md px-lg font-label-md text-center">Streak</th>
                   <th className="py-md px-lg font-label-md text-right">Points</th>
                   <th className="py-md px-lg font-label-md text-right">Trend</th>
                 </tr>
@@ -144,7 +144,7 @@ export default function Leaderboard({ user }) {
                 {filtered.map((u) => {
                   const rank = users.indexOf(u) + 1;
                   const isYou = u.username.toLowerCase() === user?.username?.toLowerCase();
-                  const tier = getTier(u.points);
+                  const isStreakActive = u.lastActiveDate === todayStr;
                   const trend = getTrend(u);
                   return (
                     <tr 
@@ -175,26 +175,23 @@ export default function Leaderboard({ user }) {
                           <div>
                             <p className={`font-bold ${isYou ? 'text-primary' : 'text-on-surface'}`}>{u.username}</p>
                             <p className="text-caption text-on-surface-variant flex items-center gap-1">
-                              {u.streak > 0 && (
-                                <span className="text-error font-bold flex items-center gap-0.5">
-                                  <span className="material-symbols-outlined text-[12px]" style={{ fontVariationSettings: "'FILL' 1" }}>
-                                    local_fire_department
-                                  </span>
-                                  {u.streak}d
-                                </span>
-                              )}
                               <span>{u.videoCount} videos · {u.taskCount} tasks</span>
                             </p>
                           </div>
                         </div>
                       </td>
-                      <td className="py-md px-lg hidden md:table-cell">
-                        <span className="text-body-sm text-on-surface-variant">{getDepartment(u.username)}</span>
-                      </td>
-                      <td className="py-md px-lg hidden md:table-cell text-center">
-                        <span className={`px-sm py-xs rounded text-caption font-medium ${TIER_COLORS[tier] || 'bg-surface-container-high text-on-surface-variant'}`}>
-                          {tier}
-                        </span>
+                      <td className="py-md px-lg text-center">
+                        <div className={`inline-flex items-center gap-0.5 text-caption font-bold transition-all duration-300 ${
+                          isStreakActive ? 'text-orange-color' : 'text-slate-400 dark:text-zinc-500'
+                        }`}>
+                          <span 
+                            className="material-symbols-outlined text-[16px] transition-all duration-300"
+                            style={{ fontVariationSettings: isStreakActive ? "'FILL' 1" : "'FILL' 0" }}
+                          >
+                            local_fire_department
+                          </span>
+                          <span>{u.streak || 0}d</span>
+                        </div>
                       </td>
                       <td className={`py-md px-lg text-right font-bold text-title-md ${isYou ? 'text-primary' : 'text-on-surface'}`}>
                         {u.points.toLocaleString()} XP
