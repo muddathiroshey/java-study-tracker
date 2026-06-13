@@ -1,0 +1,2612 @@
+<!-- Design System -->
+<!DOCTYPE html><html class="light" lang="en"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>Leadership Leaderboard - EduFocus</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600;700&amp;family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "on-background": "#0b1c30",
+                    "outline": "#737686",
+                    "surface-container-low": "#eff4ff",
+                    "on-secondary-fixed": "#0f0069",
+                    "inverse-surface": "#213145",
+                    "tertiary-container": "#007d55",
+                    "on-primary-container": "#eeefff",
+                    "surface-container": "#e5eeff",
+                    "on-surface": "#0b1c30",
+                    "tertiary-fixed-dim": "#4edea3",
+                    "surface-dim": "#cbdbf5",
+                    "on-error": "#ffffff",
+                    "on-error-container": "#93000a",
+                    "secondary": "#4b41e1",
+                    "primary-fixed-dim": "#b4c5ff",
+                    "tertiary": "#006242",
+                    "surface": "#f8f9ff",
+                    "surface-container-high": "#dce9ff",
+                    "surface-container-highest": "#d3e4fe",
+                    "error": "#ba1a1a",
+                    "on-tertiary": "#ffffff",
+                    "primary": "#004ac6",
+                    "primary-fixed": "#dbe1ff",
+                    "inverse-primary": "#b4c5ff",
+                    "background": "#f8f9ff",
+                    "on-secondary-container": "#fffbff",
+                    "primary-container": "#2563eb",
+                    "outline-variant": "#c3c6d7",
+                    "on-tertiary-container": "#bdffdb",
+                    "surface-tint": "#0053db",
+                    "surface-bright": "#f8f9ff",
+                    "on-primary-fixed-variant": "#003ea8",
+                    "secondary-fixed-dim": "#c3c0ff",
+                    "secondary-container": "#645efb",
+                    "on-primary-fixed": "#00174b",
+                    "tertiary-fixed": "#6ffbbe",
+                    "inverse-on-surface": "#eaf1ff",
+                    "on-tertiary-fixed-variant": "#005236",
+                    "error-container": "#ffdad6",
+                    "secondary-fixed": "#e2dfff",
+                    "on-tertiary-fixed": "#002113",
+                    "surface-variant": "#d3e4fe",
+                    "on-surface-variant": "#434655",
+                    "surface-container-lowest": "#ffffff",
+                    "on-secondary-fixed-variant": "#3323cc",
+                    "on-secondary": "#ffffff",
+                    "on-primary": "#ffffff"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "xl": "32px",
+                    "sm": "8px",
+                    "margin-mobile": "16px",
+                    "md": "16px",
+                    "margin-desktop": "48px",
+                    "gutter": "24px",
+                    "max-width": "1280px",
+                    "xs": "4px",
+                    "lg": "24px",
+                    "unit": "4px"
+            },
+            "fontFamily": {
+                    "caption": ["Inter"],
+                    "display-lg": ["Hanken Grotesk"],
+                    "body-md": ["Inter"],
+                    "title-md": ["Hanken Grotesk"],
+                    "headline-lg": ["Hanken Grotesk"],
+                    "body-lg": ["Inter"],
+                    "headline-lg-mobile": ["Hanken Grotesk"],
+                    "label-md": ["Inter"]
+            },
+            "fontSize": {
+                    "caption": ["12px", {"lineHeight": "16px", "fontWeight": "400"}],
+                    "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                    "title-md": ["20px", {"lineHeight": "28px", "fontWeight": "600"}],
+                    "headline-lg": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                    "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                    "headline-lg-mobile": ["28px", {"lineHeight": "36px", "fontWeight": "600"}],
+                    "label-md": ["14px", {"lineHeight": "20px", "letterSpacing": "0.01em", "fontWeight": "500"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        body {
+            background-color: #f8f9ff;
+            color: #0b1c30;
+            -webkit-font-smoothing: antialiased;
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #c3c6d7;
+            border-radius: 10px;
+        }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(255, 255, 255, 0.4);
+        }
+    </style>
+</head>
+<body class="font-body-md text-body-md overflow-x-hidden">
+<!-- SideNavBar (Shared Component) -->
+<aside class="fixed left-0 top-0 h-full flex flex-col p-md z-40 bg-surface-container-lowest border-r border-outline-variant w-64 hidden md:flex">
+<div class="mb-xl px-md">
+<h1 class="text-headline-lg font-headline-lg text-primary">EduFocus</h1>
+</div>
+<div class="flex flex-col gap-sm flex-grow">
+<nav class="space-y-sm">
+<a class="flex items-center gap-md text-on-surface-variant px-md py-sm hover:bg-surface-container-high transition-all" href="#">
+<span class="material-symbols-outlined" data-icon="calendar_today">calendar_today</span>
+<span class="font-label-md text-label-md">Daily Lessons</span>
+</a>
+<!-- Active Tab: Leaderboard -->
+<a class="flex items-center gap-md bg-secondary-container text-on-secondary-container rounded-lg px-md py-sm scale-[0.98] transition-transform duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="leaderboard" style="font-variation-settings: 'FILL' 1;">leaderboard</span>
+<span class="font-label-md text-label-md">Leaderboard</span>
+</a>
+<a class="flex items-center gap-md text-on-surface-variant px-md py-sm hover:bg-surface-container-high transition-all" href="#">
+<span class="material-symbols-outlined" data-icon="assignment_turned_in">assignment_turned_in</span>
+<span class="font-label-md text-label-md">Tasks</span>
+</a>
+<a class="flex items-center gap-md text-on-surface-variant px-md py-sm hover:bg-surface-container-high transition-all" href="#">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+<span class="font-label-md text-label-md">Settings</span>
+</a>
+</nav>
+</div>
+<div class="mt-auto border-t border-outline-variant pt-lg px-md">
+<div class="flex items-center gap-md mb-lg">
+<img alt="Student Portrait" class="w-10 h-10 rounded-full object-cover" data-alt="A close-up professional portrait of a focused young student with a friendly expression. The lighting is soft and natural, emphasizing a scholarly and determined mood. The background is a blurred academic setting with soft blue and white tones that match the EduFocus modern corporate aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDD2gw3Q9B_txCmfvXuBSZ6mc20RkBSQ8xAMIyA7FNLSHvhGxVabIoGQMjaIOSf4pPVvFJUJmRkae0g6ShYET5Aw_mg5x3VCYB7rXV3Y4Ywt1oEVrGPd4jfoyBzaO02Pr9mXfz97jmRV4ozcFzDGPHn41p-bc2myqi5_-W0OjOwHcnY9Gl1LKFa79uK1fk-qdbCxxqpkCC7iXuExAF-64TZ6woTCQXIfjfgzuQwx3A569F7Sxk0t-rWAwnRnKNzYn-OgbD-kFFy4Vob">
+<div>
+<p class="font-title-md text-sm font-bold text-on-surface">Alex Johnson</p>
+<p class="text-caption text-on-surface-variant">65% Progress</p>
+</div>
+</div>
+<button class="w-full py-sm bg-primary text-on-primary rounded-lg font-label-md hover:opacity-90 transition-opacity">
+                Upgrade to Pro
+            </button>
+</div>
+</aside>
+<!-- Main Content Area -->
+<main class="md:ml-64 min-h-screen bg-background">
+<!-- TopAppBar (Shared Component) -->
+<header class="sticky top-0 z-30 bg-surface border-b border-outline-variant px-lg py-sm flex justify-between items-center w-full max-w-max-width mx-auto">
+<div class="flex items-center gap-lg">
+<span class="material-symbols-outlined md:hidden" data-icon="menu">menu</span>
+<div class="relative hidden sm:block">
+<span class="material-symbols-outlined absolute left-sm top-1/2 -translate-y-1/2 text-outline" data-icon="search">search</span>
+<input class="pl-xl pr-md py-xs bg-surface-container-low border-none rounded-full text-body-md focus:ring-2 focus:ring-primary w-64" placeholder="Search rankings..." type="text">
+</div>
+</div>
+<h2 class="text-title-md font-bold text-primary sm:hidden">EduFocus</h2>
+<div class="flex items-center gap-md">
+<button class="p-xs hover:bg-surface-container-low rounded-full transition-colors relative">
+<span class="material-symbols-outlined text-on-surface-variant" data-icon="notifications">notifications</span>
+<span class="absolute top-1 right-1 w-2 h-2 bg-error rounded-full"></span>
+</button>
+<button class="p-xs hover:bg-surface-container-low rounded-full transition-colors">
+<span class="material-symbols-outlined text-on-surface-variant" data-icon="trending_up">trending_up</span>
+</button>
+<img alt="User profile avatar" class="w-8 h-8 rounded-full object-cover border border-outline-variant" data-alt="A small, circular avatar photo of a young man with a slight smile, representing a user profile. The style is clean and professional with a bright, minimalist background. The lighting is high-key and optimistic, fitting the scholarly yet accessible brand identity of the educational platform." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDSnYrIGkfWfSD6QHnBCQ1hBpDjeRqIN14E2Ayp1Euz3AvazvuEIXB3zwgSyd_cP73b4APG6m2jN-XkOPaSF25NusI46GBsn8Hm2xrIdsqBWQMB2nEx12SRJnl4tSF097q7eTt91jsp_n9vqsryogDzFyAgGg0ybdBr741l0u2H4nQzjzOFAIUs4yyeUJSvUItTT32R0L5biJYlBSzDWss-vcnsgJkvHikc08pSg55MQYfNMR2FdpXCCk9E-ZDK6UZXxeX-g6ZngsMP">
+</div>
+</header>
+<!-- Leaderboard Dashboard -->
+<section class="max-w-max-width mx-auto px-margin-mobile md:px-margin-desktop py-xl">
+<!-- Page Header -->
+<div class="mb-xl flex flex-col md:flex-row md:items-end justify-between gap-lg">
+<div>
+<h1 class="font-headline-lg text-headline-lg text-on-background mb-sm">Global Rankings</h1>
+<p class="text-body-md text-on-surface-variant max-w-2xl">Compete with learners worldwide. Climb the leaderboard by completing lessons, maintaining streaks, and helping others in the community.</p>
+</div>
+<div class="flex gap-sm">
+<button class="px-md py-sm rounded-lg bg-surface-container-highest text-on-surface font-label-md border border-outline-variant">This Week</button>
+<button class="px-md py-sm rounded-lg bg-surface-container-low text-on-surface-variant font-label-md hover:bg-surface-container-high transition-colors">All Time</button>
+</div>
+</div>
+<!-- Bento Grid: Top Performers -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-lg mb-xl">
+<!-- 2nd Place -->
+<div class="glass-card rounded-xl p-lg flex flex-col items-center text-center border-t-4 border-outline-variant order-2 md:order-1 self-end py-xl">
+<div class="relative mb-md">
+<div class="w-20 h-20 rounded-full bg-surface-container-high flex items-center justify-center border-4 border-surface"><span class="material-symbols-outlined text-on-surface-variant text-4xl">person</span></div>
+<span class="absolute -bottom-2 left-1/2 -translate-x-1/2 bg-surface border border-outline-variant text-on-surface px-md py-xs rounded-full text-caption font-bold">2nd</span>
+</div>
+<h3 class="font-title-md text-on-surface">Sarah Mitchell</h3>
+<p class="text-caption text-on-surface-variant mb-md">Lvl 42 • Scholar</p>
+<div class="bg-primary-fixed px-md py-sm rounded-lg w-full">
+<span class="text-on-primary-fixed-variant font-bold">12,450 XP</span>
+</div>
+</div>
+<!-- 1st Place (Prominent) -->
+<div class="bg-primary-container text-on-primary-container rounded-xl p-xl flex flex-col items-center text-center shadow-lg transform md:-translate-y-4 order-1 md:order-2 border-t-4 border-tertiary-fixed">
+<div class="relative mb-lg scale-110">
+<span class="material-symbols-outlined absolute -top-8 left-1/2 -translate-x-1/2 text-tertiary-fixed text-4xl" data-icon="workspace_premium" style="font-variation-settings: 'FILL' 1;">workspace_premium</span>
+<div class="w-24 h-24 rounded-full bg-on-primary-container flex items-center justify-center border-4 border-on-primary-container"><span class="material-symbols-outlined text-primary-container text-4xl">person</span></div>
+<span class="absolute -bottom-3 left-1/2 -translate-x-1/2 bg-tertiary-fixed text-on-tertiary-fixed px-lg py-xs rounded-full text-label-md font-extrabold uppercase tracking-widest">Master</span>
+</div>
+<h3 class="text-headline-lg font-headline-lg mb-xs">David Chen</h3>
+<p class="text-body-md opacity-90 mb-lg">Lvl 58 • Grandmaster</p>
+<div class="bg-on-primary-container text-primary-container px-xl py-md rounded-xl w-full shadow-inner">
+<span class="text-xl font-extrabold">15,820 XP</span>
+</div>
+<p class="mt-md text-caption opacity-80 flex items-center gap-xs">
+<span class="material-symbols-outlined text-xs" data-icon="local_fire_department" style="font-variation-settings: 'FILL' 1;">local_fire_department</span>
+                        142 Day Streak
+                    </p>
+</div>
+<!-- 3rd Place -->
+<div class="glass-card rounded-xl p-lg flex flex-col items-center text-center border-t-4 border-tertiary-container order-3 self-end py-xl">
+<div class="relative mb-md">
+<div class="w-20 h-20 rounded-full bg-surface-container-high flex items-center justify-center border-4 border-surface"><span class="material-symbols-outlined text-on-surface-variant text-4xl">person</span></div>
+<span class="absolute -bottom-2 left-1/2 -translate-x-1/2 bg-surface border border-outline-variant text-on-surface px-md py-xs rounded-full text-caption font-bold">3rd</span>
+</div>
+<h3 class="font-title-md text-on-surface">Elena Rodriguez</h3>
+<p class="text-caption text-on-surface-variant mb-md">Lvl 39 • Mentor</p>
+<div class="bg-surface-container-high px-md py-sm rounded-lg w-full">
+<span class="text-on-surface font-bold">11,200 XP</span>
+</div>
+</div>
+</div>
+<!-- Global Rankings Table -->
+<div class="bg-surface-container-lowest rounded-xl border border-outline-variant overflow-hidden shadow-sm">
+<div class="p-lg border-b border-outline-variant flex justify-between items-center bg-surface-bright">
+<h2 class="font-title-md text-on-surface">Global Rankings</h2>
+<span class="text-caption text-outline">Updated 5 minutes ago</span>
+</div>
+<div class="overflow-x-auto">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="bg-surface-container-low text-on-surface-variant border-b border-outline-variant">
+<th class="py-md px-lg font-label-md">Rank</th>
+<th class="py-md px-lg font-label-md">Learner</th>
+<th class="py-md px-lg font-label-md hidden md:table-cell">Tier</th>
+<th class="py-md px-lg font-label-md text-right">Points</th>
+<th class="py-md px-lg font-label-md text-right">Trend</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-outline-variant">
+<!-- Rank 4 -->
+<tr class="hover:bg-surface-container transition-colors group" style="opacity: 1; transform: translateY(0px); transition: 0.3s;">
+<td class="py-md px-lg">
+<span class="text-title-md font-bold text-on-surface-variant">4</span>
+</td>
+<td class="py-md px-lg">
+<div class="flex items-center gap-md">
+<div class="w-10 h-10 rounded-full bg-surface-container-high flex items-center justify-center"><span class="material-symbols-outlined text-on-surface-variant text-sm">person</span></div>
+<div>
+<p class="font-bold text-on-surface">Marcus T.</p>
+<p class="text-caption text-on-surface-variant">Applied Mathematics</p>
+</div>
+</div>
+</td>
+<td class="py-md px-lg hidden md:table-cell">
+<span class="px-sm py-xs bg-surface-container-high rounded text-caption text-on-surface-variant font-medium">Mentor</span>
+</td>
+<td class="py-md px-lg text-right font-bold text-primary">10,850</td>
+<td class="py-md px-lg text-right">
+<span class="material-symbols-outlined text-tertiary text-sm" data-icon="trending_up">trending_up</span>
+</td>
+</tr>
+<!-- Current User Position (Highlighted) -->
+<tr class="bg-surface-container-high border-y-2 border-primary relative z-10" style="opacity: 1; transform: translateY(0px); transition: 0.3s 0.05s;">
+<td class="py-md px-lg">
+<span class="text-title-md font-bold text-primary">12</span>
+</td>
+<td class="py-md px-lg">
+<div class="flex items-center gap-md">
+<div class="relative">
+<div class="w-10 h-10 rounded-full bg-surface-container-high flex items-center justify-center"><span class="material-symbols-outlined text-on-surface-variant text-sm">person</span></div>
+<span class="absolute -top-1 -right-1 bg-primary text-on-primary text-[8px] font-bold px-1 rounded-full">YOU</span>
+</div>
+<div>
+<p class="font-bold text-on-surface">Alex Johnson</p>
+<p class="text-caption text-on-surface-variant">Computer Science</p>
+</div>
+</div>
+</td>
+<td class="py-md px-lg hidden md:table-cell">
+<span class="px-sm py-xs bg-primary text-on-primary rounded text-caption font-medium">Rising Star</span>
+</td>
+<td class="py-md px-lg text-right font-bold text-primary">8,420</td>
+<td class="py-md px-lg text-right">
+<span class="material-symbols-outlined text-tertiary text-sm" data-icon="trending_up">trending_up</span>
+</td>
+</tr>
+<!-- Rank 13 -->
+<tr class="hover:bg-surface-container transition-colors" style="opacity: 1; transform: translateY(0px); transition: 0.3s 0.1s;">
+<td class="py-md px-lg">
+<span class="text-title-md font-bold text-on-surface-variant">13</span>
+</td>
+<td class="py-md px-lg">
+<div class="flex items-center gap-md">
+<div class="w-10 h-10 rounded-full bg-surface-container-high flex items-center justify-center"><span class="material-symbols-outlined text-on-surface-variant text-sm">person</span></div>
+<div>
+<p class="font-bold text-on-surface">Linda W.</p>
+<p class="text-caption text-on-surface-variant">Graphic Design</p>
+</div>
+</div>
+</td>
+<td class="py-md px-lg hidden md:table-cell">
+<span class="px-sm py-xs bg-surface-container-high rounded text-caption text-on-surface-variant font-medium">Contributor</span>
+</td>
+<td class="py-md px-lg text-right font-bold text-on-surface">8,100</td>
+<td class="py-md px-lg text-right">
+<span class="material-symbols-outlined text-error text-sm" data-icon="trending_down">trending_down</span>
+</td>
+</tr>
+<!-- Rank 14 -->
+<tr class="hover:bg-surface-container transition-colors" style="opacity: 1; transform: translateY(0px); transition: 0.3s 0.15s;">
+<td class="py-md px-lg">
+<span class="text-title-md font-bold text-on-surface-variant">14</span>
+</td>
+<td class="py-md px-lg">
+<div class="flex items-center gap-md">
+<div class="w-10 h-10 rounded-full bg-surface-container-high flex items-center justify-center"><span class="material-symbols-outlined text-on-surface-variant text-sm">person</span></div>
+<div>
+<p class="font-bold text-on-surface">Kevin O.</p>
+<p class="text-caption text-on-surface-variant">Full-Stack Dev</p>
+</div>
+</div>
+</td>
+<td class="py-md px-lg hidden md:table-cell">
+<span class="px-sm py-xs bg-surface-container-high rounded text-caption text-on-surface-variant font-medium">Scholar</span>
+</td>
+<td class="py-md px-lg text-right font-bold text-on-surface">7,950</td>
+<td class="py-md px-lg text-right">
+<span class="material-symbols-outlined text-outline text-sm" data-icon="horizontal_rule">horizontal_rule</span>
+</td>
+</tr>
+<!-- Rank 15 -->
+<tr class="hover:bg-surface-container transition-colors" style="opacity: 1; transform: translateY(0px); transition: 0.3s 0.2s;">
+<td class="py-md px-lg">
+<span class="text-title-md font-bold text-on-surface-variant">15</span>
+</td>
+<td class="py-md px-lg">
+<div class="flex items-center gap-md">
+<div class="w-10 h-10 rounded-full bg-surface-container-high flex items-center justify-center"><span class="material-symbols-outlined text-on-surface-variant text-sm">person</span></div>
+<div>
+<p class="font-bold text-on-surface">Sophia L.</p>
+<p class="text-caption text-on-surface-variant">Economics</p>
+</div>
+</div>
+</td>
+<td class="py-md px-lg hidden md:table-cell">
+<span class="px-sm py-xs bg-surface-container-high rounded text-caption text-on-surface-variant font-medium">Contributor</span>
+</td>
+<td class="py-md px-lg text-right font-bold text-on-surface">7,820</td>
+<td class="py-md px-lg text-right">
+<span class="material-symbols-outlined text-tertiary text-sm" data-icon="trending_up">trending_up</span>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="p-lg border-t border-outline-variant bg-surface-bright flex justify-center">
+<button class="text-primary font-label-md flex items-center gap-sm hover:underline">
+                        View Full Leaderboard
+                        <span class="material-symbols-outlined text-sm" data-icon="arrow_forward">arrow_forward</span>
+</button>
+</div>
+</div>
+<!-- Gamification / Stats Section -->
+<div class="mt-xl grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-lg">
+<div class="bg-surface-container-low p-lg rounded-xl border border-outline-variant">
+<div class="flex items-center gap-md mb-md">
+<div class="p-sm bg-primary-container rounded-lg text-on-primary-container">
+<span class="material-symbols-outlined" data-icon="military_tech">military_tech</span>
+</div>
+<h4 class="font-label-md text-on-surface-variant">Current Rank</h4>
+</div>
+<p class="text-headline-lg font-headline-lg text-on-surface">#12</p>
+<p class="text-caption text-tertiary flex items-center gap-xs mt-xs">
+<span class="material-symbols-outlined text-xs" data-icon="keyboard_double_arrow_up">keyboard_double_arrow_up</span>
+                        Jumped 4 spots today
+                    </p>
+</div>
+<div class="bg-surface-container-low p-lg rounded-xl border border-outline-variant">
+<div class="flex items-center gap-md mb-md">
+<div class="p-sm bg-secondary-container rounded-lg text-on-secondary-container">
+<span class="material-symbols-outlined" data-icon="stars">stars</span>
+</div>
+<h4 class="font-label-md text-on-surface-variant">Points to #11</h4>
+</div>
+<p class="text-headline-lg font-headline-lg text-on-surface">140 XP</p>
+<div class="w-full bg-outline-variant h-1.5 rounded-full mt-md">
+<div class="bg-primary h-full rounded-full" style="width: 75%"></div>
+</div>
+</div>
+<div class="bg-surface-container-low p-lg rounded-xl border border-outline-variant">
+<div class="flex items-center gap-md mb-md">
+<div class="p-sm bg-tertiary-container rounded-lg text-on-tertiary-container">
+<span class="material-symbols-outlined" data-icon="schedule">schedule</span>
+</div>
+<h4 class="font-label-md text-on-surface-variant">Season Ends</h4>
+</div>
+<p class="text-headline-lg font-headline-lg text-on-surface">4d 12h</p>
+<p class="text-caption text-on-surface-variant mt-xs">Bronze League Reset</p>
+</div>
+<div class="bg-surface-container-low p-lg rounded-xl border border-outline-variant">
+<div class="flex items-center gap-md mb-md">
+<div class="p-sm bg-on-background rounded-lg text-surface">
+<span class="material-symbols-outlined" data-icon="groups">groups</span>
+</div>
+<h4 class="font-label-md text-on-surface-variant">Total Learners</h4>
+</div>
+<p class="text-headline-lg font-headline-lg text-on-surface">24,510</p>
+<p class="text-caption text-on-surface-variant mt-xs">Top 1% Worldwide</p>
+</div>
+</div>
+</section>
+</main>
+<!-- Bottom Navigation Bar (Mobile only) -->
+<nav class="md:hidden fixed bottom-0 left-0 right-0 bg-surface border-t border-outline-variant px-lg py-sm flex justify-around items-center z-40">
+<button class="flex flex-col items-center gap-xs text-on-surface-variant">
+<span class="material-symbols-outlined" data-icon="calendar_today">calendar_today</span>
+<span class="text-[10px] font-label-md">Lessons</span>
+</button>
+<button class="flex flex-col items-center gap-xs text-primary font-bold">
+<span class="material-symbols-outlined" data-icon="leaderboard" style="font-variation-settings: 'FILL' 1;">leaderboard</span>
+<span class="text-[10px] font-label-md">Rank</span>
+</button>
+<button class="flex flex-col items-center gap-xs text-on-surface-variant">
+<span class="material-symbols-outlined" data-icon="assignment_turned_in">assignment_turned_in</span>
+<span class="text-[10px] font-label-md">Tasks</span>
+</button>
+<button class="flex flex-col items-center gap-xs text-on-surface-variant">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+<span class="text-[10px] font-label-md">Account</span>
+</button>
+</nav>
+<script>
+        // Micro-interaction: Table row hover effect logic is handled by Tailwind
+        // Subtle scroll animation or reveal could be added here
+        document.addEventListener('DOMContentLoaded', () => {
+            const rows = document.querySelectorAll('tbody tr');
+            rows.forEach((row, index) => {
+                row.style.opacity = '0';
+                row.style.transform = 'translateY(10px)';
+                row.style.transition = `all 0.3s ease ${index * 0.05}s`;
+                
+                setTimeout(() => {
+                    row.style.opacity = '1';
+                    row.style.transform = 'translateY(0)';
+                }, 100);
+            });
+        });
+    </script>
+
+
+</body></html>
+
+<!-- Leaderboard -->
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Daily Lessons | EduFocus</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600;700&amp;family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-background": "#0b1c30",
+                        "outline": "#737686",
+                        "surface-container-low": "#eff4ff",
+                        "on-secondary-fixed": "#0f0069",
+                        "inverse-surface": "#213145",
+                        "tertiary-container": "#007d55",
+                        "on-primary-container": "#eeefff",
+                        "surface-container": "#e5eeff",
+                        "on-surface": "#0b1c30",
+                        "tertiary-fixed-dim": "#4edea3",
+                        "surface-dim": "#cbdbf5",
+                        "on-error": "#ffffff",
+                        "on-error-container": "#93000a",
+                        "secondary": "#4b41e1",
+                        "primary-fixed-dim": "#b4c5ff",
+                        "tertiary": "#006242",
+                        "surface": "#f8f9ff",
+                        "surface-container-high": "#dce9ff",
+                        "surface-container-highest": "#d3e4fe",
+                        "error": "#ba1a1a",
+                        "on-tertiary": "#ffffff",
+                        "primary": "#004ac6",
+                        "primary-fixed": "#dbe1ff",
+                        "inverse-primary": "#b4c5ff",
+                        "background": "#f8f9ff",
+                        "on-secondary-container": "#fffbff",
+                        "primary-container": "#2563eb",
+                        "outline-variant": "#c3c6d7",
+                        "on-tertiary-container": "#bdffdb",
+                        "surface-tint": "#0053db",
+                        "surface-bright": "#f8f9ff",
+                        "on-primary-fixed-variant": "#003ea8",
+                        "secondary-fixed-dim": "#c3c0ff",
+                        "secondary-container": "#645efb",
+                        "on-primary-fixed": "#00174b",
+                        "tertiary-fixed": "#6ffbbe",
+                        "inverse-on-surface": "#eaf1ff",
+                        "on-tertiary-fixed-variant": "#005236",
+                        "error-container": "#ffdad6",
+                        "secondary-fixed": "#e2dfff",
+                        "on-tertiary-fixed": "#002113",
+                        "surface-variant": "#d3e4fe",
+                        "on-surface-variant": "#434655",
+                        "surface-container-lowest": "#ffffff",
+                        "on-secondary-fixed-variant": "#3323cc",
+                        "on-secondary": "#ffffff",
+                        "on-primary": "#ffffff"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "xl": "32px",
+                        "sm": "8px",
+                        "margin-mobile": "16px",
+                        "md": "16px",
+                        "margin-desktop": "48px",
+                        "gutter": "24px",
+                        "max-width": "1280px",
+                        "xs": "4px",
+                        "lg": "24px",
+                        "unit": "4px"
+                    },
+                    "fontFamily": {
+                        "caption": ["Inter"],
+                        "display-lg": ["Hanken Grotesk"],
+                        "body-md": ["Inter"],
+                        "title-md": ["Hanken Grotesk"],
+                        "headline-lg": ["Hanken Grotesk"],
+                        "body-lg": ["Inter"],
+                        "headline-lg-mobile": ["Hanken Grotesk"],
+                        "label-md": ["Inter"]
+                    },
+                    "fontSize": {
+                        "caption": ["12px", {"lineHeight": "16px", "fontWeight": "400"}],
+                        "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                        "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                        "title-md": ["20px", {"lineHeight": "28px", "fontWeight": "600"}],
+                        "headline-lg": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                        "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                        "headline-lg-mobile": ["28px", {"lineHeight": "36px", "fontWeight": "600"}],
+                        "label-md": ["14px", {"lineHeight": "20px", "letterSpacing": "0.01em", "fontWeight": "500"}]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        body { font-family: 'Inter', sans-serif; background-color: #f8f9ff; }
+        .font-headline-lg { font-family: 'Hanken Grotesk', sans-serif; }
+        .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+        .timeline-connector { width: 2px; background-color: #c3c6d7; position: absolute; left: 23px; top: 40px; bottom: -40px; }
+        .glass-card { background: rgba(255, 255, 255, 0.8); backdrop-filter: blur(12px); border: 1px solid rgba(195, 198, 215, 0.3); }
+        .active-dot { box-shadow: 0 0 0 4px #dbe1ff; }
+    </style>
+</head>
+<body class="text-on-surface">
+<!-- TopAppBar -->
+<header class="fixed top-0 left-0 right-0 z-50 bg-surface dark:bg-on-background border-b border-outline-variant dark:border-outline">
+<div class="flex justify-between items-center w-full px-lg py-sm max-w-max-width mx-auto">
+<div class="flex items-center gap-md">
+<span class="text-title-md font-title-md font-bold text-primary dark:text-primary-fixed">EduFocus</span>
+</div>
+<div class="flex items-center gap-md">
+<div class="hidden md:flex items-center bg-surface-container-low px-md py-xs rounded-full">
+<span class="material-symbols-outlined text-outline">search</span>
+<input class="bg-transparent border-none focus:ring-0 text-body-md" placeholder="Search lessons..." type="text"/>
+</div>
+<button class="material-symbols-outlined text-primary hover:bg-surface-container-low p-sm rounded-full transition-colors">notifications</button>
+<button class="material-symbols-outlined text-primary hover:bg-surface-container-low p-sm rounded-full transition-colors">trending_up</button>
+<div class="w-10 h-10 rounded-full overflow-hidden border-2 border-primary-fixed">
+<img alt="User profile avatar" class="w-full h-full object-cover" data-alt="Close-up portrait of a diverse university student with a friendly expression, soft natural indoor lighting, clean scholarly background with blurred books, modern academic aesthetic using soft blues and whites." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBTiCRJ79BKA-PstjpWqkZdbV1VQPeu1q_pQw23iC9L6J4K0iMCgv30znLF7kiuTjax0yzQYCXMVnNtBJQspjNh06RaNTJIREQThDdlLs_oTKKn1XBl5TH-JFGsGHEG61XiiOKeGNUgpyUMkZub8_z5CA6PuC1qiHOQs_LlcikWXDwyNV1FoeFhavqxx5cknMLSPYfQ93Lt1tYqzywa3R378K0kojG-31l7RWxQXHDJuZ3sqjPnKg0EavroT0O1HpCfGJCiYAml9kQl"/>
+</div>
+</div>
+</div>
+</header>
+<!-- SideNavBar -->
+<nav class="fixed left-0 top-0 h-full flex flex-col p-md z-40 bg-surface-container-lowest dark:bg-inverse-surface border-r border-outline-variant dark:border-outline docked h-screen w-64 pt-24">
+<div class="flex flex-col gap-sm mb-xl">
+<div class="flex flex-col items-center p-md">
+<div class="w-16 h-16 rounded-full overflow-hidden mb-sm border-2 border-secondary-container">
+<img alt="Student Portrait" class="w-full h-full object-cover" data-alt="A professional headshot of a young adult student Alex Johnson, wearing a clean smart-casual navy sweater, set against a bright minimalist studio background. The lighting is crisp and even, reflecting a focused and scholarly persona consistent with a high-end educational dashboard." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCp3ukVaw49TowqWawl2PUpVbcovGx21NPvKZCV2g73_P0NZDtlQF1CC0ZV6YxGA7h-TR5HU0KaiAVDGsNSej_RrHU8m7h46zKhGmv6JrCBYwg22QFeoFmEbRGXjab-Dm3FG-pepXGxziAw-LhERRF2ZsOTRYWWX1qKrENuPaz6iQ_eoxCQ--XLF1uM7DOBYaboLReUNZWv6xW89zdbu8_ljTB2VV_Ak6hGBisHgC4hayutUng3N34toUy4XgKWRa-0WdNTKBokzI2L"/>
+</div>
+<span class="text-body-md font-bold text-on-surface">Alex Johnson</span>
+<span class="text-label-md text-on-surface-variant">Course Progress: 65%</span>
+<div class="w-full bg-outline-variant h-1.5 rounded-full mt-sm overflow-hidden">
+<div class="bg-tertiary-fixed-dim h-full" style="width: 65%"></div>
+</div>
+</div>
+</div>
+<div class="flex flex-col gap-xs flex-grow">
+<!-- Active Navigation -->
+<a class="flex items-center gap-md bg-secondary-container dark:bg-secondary text-on-secondary-container dark:text-on-secondary rounded-lg px-md py-sm scale-[0.98] transition-transform duration-200" href="#">
+<span class="material-symbols-outlined">calendar_today</span>
+<span class="text-label-md font-label-md">Daily Lessons</span>
+</a>
+<a class="flex items-center gap-md text-on-surface-variant dark:text-outline-variant px-md py-sm hover:bg-surface-container-high dark:hover:bg-surface-container transition-all" href="#">
+<span class="material-symbols-outlined">leaderboard</span>
+<span class="text-label-md font-label-md">Leaderboard</span>
+</a>
+<a class="flex items-center gap-md text-on-surface-variant dark:text-outline-variant px-md py-sm hover:bg-surface-container-high dark:hover:bg-surface-container transition-all" href="#">
+<span class="material-symbols-outlined">assignment_turned_in</span>
+<span class="text-label-md font-label-md">Tasks</span>
+</a>
+<a class="flex items-center gap-md text-on-surface-variant dark:text-outline-variant px-md py-sm hover:bg-surface-container-high dark:hover:bg-surface-container transition-all" href="#">
+<span class="material-symbols-outlined">settings</span>
+<span class="text-label-md font-label-md">Settings</span>
+</a>
+</div>
+<button class="mt-auto bg-primary text-on-primary font-bold py-md px-lg rounded-xl shadow-sm hover:opacity-90 transition-opacity">
+            Upgrade to Pro
+        </button>
+</nav>
+<!-- Main Content Canvas -->
+<main class="ml-64 pt-24 pb-12 px-margin-desktop min-h-screen">
+<div class="max-w-4xl mx-auto">
+<header class="mb-xl">
+<h1 class="font-headline-lg text-headline-lg text-on-background mb-sm">Your Learning Path</h1>
+<p class="text-body-md text-on-surface-variant">Stay consistent. Every lesson brings you closer to your goal.</p>
+</header>
+<!-- Timeline Section -->
+<div class="relative space-y-12">
+<!-- Day 1 (Completed) -->
+<div class="relative flex gap-lg group">
+<div class="timeline-connector bg-tertiary"></div>
+<div class="z-10 mt-2">
+<div class="w-12 h-12 rounded-full bg-tertiary flex items-center justify-center text-on-tertiary">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+</div>
+</div>
+<div class="flex-grow">
+<div class="flex items-center gap-md mb-md">
+<h3 class="text-title-md font-title-md text-on-background">Day 1: Foundations of Focus</h3>
+<span class="px-sm py-xs bg-tertiary-container text-on-tertiary-container text-caption rounded-lg font-medium">Completed</span>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-md">
+<div class="glass-card p-lg rounded-xl flex flex-col gap-sm">
+<div class="flex justify-between items-start">
+<h4 class="text-body-md font-bold text-on-surface">Cognitive Load Theory</h4>
+<span class="text-caption text-on-surface-variant">12 mins</span>
+</div>
+<div class="flex items-center gap-xs text-tertiary font-medium">
+<span class="material-symbols-outlined text-[18px]">verified</span>
+<span class="text-label-md">Score: 95%</span>
+</div>
+</div>
+<div class="glass-card p-lg rounded-xl flex flex-col gap-sm">
+<div class="flex justify-between items-start">
+<h4 class="text-body-md font-bold text-on-surface">The Flow State Intro</h4>
+<span class="text-caption text-on-surface-variant">8 mins</span>
+</div>
+<div class="flex items-center gap-md">
+<span class="px-sm py-xs bg-primary-fixed text-on-primary-fixed-variant text-caption rounded-lg font-bold">Post-lesson Task</span>
+<span class="material-symbols-outlined text-tertiary text-[18px]">check_circle</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Day 2 (In Progress / Active) -->
+<div class="relative flex gap-lg group">
+<div class="timeline-connector"></div>
+<div class="z-10 mt-2">
+<div class="w-12 h-12 rounded-full bg-primary flex items-center justify-center text-on-primary active-dot">
+<span class="text-label-md font-bold">2</span>
+</div>
+</div>
+<div class="flex-grow">
+<div class="flex items-center gap-md mb-md">
+<h3 class="text-title-md font-title-md text-on-background">Day 2: Behavioral Mechanics</h3>
+<span class="px-sm py-xs bg-secondary-container text-on-secondary-container text-caption rounded-lg font-medium">In Progress</span>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-md">
+<div class="bg-surface-container-highest border-2 border-primary-container p-lg rounded-xl flex flex-col gap-sm shadow-md">
+<div class="flex justify-between items-start">
+<h4 class="text-body-md font-bold text-on-surface">Dopamine Loops</h4>
+<span class="text-caption text-on-surface-variant">15 mins</span>
+</div>
+<div class="w-full bg-surface-container-low h-2 rounded-full mt-sm">
+<div class="bg-primary h-full rounded-full" style="width: 45%"></div>
+</div>
+<button class="mt-md text-primary font-bold text-label-md flex items-center gap-xs group-hover:translate-x-1 transition-transform">
+                                    Resume Lesson <span class="material-symbols-outlined">arrow_forward</span>
+</button>
+</div>
+<div class="glass-card p-lg rounded-xl flex flex-col gap-sm opacity-60">
+<div class="flex justify-between items-start">
+<h4 class="text-body-md font-bold text-on-surface">Environment Design</h4>
+<span class="text-caption text-on-surface-variant">20 mins</span>
+</div>
+<div class="flex items-center gap-md">
+<span class="px-sm py-xs bg-primary-fixed text-on-primary-fixed-variant text-caption rounded-lg font-bold">Post-lesson Task</span>
+<span class="material-symbols-outlined text-outline text-[18px]">radio_button_unchecked</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Day 3 (Locked) -->
+<div class="relative flex gap-lg group">
+<div class="timeline-connector"></div>
+<div class="z-10 mt-2">
+<div class="w-12 h-12 rounded-full bg-outline-variant flex items-center justify-center text-on-surface-variant">
+<span class="material-symbols-outlined">lock</span>
+</div>
+</div>
+<div class="flex-grow">
+<div class="flex items-center gap-md mb-md">
+<h3 class="text-title-md font-title-md text-outline">Day 3: Deep Work Habits</h3>
+<span class="px-sm py-xs bg-surface-variant text-on-surface-variant text-caption rounded-lg font-medium">Locked</span>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-1">
+<div class="border border-dashed border-outline-variant p-xl rounded-xl flex flex-col items-center justify-center text-center bg-surface-container-low opacity-50">
+<span class="material-symbols-outlined text-xl mb-sm">lock_open</span>
+<p class="text-body-md text-on-surface-variant">Complete Day 2 to unlock this masterclass section.</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Day 4 (Locked) -->
+<div class="relative flex gap-lg group">
+<div class="z-10 mt-2">
+<div class="w-12 h-12 rounded-full bg-outline-variant flex items-center justify-center text-on-surface-variant">
+<span class="material-symbols-outlined">lock</span>
+</div>
+</div>
+<div class="flex-grow">
+<div class="flex items-center gap-md mb-md">
+<h3 class="text-title-md font-title-md text-outline">Day 4: Sustained Performance</h3>
+<span class="px-sm py-xs bg-surface-variant text-on-surface-variant text-caption rounded-lg font-medium">Locked</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Featured Section (Bento Style) -->
+<div class="max-w-4xl mx-auto mt-xl pt-xl border-t border-outline-variant">
+<h2 class="text-title-md font-title-md mb-lg">Recommended Enrichment</h2>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-lg h-64">
+<div class="md:col-span-2 bg-primary-container rounded-xl p-lg relative overflow-hidden text-on-primary-container shadow-lg group cursor-pointer">
+<div class="relative z-10">
+<h4 class="text-headline-lg font-headline-lg mb-sm">Expert Spotlight</h4>
+<p class="text-body-md opacity-90 max-w-sm">Dr. Aris Thorne discusses the neural pathways of academic persistence.</p>
+<button class="mt-lg bg-on-primary-container text-primary-container px-lg py-sm rounded-lg font-bold transition-all hover:scale-105">Watch Interview</button>
+</div>
+<div class="absolute right-0 bottom-0 w-1/2 h-full opacity-40 group-hover:scale-110 transition-transform duration-500">
+<img alt="Expert Thumbnail" class="w-full h-full object-cover" data-alt="A cinematic, high-contrast black and white photograph of an intellectual professor in a sunlit old library. The subject is surrounded by towering mahogany bookshelves and dust motes dancing in shafts of golden light. The mood is scholarly, prestigious, and deeply focused, embodying a premium educational environment." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAO8_wlgDqnp0XuCq-2i74XAjhzPNFtoHVBHtrnm0vQvNfPMvaE0e3paPzK2Nq6DSWpfsTLO5ftsr9ecV8ZEIGC94zWxsOoEeWJ93l9IyCpTcqSez7f1VMHmJ10jfOFBml5MOD3Vv1EyA9OhhPyvwvwDEMb2h7YIxJ1utypH8xnJScjGW1oVL6NGc6-0606qzEQk7lV5rd-6UAGQOnUPmR6WAN05O8Z9p6maSW-XclA0jxgPU24AFRjX77hU9Y06Ruw-h79Ac41-TPD"/>
+</div>
+</div>
+<div class="bg-surface-container-highest rounded-xl p-lg flex flex-col justify-between border border-outline-variant hover:border-primary transition-colors cursor-pointer">
+<span class="material-symbols-outlined text-primary text-display-lg" style="font-variation-settings: 'wght' 200;">psychology</span>
+<div>
+<h4 class="text-label-md font-bold">Mental Refresher</h4>
+<p class="text-caption text-on-surface-variant">5-min mindfulness session</p>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- Floating Action Button (Active only on Dashboards) -->
+<div class="fixed bottom-lg right-lg z-50">
+<button class="flex items-center gap-sm bg-secondary-container text-on-secondary-container px-lg py-md rounded-full shadow-lg hover:shadow-xl hover:scale-105 transition-all duration-300">
+<span class="material-symbols-outlined">bolt</span>
+<span class="font-bold">Quick Review</span>
+</button>
+</div>
+<script>
+        // Micro-interaction for lesson cards
+        document.querySelectorAll('.glass-card, .bg-surface-container-highest').forEach(card => {
+            card.addEventListener('mouseenter', () => {
+                card.style.transform = 'translateY(-2px)';
+            });
+            card.addEventListener('mouseleave', () => {
+                card.style.transform = 'translateY(0)';
+            });
+        });
+    </script>
+</body></html>
+
+<!-- Daily Lessons Dashboard -->
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>EduFocus - Course Material Editor</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Hanken+Grotesk:wght@600;700;800&family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@100..900&family=Inter:wght@100..900&display=swap" rel="stylesheet"/>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            vertical-align: middle;
+        }
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 10px;
+        }
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "on-secondary-container": "#fffbff",
+                      "on-surface": "#0b1c30",
+                      "tertiary": "#006242",
+                      "secondary-fixed-dim": "#c3c0ff",
+                      "on-primary-fixed-variant": "#003ea8",
+                      "on-tertiary": "#ffffff",
+                      "secondary": "#4b41e1",
+                      "on-primary": "#ffffff",
+                      "surface-container": "#e5eeff",
+                      "tertiary-fixed": "#6ffbbe",
+                      "surface-container-highest": "#d3e4fe",
+                      "on-tertiary-fixed-variant": "#005236",
+                      "on-primary-fixed": "#00174b",
+                      "tertiary-container": "#007d55",
+                      "surface-bright": "#f8f9ff",
+                      "on-primary-container": "#eeefff",
+                      "background": "#f8f9ff",
+                      "on-secondary": "#ffffff",
+                      "on-tertiary-fixed": "#002113",
+                      "on-surface-variant": "#434655",
+                      "surface-variant": "#d3e4fe",
+                      "primary-fixed-dim": "#b4c5ff",
+                      "on-error-container": "#93000a",
+                      "primary": "#004ac6",
+                      "on-secondary-fixed-variant": "#3323cc",
+                      "secondary-fixed": "#e2dfff",
+                      "primary-fixed": "#dbe1ff",
+                      "outline": "#737686",
+                      "secondary-container": "#645efb",
+                      "on-secondary-fixed": "#0f0069",
+                      "on-tertiary-container": "#bdffdb",
+                      "surface-container-low": "#eff4ff",
+                      "inverse-on-surface": "#eaf1ff",
+                      "error": "#ba1a1a",
+                      "surface-tint": "#0053db",
+                      "tertiary-fixed-dim": "#4edea3",
+                      "primary-container": "#2563eb",
+                      "inverse-surface": "#213145",
+                      "on-error": "#ffffff",
+                      "surface-container-lowest": "#ffffff",
+                      "surface-dim": "#cbdbf5",
+                      "surface-container-high": "#dce9ff",
+                      "on-background": "#0b1c30",
+                      "error-container": "#ffdad6",
+                      "surface": "#f8f9ff",
+                      "inverse-primary": "#b4c5ff",
+                      "outline-variant": "#c3c6d7"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.25rem",
+                      "lg": "0.5rem",
+                      "xl": "0.75rem",
+                      "full": "9999px"
+              },
+              "spacing": {
+                      "md": "16px",
+                      "sm": "8px",
+                      "margin-mobile": "16px",
+                      "xs": "4px",
+                      "max-width": "1280px",
+                      "lg": "24px",
+                      "gutter": "24px",
+                      "xl": "32px",
+                      "margin-desktop": "48px",
+                      "unit": "4px"
+              },
+              "fontFamily": {
+                      "label-md": ["Inter"],
+                      "body-lg": ["Inter"],
+                      "title-md": ["Hanken Grotesk"],
+                      "headline-lg": ["Hanken Grotesk"],
+                      "caption": ["Inter"],
+                      "body-md": ["Inter"],
+                      "headline-lg-mobile": ["Hanken Grotesk"],
+                      "display-lg": ["Hanken Grotesk"]
+              },
+              "fontSize": {
+                      "label-md": ["14px", {"lineHeight": "20px", "letterSpacing": "0.01em", "fontWeight": "500"}],
+                      "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                      "title-md": ["20px", {"lineHeight": "28px", "fontWeight": "600"}],
+                      "headline-lg": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                      "caption": ["12px", {"lineHeight": "16px", "fontWeight": "400"}],
+                      "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                      "headline-lg-mobile": ["28px", {"lineHeight": "36px", "fontWeight": "600"}],
+                      "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700"}]
+              }
+            }
+          }
+        }
+    </script>
+</head>
+<body class="bg-background text-on-surface font-body-md selection:bg-primary-container selection:text-on-primary-container">
+<!-- Sidebar Navigation (From Shared Components) -->
+<aside class="fixed left-0 top-0 h-full flex flex-col p-md z-40 bg-surface-container-lowest border-r border-outline-variant w-64 hidden md:flex">
+<div class="mb-xl px-md">
+<h1 class="text-headline-lg font-headline-lg text-primary">EduFocus</h1>
+</div>
+<nav class="flex-1 space-y-xs">
+<a class="flex items-center gap-md text-on-surface-variant px-md py-sm hover:bg-surface-container-high transition-all rounded-lg" href="#">
+<span class="material-symbols-outlined" data-icon="calendar_today">calendar_today</span>
+<span class="font-label-md text-label-md">Daily Lessons</span>
+</a>
+<a class="flex items-center gap-md text-on-surface-variant px-md py-sm hover:bg-surface-container-high transition-all rounded-lg" href="#">
+<span class="material-symbols-outlined" data-icon="leaderboard">leaderboard</span>
+<span class="font-label-md text-label-md">Leaderboard</span>
+</a>
+<a class="flex items-center gap-md bg-secondary-container text-on-secondary-container px-md py-sm rounded-lg active:scale-[0.98] transition-transform duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="assignment_turned_in">assignment_turned_in</span>
+<span class="font-label-md text-label-md">Tasks</span>
+</a>
+<a class="flex items-center gap-md text-on-surface-variant px-md py-sm hover:bg-surface-container-high transition-all rounded-lg" href="#">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+<span class="font-label-md text-label-md">Settings</span>
+</a>
+</nav>
+<div class="mt-auto border-t border-outline-variant pt-md px-md">
+<div class="flex items-center gap-md mb-md">
+<img alt="Alex Johnson" class="w-10 h-10 rounded-full object-cover border border-outline-variant" data-alt="A professional headshot of a young male educator with a warm, friendly smile, dressed in a minimalist navy polo shirt. The lighting is soft and natural, emphasizing a high-end scholarly aesthetic with a clean, blurred background." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDqEZaClPe20miQagVyzedE9TxdZ3SjJP308mEK9A3A2SJbPwh8OU3TtOG0I8kEvULGQFR1zmZ4x2CdRMXOzhGobZ-MiyPUbfn9HgwRUkn_Uu2rMxJMcokbk85x2f_T0LUmVQYFj3QlgsC29csjHuo6zOiaA32Ktrxc_b42x-JxeHm5YRVt3o4JyoTHB2CohmBW6IbK7BRozOlrs5-bX_QBHJ6615dSY1WxuNhTqUhOYVxMvRvPQV8x1ti23LM-UmTmSbQ4xxvhAoD5"/>
+<div>
+<p class="font-label-md text-label-md font-bold">Alex Johnson</p>
+<p class="text-caption font-caption text-on-surface-variant">Course Progress: 65%</p>
+</div>
+</div>
+<button class="w-full py-sm bg-primary text-on-primary rounded-lg font-label-md text-label-md hover:opacity-90 transition-opacity">
+                Upgrade to Pro
+            </button>
+</div>
+</aside>
+<!-- Main Content Canvas -->
+<main class="md:ml-64 min-h-screen">
+<!-- Top App Bar (From Shared Components) -->
+<header class="sticky top-0 z-30 bg-surface border-b border-outline-variant px-lg py-sm flex justify-between items-center w-full">
+<div class="flex items-center gap-md">
+<button class="md:hidden p-xs rounded-full hover:bg-surface-container">
+<span class="material-symbols-outlined">menu</span>
+</button>
+<div class="flex flex-col">
+<h2 class="text-title-md font-title-md font-bold text-primary">Edit Material</h2>
+<p class="text-caption font-caption text-on-surface-variant">Admin Dashboard / Course Builder</p>
+</div>
+</div>
+<div class="flex items-center gap-md">
+<div class="hidden sm:flex bg-surface-container-low px-md py-xs rounded-full border border-outline-variant items-center gap-sm">
+<span class="material-symbols-outlined text-outline">search</span>
+<input class="bg-transparent border-none focus:ring-0 text-body-md w-48" placeholder="Search curriculum..." type="text"/>
+</div>
+<div class="flex items-center gap-sm">
+<button class="p-xs rounded-full hover:bg-surface-container-low transition-colors relative">
+<span class="material-symbols-outlined">notifications</span>
+<span class="absolute top-1 right-1 w-2 h-2 bg-error rounded-full"></span>
+</button>
+<button class="p-xs rounded-full hover:bg-surface-container-low transition-colors">
+<span class="material-symbols-outlined">trending_up</span>
+</button>
+</div>
+</div>
+</header>
+<!-- Content Area -->
+<div class="max-w-max-width mx-auto p-gutter animate-in fade-in duration-700">
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-gutter">
+<!-- Left Column: Form Inputs -->
+<div class="lg:col-span-7 space-y-gutter">
+<!-- Basic Information Card -->
+<section class="bg-surface-container-lowest rounded-xl p-lg border border-outline-variant shadow-sm">
+<div class="flex items-center gap-sm mb-lg">
+<span class="material-symbols-outlined text-primary">edit_note</span>
+<h3 class="text-title-md font-title-md">Lesson Details</h3>
+</div>
+<div class="space-y-md">
+<div>
+<label class="block text-label-md font-label-md mb-xs text-on-surface-variant">Day Title</label>
+<input class="w-full rounded-lg border-outline-variant focus:border-primary focus:ring-1 focus:ring-primary text-body-md py-md bg-surface" placeholder="Enter lesson title..." type="text" value="Introduction to React"/>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-md">
+<div class="md:col-span-2">
+<label class="block text-label-md font-label-md mb-xs text-on-surface-variant">YouTube Video URL</label>
+<div class="relative">
+<span class="absolute left-md top-1/2 -translate-y-1/2 material-symbols-outlined text-outline text-body-md">link</span>
+<input class="w-full pl-xl rounded-lg border-outline-variant focus:border-primary focus:ring-1 focus:ring-primary text-body-md py-md bg-surface" id="video-url" placeholder="https://youtube.com/watch?v=..." type="url" value="https://www.youtube.com/watch?v=dQw4w9WgXcQ"/>
+</div>
+</div>
+<div>
+<label class="block text-label-md font-label-md mb-xs text-on-surface-variant">Start Time (minutes)</label>
+<input class="w-full rounded-lg border-outline-variant focus:border-primary focus:ring-1 focus:ring-primary text-body-md py-md bg-surface" type="number" value="0"/>
+</div>
+<div>
+<label class="block text-label-md font-label-md mb-xs text-on-surface-variant">End Time (minutes)</label>
+<input class="w-full rounded-lg border-outline-variant focus:border-primary focus:ring-1 focus:ring-primary text-body-md py-md bg-surface" type="number" value="12"/>
+</div>
+</div>
+</div>
+</section>
+<!-- Tasks Section -->
+<section class="bg-surface-container-lowest rounded-xl p-lg border border-outline-variant shadow-sm">
+<div class="flex justify-between items-center mb-lg">
+<div class="flex items-center gap-sm">
+<span class="material-symbols-outlined text-primary">checklist</span>
+<h3 class="text-title-md font-title-md">Lesson Tasks</h3>
+</div>
+<button class="flex items-center gap-xs text-primary font-label-md text-label-md hover:underline">
+<span class="material-symbols-outlined text-[18px]">add</span>
+                                Add Task
+                            </button>
+</div>
+<div class="space-y-sm" id="task-list">
+<!-- Task Item 1 -->
+<div class="flex items-center gap-md p-md bg-surface-container-low rounded-lg border border-outline-variant group">
+<input class="w-5 h-5 rounded text-primary border-outline focus:ring-primary cursor-pointer" type="checkbox"/>
+<input class="flex-1 bg-transparent border-none focus:ring-0 text-body-md p-0" type="text" value="Install Node.js and NPM"/>
+<button class="opacity-0 group-hover:opacity-100 transition-opacity p-xs text-outline hover:text-error">
+<span class="material-symbols-outlined">delete</span>
+</button>
+</div>
+<!-- Task Item 2 -->
+<div class="flex items-center gap-md p-md bg-surface-container-low rounded-lg border border-outline-variant group">
+<input checked="" class="w-5 h-5 rounded text-primary border-outline focus:ring-primary cursor-pointer" type="checkbox"/>
+<input class="flex-1 bg-transparent border-none focus:ring-0 text-body-md p-0" type="text" value="Initialize a new React project using Vite"/>
+<button class="opacity-0 group-hover:opacity-100 transition-opacity p-xs text-outline hover:text-error">
+<span class="material-symbols-outlined">delete</span>
+</button>
+</div>
+<!-- Task Item 3 -->
+<div class="flex items-center gap-md p-md bg-surface-container-low rounded-lg border border-outline-variant group">
+<input class="w-5 h-5 rounded text-primary border-outline focus:ring-primary cursor-pointer" type="checkbox"/>
+<input class="flex-1 bg-transparent border-none focus:ring-0 text-body-md p-0" type="text" value="Understand JSX syntax and basic components"/>
+<button class="opacity-0 group-hover:opacity-100 transition-opacity p-xs text-outline hover:text-error">
+<span class="material-symbols-outlined">delete</span>
+</button>
+</div>
+</div>
+</section>
+</div>
+<!-- Right Column: Preview & Sticky Actions -->
+<div class="lg:col-span-5 space-y-gutter">
+<!-- Live Preview Card -->
+<div class="sticky top-[84px] space-y-gutter">
+<section class="bg-inverse-surface rounded-xl overflow-hidden shadow-xl">
+<div class="p-md border-b border-outline bg-on-background flex items-center gap-sm">
+<div class="flex gap-1">
+<div class="w-2.5 h-2.5 rounded-full bg-error"></div>
+<div class="w-2.5 h-2.5 rounded-full bg-[#facc15]"></div>
+<div class="w-2.5 h-2.5 rounded-full bg-tertiary-fixed-dim"></div>
+</div>
+<span class="text-caption font-caption text-outline-variant ml-sm">Live Preview</span>
+</div>
+<!-- Video Placeholder with data-alt -->
+<div class="aspect-video bg-black relative group flex items-center justify-center">
+<img alt="React Development" class="w-full h-full object-cover opacity-60" data-alt="A high-resolution cinematic shot of a modern programmer's desk with a curved monitor displaying clean React JavaScript code. The room is softly lit with cool blue and warm orange ambient light, creating a focused, high-end developer workspace atmosphere. The aesthetic is professional, modern, and scholarly, emphasizing academic rigor in technology." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDxUiHs3FK1v21Ns5wt-nR1yYBBghd3sVTsokg0FH1H9JMAzeA-9k_0TzdfcDJj3o8qOLHi0ueDUawqTXym05Qpevuxwte_cMSXcpzkRUnabGqds_a5Hk0En-aCX7WosrE65urGHJz4Y3HefbTYVz3e__5x6L96r4xuuQsSO5R1Sm0jl_Q5-n5wtIBplGbClboni0wsawer9paathtTOs5HNay318l1eMLkTWIycE1JyRhLmRy1-Hvvo4aicI98Sn73cke9VgnDtdP2"/>
+<div class="absolute inset-0 flex items-center justify-center">
+<button class="w-16 h-16 bg-primary text-on-primary rounded-full flex items-center justify-center shadow-2xl hover:scale-110 transition-transform">
+<span class="material-symbols-outlined !text-[32px]" style="font-variation-settings: 'FILL' 1;">play_arrow</span>
+</button>
+</div>
+<div class="absolute bottom-4 left-4 right-4 h-1 bg-outline-variant rounded-full overflow-hidden">
+<div class="bg-tertiary-fixed-dim w-1/3 h-full"></div>
+</div>
+</div>
+<div class="p-lg bg-surface-container-highest">
+<div class="flex items-start justify-between mb-sm">
+<h4 class="text-title-md font-title-md text-on-surface" id="preview-title">Introduction to React</h4>
+<span class="bg-primary-container text-on-primary-container px-sm py-1 rounded-full text-caption font-label-md">0:00 - 12:00</span>
+</div>
+<p class="text-body-md text-on-surface-variant line-clamp-2">
+                                    In this introductory lesson, we cover the core concepts of React, setting up your environment, and building your first component.
+                                </p>
+</div>
+</section>
+<!-- Final Actions -->
+<div class="bg-surface-container-lowest p-lg rounded-xl border border-outline-variant shadow-sm space-y-md">
+<div class="flex items-center gap-sm text-on-surface-variant">
+<span class="material-symbols-outlined text-[20px]">info</span>
+<p class="text-caption">Changes are saved to draft automatically.</p>
+</div>
+<div class="flex gap-md">
+<button class="flex-1 py-md bg-primary text-on-primary rounded-lg font-label-md text-label-md hover:opacity-90 active:scale-[0.98] transition-all shadow-md">
+                                    Save Material
+                                </button>
+<button class="px-lg py-md border border-outline-variant rounded-lg font-label-md text-label-md hover:bg-surface-container-low transition-colors">
+                                    Discard
+                                </button>
+</div>
+</div>
+<!-- Mini Stats Card -->
+<div class="grid grid-cols-2 gap-md">
+<div class="bg-tertiary-container text-on-tertiary-container p-md rounded-xl border border-tertiary shadow-sm">
+<p class="text-caption opacity-80 mb-1">Estimated Time</p>
+<p class="text-title-md font-bold">45 Mins</p>
+</div>
+<div class="bg-surface-container-low text-on-surface p-md rounded-xl border border-outline-variant shadow-sm">
+<p class="text-caption text-on-surface-variant mb-1">Total Tasks</p>
+<p class="text-title-md font-bold">3 Steps</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- Micro-interactions Script -->
+<script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Live title update
+            const titleInput = document.querySelector('input[placeholder="Enter lesson title..."]');
+            const previewTitle = document.getElementById('preview-title');
+            
+            titleInput.addEventListener('input', (e) => {
+                previewTitle.textContent = e.target.value || "Untitled Lesson";
+            });
+
+            // Active State Simulation for Nav
+            const navItems = document.querySelectorAll('aside nav a');
+            navItems.forEach(item => {
+                item.addEventListener('click', (e) => {
+                    navItems.forEach(i => {
+                        i.classList.remove('bg-secondary-container', 'text-on-secondary-container');
+                        i.classList.add('text-on-surface-variant');
+                    });
+                    item.classList.add('bg-secondary-container', 'text-on-secondary-container');
+                    item.classList.remove('text-on-surface-variant');
+                });
+            });
+
+            // Hover effect for Save button
+            const saveBtn = document.querySelector('.bg-primary');
+            saveBtn.addEventListener('mousedown', () => {
+                saveBtn.style.transform = 'scale(0.97)';
+            });
+            saveBtn.addEventListener('mouseup', () => {
+                saveBtn.style.transform = 'scale(1)';
+            });
+
+            // Simple Task addition simulation (Visual only for now)
+            const addTaskBtn = document.querySelector('button:has(span:contains("add"))');
+            // Using more reliable selector for demo
+            const addTaskAction = Array.from(document.querySelectorAll('button')).find(el => el.textContent.includes('Add Task'));
+            
+            if(addTaskAction) {
+                addTaskAction.addEventListener('click', () => {
+                    const taskList = document.getElementById('task-list');
+                    const newTask = document.createElement('div');
+                    newTask.className = 'flex items-center gap-md p-md bg-surface-container-low rounded-lg border border-outline-variant group animate-in slide-in-from-bottom-2 duration-300';
+                    newTask.innerHTML = `
+                        <input type="checkbox" class="w-5 h-5 rounded text-primary border-outline focus:ring-primary cursor-pointer">
+                        <input type="text" placeholder="New Task..." class="flex-1 bg-transparent border-none focus:ring-0 text-body-md p-0">
+                        <button class="opacity-0 group-hover:opacity-100 transition-opacity p-xs text-outline hover:text-error">
+                            <span class="material-symbols-outlined">delete</span>
+                        </button>
+                    `;
+                    taskList.appendChild(newTask);
+                    newTask.querySelector('input[type="text"]').focus();
+                });
+            }
+        });
+    </script>
+</body></html>
+
+<!-- Add/Edit Course Material -->
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>EduFocus Admin | Course Management</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;600;700;800&amp;family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "on-secondary-container": "#fffbff",
+                    "on-surface": "#0b1c30",
+                    "tertiary": "#006242",
+                    "secondary-fixed-dim": "#c3c0ff",
+                    "on-primary-fixed-variant": "#003ea8",
+                    "on-tertiary": "#ffffff",
+                    "secondary": "#4b41e1",
+                    "on-primary": "#ffffff",
+                    "surface-container": "#e5eeff",
+                    "tertiary-fixed": "#6ffbbe",
+                    "surface-container-highest": "#d3e4fe",
+                    "on-tertiary-fixed-variant": "#005236",
+                    "on-primary-fixed": "#00174b",
+                    "tertiary-container": "#007d55",
+                    "surface-bright": "#f8f9ff",
+                    "on-primary-container": "#eeefff",
+                    "background": "#f8f9ff",
+                    "on-secondary": "#ffffff",
+                    "on-tertiary-fixed": "#002113",
+                    "on-surface-variant": "#434655",
+                    "surface-variant": "#d3e4fe",
+                    "primary-fixed-dim": "#b4c5ff",
+                    "on-error-container": "#93000a",
+                    "primary": "#004ac6",
+                    "on-secondary-fixed-variant": "#3323cc",
+                    "secondary-fixed": "#e2dfff",
+                    "primary-fixed": "#dbe1ff",
+                    "outline": "#737686",
+                    "secondary-container": "#645efb",
+                    "on-secondary-fixed": "#0f0069",
+                    "on-tertiary-container": "#bdffdb",
+                    "surface-container-low": "#eff4ff",
+                    "inverse-on-surface": "#eaf1ff",
+                    "error": "#ba1a1a",
+                    "surface-tint": "#0053db",
+                    "tertiary-fixed-dim": "#4edea3",
+                    "primary-container": "#2563eb",
+                    "inverse-surface": "#213145",
+                    "on-error": "#ffffff",
+                    "surface-container-lowest": "#ffffff",
+                    "surface-dim": "#cbdbf5",
+                    "surface-container-high": "#dce9ff",
+                    "on-background": "#0b1c30",
+                    "error-container": "#ffdad6",
+                    "surface": "#f8f9ff",
+                    "inverse-primary": "#b4c5ff",
+                    "outline-variant": "#c3c6d7"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "md": "16px",
+                    "sm": "8px",
+                    "margin-mobile": "16px",
+                    "xs": "4px",
+                    "max-width": "1280px",
+                    "lg": "24px",
+                    "gutter": "24px",
+                    "xl": "32px",
+                    "margin-desktop": "48px",
+                    "unit": "4px"
+            },
+            "fontFamily": {
+                    "label-md": ["Inter"],
+                    "body-lg": ["Inter"],
+                    "title-md": ["Hanken Grotesk"],
+                    "headline-lg": ["Hanken Grotesk"],
+                    "caption": ["Inter"],
+                    "body-md": ["Inter"],
+                    "headline-lg-mobile": ["Hanken Grotesk"],
+                    "display-lg": ["Hanken Grotesk"]
+            },
+            "fontSize": {
+                    "label-md": ["14px", {"lineHeight": "20px", "letterSpacing": "0.01em", "fontWeight": "500"}],
+                    "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                    "title-md": ["20px", {"lineHeight": "28px", "fontWeight": "600"}],
+                    "headline-lg": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                    "caption": ["12px", {"lineHeight": "16px", "fontWeight": "400"}],
+                    "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                    "headline-lg-mobile": ["28px", {"lineHeight": "36px", "fontWeight": "600"}],
+                    "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        body {
+            background-color: #f8f9ff;
+            color: #0b1c30;
+            overflow-x: hidden;
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(195, 198, 215, 0.3);
+        }
+        .bento-card {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .bento-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 10px 25px -5px rgba(0, 74, 198, 0.1);
+        }
+    </style>
+</head>
+<body class="font-body-md text-body-md">
+<!-- Sidebar Navigation -->
+<aside class="fixed left-0 top-0 h-full flex flex-col p-md z-40 bg-surface-container-lowest border-r border-outline-variant w-64 hidden md:flex">
+<div class="mb-xl px-md">
+<h1 class="text-headline-lg font-headline-lg text-primary">EduFocus</h1>
+<div class="mt-md flex items-center gap-sm">
+<img alt="Alex Johnson" class="w-10 h-10 rounded-full object-cover" data-alt="A professional close-up portrait of a young administrator with a friendly expression. They are set against a soft, out-of-focus modern office background with clean architectural lines. The lighting is natural and bright, reinforcing a scholarly yet accessible professional identity consistent with high-end educational software." src="https://lh3.googleusercontent.com/aida-public/AB6AXuC-SYRSvE6nhf1xJ5DjZ6sCIWP5paRptqWSpGnXohuFmmtBW0KENBvRDzOWm99av7rgiHKsXKL08f8RGxngf71hiJ-lfzPwk7F7wMc8iqOH6uj_s9RBCmuyoBUMvjNPhBveDU5Nj-KZoRTIzW6WTc2kCm11j6Jrpmk_LRX0WPnPiMg7zoqB1jjrQ6SVP-fJboE5o3fppl-n4auqVvgYf_sXlrs_rXW9fRX9ulZps8NpWAg14CNLatk3CuhKQMZa0CqLviNDO-f_vyhR"/>
+<div>
+<p class="font-label-md text-label-md text-on-surface">Alex Johnson</p>
+<p class="text-caption text-on-surface-variant">Course Admin</p>
+</div>
+</div>
+</div>
+<nav class="flex-1 flex flex-col gap-xs">
+<a class="flex items-center gap-md text-on-surface-variant px-md py-sm hover:bg-surface-container-high transition-all rounded-lg" href="#">
+<span class="material-symbols-outlined">calendar_today</span>
+<span class="font-label-md">Daily Lessons</span>
+</a>
+<a class="flex items-center gap-md text-on-surface-variant px-md py-sm hover:bg-surface-container-high transition-all rounded-lg" href="#">
+<span class="material-symbols-outlined">leaderboard</span>
+<span class="font-label-md">Leaderboard</span>
+</a>
+<a class="flex items-center gap-md bg-secondary-container text-on-secondary-container px-md py-sm rounded-lg scale-[0.98]" href="#">
+<span class="material-symbols-outlined">assignment_turned_in</span>
+<span class="font-label-md">Tasks</span>
+</a>
+<a class="flex items-center gap-md text-on-surface-variant px-md py-sm hover:bg-surface-container-high transition-all rounded-lg" href="#">
+<span class="material-symbols-outlined">settings</span>
+<span class="font-label-md">Settings</span>
+</a>
+</nav>
+<div class="mt-auto p-md">
+<button class="w-full bg-primary text-on-primary py-sm rounded-lg font-label-md shadow-sm hover:opacity-90 transition-opacity">
+                Upgrade to Pro
+            </button>
+</div>
+</aside>
+<!-- Top App Bar -->
+<header class="fixed top-0 right-0 left-0 md:left-64 h-16 bg-surface border-b border-outline-variant z-30 flex items-center justify-between px-lg">
+<div class="flex items-center gap-md">
+<span class="material-symbols-outlined text-primary">search</span>
+<input class="bg-transparent border-none focus:ring-0 text-body-md w-64" placeholder="Search course modules..." type="text"/>
+</div>
+<div class="flex items-center gap-lg">
+<button class="relative">
+<span class="material-symbols-outlined text-on-surface-variant">notifications</span>
+<span class="absolute top-0 right-0 w-2 h-2 bg-error rounded-full"></span>
+</button>
+<span class="material-symbols-outlined text-on-surface-variant">trending_up</span>
+<div class="w-8 h-8 rounded-full bg-primary-container flex items-center justify-center text-on-primary-container font-bold text-xs">AJ</div>
+</div>
+</header>
+<!-- Main Content Area -->
+<main class="pt-24 pb-12 px-md md:pl-80 md:pr-12 max-w-max-width mx-auto">
+<!-- Header Section -->
+<section class="flex flex-col md:flex-row md:items-end justify-between gap-md mb-xl">
+<div>
+<h2 class="text-headline-lg font-headline-lg text-on-surface">Curriculum Management</h2>
+<p class="text-body-md text-on-surface-variant mt-xs">Organize daily learning journeys and task assignments.</p>
+</div>
+<button class="flex items-center justify-center gap-sm bg-primary text-on-primary px-lg py-md rounded-xl font-title-md hover:shadow-lg transition-shadow">
+<span class="material-symbols-outlined">add_circle</span>
+                Add New Day
+            </button>
+</section>
+<!-- Bento Grid Content -->
+<div class="grid grid-cols-1 md:grid-cols-12 gap-gutter">
+<!-- Day 1 Card -->
+<div class="md:col-span-8 bento-card bg-surface-container-lowest p-lg rounded-xl border border-outline-variant shadow-sm flex flex-col gap-md">
+<div class="flex justify-between items-start">
+<div>
+<div class="flex items-center gap-sm mb-xs">
+<span class="bg-tertiary-fixed text-on-tertiary-fixed-variant px-sm py-xs rounded text-xs font-bold uppercase tracking-wider">Active</span>
+<h3 class="text-title-md font-title-md text-on-surface">Day 1: Introduction to Data Structures</h3>
+</div>
+<p class="text-body-md text-on-surface-variant">The fundamentals of memory management and basic arrays.</p>
+</div>
+<button class="p-sm hover:bg-surface-container-high rounded-full transition-colors">
+<span class="material-symbols-outlined text-primary">edit</span>
+</button>
+</div>
+<div class="grid grid-cols-1 sm:grid-cols-2 gap-md mt-sm">
+<div class="bg-surface-container-low p-md rounded-lg flex items-center gap-md">
+<div class="w-12 h-12 bg-primary-container rounded-lg flex items-center justify-center">
+<span class="material-symbols-outlined text-primary">videocam</span>
+</div>
+<div>
+<p class="font-bold text-on-surface">4 Videos</p>
+<p class="text-caption text-on-surface-variant">42 mins total</p>
+</div>
+</div>
+<div class="bg-surface-container-low p-md rounded-lg flex items-center gap-md">
+<div class="w-12 h-12 bg-secondary-container rounded-lg flex items-center justify-center">
+<span class="material-symbols-outlined text-on-secondary-container">task_alt</span>
+</div>
+<div>
+<p class="font-bold text-on-surface">3 Tasks</p>
+<p class="text-caption text-on-surface-variant">Estimated 2 hours</p>
+</div>
+</div>
+</div>
+<div class="mt-auto pt-md border-t border-outline-variant flex justify-between items-center">
+<div class="flex -space-x-2">
+<img class="w-8 h-8 rounded-full border-2 border-surface-container-lowest" data-alt="Close-up avatar of a female student with a bright smile, captured in soft studio lighting." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAsakE9E_Xi0BPx01zQndNc8TxIuH6WEKEyDsOHCVCecsY6vpfOw4P79YsjbdmsxLmZSVjMRbrV0fc8GkEDVr2PPL9s6qfTAw5w8_kOBtAkwAM0jP4s_SrLgqYFz4Ejhjn76pjM6E3DOArxVXjZOvWEvI927jred-7sqjkx8v2M_Jfy_d3EKRfnW5qhHxR46C1KHdal6-0zY2OUDuTxPDJQiCvIuOGGOKFm_FW7T6HTqS9I3zKWvBhqIBHmKwtG_y2It8jraqSzEpgt"/>
+<img class="w-8 h-8 rounded-full border-2 border-surface-container-lowest" data-alt="Close-up avatar of a male student with glasses, looking thoughtful, set against a neutral grey background." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBH_LvwiMWlyDwqrrAf07Ac1NUoMwSpWBYvXRiCDndWjK2bXH_tfaONtV0UBfXBWaX0EBVsdWsuWRwUJfOCnpyGYSmUgt8SbO4NSsV-zBrWNXe-o5zQeKdvWmASEO1WAwLzwfS5uerw255CISrI4WXOcM0cX9LUGPv67C_IqcPRmmvhJHt0_mQduHT68OFWcAWaCx9Dyi1MWEnzjYbdpUseD1LoJIVDZE7JM4GlqV7D-Gs09tJT9EnJCET07JhVc1UtGPoGGzSHtaEq"/>
+<div class="w-8 h-8 rounded-full border-2 border-surface-container-lowest bg-outline-variant flex items-center justify-center text-[10px] font-bold">+12</div>
+</div>
+<span class="text-caption text-on-surface-variant">Last edited: 2 hours ago</span>
+</div>
+</div>
+<!-- Stats Mini Card -->
+<div class="md:col-span-4 bento-card bg-primary p-lg rounded-xl flex flex-col justify-between text-on-primary relative overflow-hidden">
+<div class="relative z-10">
+<h4 class="text-title-md font-title-md mb-xs">Course Health</h4>
+<p class="text-caption opacity-80">Average completion rate across all active days.</p>
+</div>
+<div class="mt-xl relative z-10">
+<div class="text-display-lg font-display-lg mb-xs">88%</div>
+<div class="w-full bg-white/20 h-2 rounded-full overflow-hidden">
+<div class="bg-tertiary-fixed-dim h-full w-[88%]"></div>
+</div>
+</div>
+<!-- Decorative background elements -->
+<div class="absolute -right-8 -bottom-8 w-32 h-32 bg-white/10 rounded-full blur-2xl"></div>
+</div>
+<!-- Day 2 Card -->
+<div class="md:col-span-6 bento-card bg-surface-container-lowest p-lg rounded-xl border border-outline-variant shadow-sm flex flex-col gap-md">
+<div class="flex justify-between items-start">
+<div>
+<h3 class="text-title-md font-title-md text-on-surface">Day 2: Linked Lists</h3>
+<p class="text-body-md text-on-surface-variant mt-xs">Deep dive into dynamic memory and pointers.</p>
+</div>
+<button class="p-sm hover:bg-surface-container-high rounded-full transition-colors">
+<span class="material-symbols-outlined text-primary">edit</span>
+</button>
+</div>
+<div class="flex gap-md">
+<div class="flex items-center gap-xs text-on-surface-variant">
+<span class="material-symbols-outlined text-sm">play_circle</span>
+<span class="text-caption">3 Videos</span>
+</div>
+<div class="flex items-center gap-xs text-on-surface-variant">
+<span class="material-symbols-outlined text-sm">quiz</span>
+<span class="text-caption">1 Quiz</span>
+</div>
+</div>
+<div class="mt-4 flex items-center justify-between">
+<span class="text-label-md font-label-md text-primary bg-primary-fixed px-md py-xs rounded-full">Draft</span>
+<button class="text-primary font-bold text-sm hover:underline">Manage Content</button>
+</div>
+</div>
+<!-- Day 3 Card -->
+<div class="md:col-span-6 bento-card bg-surface-container-lowest p-lg rounded-xl border border-outline-variant shadow-sm flex flex-col gap-md">
+<div class="flex justify-between items-start">
+<div>
+<h3 class="text-title-md font-title-md text-on-surface">Day 3: Stacks &amp; Queues</h3>
+<p class="text-body-md text-on-surface-variant mt-xs">Practical applications of LIFO and FIFO patterns.</p>
+</div>
+<button class="p-sm hover:bg-surface-container-high rounded-full transition-colors">
+<span class="material-symbols-outlined text-primary">edit</span>
+</button>
+</div>
+<div class="flex gap-md">
+<div class="flex items-center gap-xs text-on-surface-variant">
+<span class="material-symbols-outlined text-sm">play_circle</span>
+<span class="text-caption">5 Videos</span>
+</div>
+<div class="flex items-center gap-xs text-on-surface-variant">
+<span class="material-symbols-outlined text-sm">list_alt</span>
+<span class="text-caption">4 Exercises</span>
+</div>
+</div>
+<div class="mt-4 flex items-center justify-between">
+<span class="text-label-md font-label-md text-outline bg-surface-variant px-md py-xs rounded-full">Scheduled</span>
+<button class="text-primary font-bold text-sm hover:underline">Manage Content</button>
+</div>
+</div>
+<!-- Sidebar / Quick Actions -->
+<div class="md:col-span-12 grid grid-cols-1 sm:grid-cols-3 gap-gutter mt-lg">
+<div class="bg-surface-container-high p-lg rounded-xl border border-outline-variant flex flex-col items-center text-center">
+<span class="material-symbols-outlined text-primary text-4xl mb-sm">auto_stories</span>
+<p class="font-title-md text-on-surface">Generate AI Quizzes</p>
+<p class="text-caption text-on-surface-variant">Create questions from your video transcripts instantly.</p>
+</div>
+<div class="bg-surface-container-high p-lg rounded-xl border border-outline-variant flex flex-col items-center text-center">
+<span class="material-symbols-outlined text-tertiary text-4xl mb-sm">analytics</span>
+<p class="font-title-md text-on-surface">Student Insights</p>
+<p class="text-caption text-on-surface-variant">See which days have the highest dropout rate.</p>
+</div>
+<div class="bg-surface-container-high p-lg rounded-xl border border-outline-variant flex flex-col items-center text-center">
+<span class="material-symbols-outlined text-secondary text-4xl mb-sm">cloud_upload</span>
+<p class="font-title-md text-on-surface">Bulk Import</p>
+<p class="text-caption text-on-surface-variant">Upload CSV or JSON curriculum structures.</p>
+</div>
+</div>
+</div>
+</main>
+<!-- Mobile Bottom Navigation (Visible only on mobile) -->
+<nav class="md:hidden fixed bottom-0 left-0 right-0 bg-surface border-t border-outline-variant flex justify-around p-sm z-50">
+<button class="flex flex-col items-center text-primary">
+<span class="material-symbols-outlined">calendar_today</span>
+<span class="text-[10px] font-bold">Lessons</span>
+</button>
+<button class="flex flex-col items-center text-on-surface-variant">
+<span class="material-symbols-outlined">leaderboard</span>
+<span class="text-[10px]">Leaderboard</span>
+</button>
+<button class="flex flex-col items-center text-on-surface-variant">
+<span class="material-symbols-outlined">assignment_turned_in</span>
+<span class="text-[10px]">Tasks</span>
+</button>
+<button class="flex flex-col items-center text-on-surface-variant">
+<span class="material-symbols-outlined">settings</span>
+<span class="text-[10px]">Settings</span>
+</button>
+</nav>
+<!-- Micro-interaction Scripts -->
+<script>
+        document.querySelectorAll('.bento-card').forEach(card => {
+            card.addEventListener('mouseenter', () => {
+                // Subtle feedback handled by CSS transitions
+            });
+        });
+
+        // Search bar interaction
+        const searchInput = document.querySelector('input[type="text"]');
+        searchInput.addEventListener('focus', () => {
+            searchInput.parentElement.classList.add('ring-1', 'ring-primary', 'rounded-lg', 'bg-surface-container-low');
+        });
+        searchInput.addEventListener('blur', () => {
+            searchInput.parentElement.classList.remove('ring-1', 'ring-primary', 'rounded-lg', 'bg-surface-container-low');
+        });
+    </script>
+</body></html>
+
+<!-- Course Content Manager -->
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>EduFocus Admin Dashboard</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;family=Hanken+Grotesk:wght@600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-secondary-container": "#fffbff",
+                        "on-surface": "#0b1c30",
+                        "tertiary": "#006242",
+                        "secondary-fixed-dim": "#c3c0ff",
+                        "on-primary-fixed-variant": "#003ea8",
+                        "on-tertiary": "#ffffff",
+                        "secondary": "#4b41e1",
+                        "on-primary": "#ffffff",
+                        "surface-container": "#e5eeff",
+                        "tertiary-fixed": "#6ffbbe",
+                        "surface-container-highest": "#d3e4fe",
+                        "on-tertiary-fixed-variant": "#005236",
+                        "on-primary-fixed": "#00174b",
+                        "tertiary-container": "#007d55",
+                        "surface-bright": "#f8f9ff",
+                        "on-primary-container": "#eeefff",
+                        "background": "#f8f9ff",
+                        "on-secondary": "#ffffff",
+                        "on-tertiary-fixed": "#002113",
+                        "on-surface-variant": "#434655",
+                        "surface-variant": "#d3e4fe",
+                        "primary-fixed-dim": "#b4c5ff",
+                        "on-error-container": "#93000a",
+                        "primary": "#004ac6",
+                        "on-secondary-fixed-variant": "#3323cc",
+                        "secondary-fixed": "#e2dfff",
+                        "primary-fixed": "#dbe1ff",
+                        "outline": "#737686",
+                        "secondary-container": "#645efb",
+                        "on-secondary-fixed": "#0f0069",
+                        "on-tertiary-container": "#bdffdb",
+                        "surface-container-low": "#eff4ff",
+                        "inverse-on-surface": "#eaf1ff",
+                        "error": "#ba1a1a",
+                        "surface-tint": "#0053db",
+                        "tertiary-fixed-dim": "#4edea3",
+                        "primary-container": "#2563eb",
+                        "inverse-surface": "#213145",
+                        "on-error": "#ffffff",
+                        "surface-container-lowest": "#ffffff",
+                        "surface-dim": "#cbdbf5",
+                        "surface-container-high": "#dce9ff",
+                        "on-background": "#0b1c30",
+                        "error-container": "#ffdad6",
+                        "surface": "#f8f9ff",
+                        "inverse-primary": "#b4c5ff",
+                        "outline-variant": "#c3c6d7"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "md": "16px",
+                        "sm": "8px",
+                        "margin-mobile": "16px",
+                        "xs": "4px",
+                        "max-width": "1280px",
+                        "lg": "24px",
+                        "gutter": "24px",
+                        "xl": "32px",
+                        "margin-desktop": "48px",
+                        "unit": "4px"
+                    },
+                    "fontFamily": {
+                        "label-md": ["Inter"],
+                        "body-lg": ["Inter"],
+                        "title-md": ["Hanken Grotesk"],
+                        "headline-lg": ["Hanken Grotesk"],
+                        "caption": ["Inter"],
+                        "body-md": ["Inter"],
+                        "headline-lg-mobile": ["Hanken Grotesk"],
+                        "display-lg": ["Hanken Grotesk"]
+                    },
+                    "fontSize": {
+                        "label-md": ["14px", {"lineHeight": "20px", "letterSpacing": "0.01em", "fontWeight": "500"}],
+                        "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                        "title-md": ["20px", {"lineHeight": "28px", "fontWeight": "600"}],
+                        "headline-lg": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                        "caption": ["12px", {"lineHeight": "16px", "fontWeight": "400"}],
+                        "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                        "headline-lg-mobile": ["28px", {"lineHeight": "36px", "fontWeight": "600"}],
+                        "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700"}]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8f9ff;
+        }
+        .bento-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            grid-template-rows: auto auto;
+            gap: 24px;
+        }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+    </style>
+</head>
+<body class="bg-background text-on-surface">
+<!-- SideNavBar (Authority: JSON) -->
+<nav class="fixed left-0 top-0 h-full flex flex-col p-md z-40 bg-surface-container-lowest border-r border-outline-variant w-64 shadow-sm">
+<div class="mb-xl px-md">
+<span class="text-headline-lg font-headline-lg text-primary">EduFocus</span>
+</div>
+<div class="flex flex-col gap-sm flex-grow">
+<!-- Daily Lessons - Inactive -->
+<a class="flex items-center gap-md text-on-surface-variant px-md py-sm hover:bg-surface-container-high transition-all" href="#">
+<span class="material-symbols-outlined" data-icon="calendar_today">calendar_today</span>
+<span class="text-label-md font-label-md">Daily Lessons</span>
+</a>
+<!-- Leaderboard - Inactive -->
+<a class="flex items-center gap-md text-on-surface-variant px-md py-sm hover:bg-surface-container-high transition-all" href="#">
+<span class="material-symbols-outlined" data-icon="leaderboard">leaderboard</span>
+<span class="text-label-md font-label-md">Leaderboard</span>
+</a>
+<!-- Tasks - Inactive -->
+<a class="flex items-center gap-md text-on-surface-variant px-md py-sm hover:bg-surface-container-high transition-all" href="#">
+<span class="material-symbols-outlined" data-icon="assignment_turned_in">assignment_turned_in</span>
+<span class="text-label-md font-label-md">Tasks</span>
+</a>
+<!-- Settings - Inactive -->
+<a class="flex items-center gap-md text-on-surface-variant px-md py-sm hover:bg-surface-container-high transition-all" href="#">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+<span class="text-label-md font-label-md">Settings</span>
+</a>
+</div>
+<div class="mt-auto p-md border-t border-outline-variant">
+<div class="flex items-center gap-md mb-md">
+<div class="w-10 h-10 rounded-full bg-primary-container flex items-center justify-center text-on-primary-container overflow-hidden">
+<img alt="Alex Johnson" data-alt="A professional studio portrait of a young academic administrator with a warm, confident expression. The lighting is soft and directional, highlighting clean facial features against a blurred background of a modern library. The aesthetic is scholarly and sophisticated, utilizing a palette of deep blues and soft whites to convey educational authority." src="https://lh3.googleusercontent.com/aida-public/AB6AXuC0pmZQdOPlEyA_PbQ1DUBOj_7TCLQwhRcoXOwZQiWBvvXd8hM00IErNtuFNtSqgNV_16GINDfKbSy0g9SddE-IouY_Qqy18uUsX4PyuxuIJqUsbhM6EBJq-y4lHuEdXKVGCGLsCzPBG1Qh6eN21f4HPWCejG5Caxoruw_3H2h6qQgITdpN7K1MB1va9hTKctQQ4bu_a-J4cCHtCmsp_xkgFqOW_vk3ws-wtsk-ZNbJVL4vHJZi4JX0NoQi1d_mLa_OMoJ8KmzzhlrB"/>
+</div>
+<div>
+<p class="text-label-md font-label-md font-bold">Alex Johnson</p>
+<p class="text-caption font-caption opacity-70">Course Progress: 65%</p>
+</div>
+</div>
+<button class="w-full bg-primary text-on-primary py-sm rounded-lg text-label-md font-label-md hover:opacity-90 transition-opacity">
+                Upgrade to Pro
+            </button>
+</div>
+</nav>
+<!-- Main Content Canvas -->
+<main class="ml-64 min-h-screen">
+<!-- TopAppBar (Authority: JSON) -->
+<header class="sticky top-0 z-30 bg-surface border-b border-outline-variant px-lg py-sm flex justify-between items-center w-full">
+<div class="flex items-center gap-md">
+<div class="relative">
+<span class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-outline">
+<span class="material-symbols-outlined">search</span>
+</span>
+<input class="pl-10 pr-4 py-2 bg-surface-container-low border-none rounded-full text-body-md focus:ring-2 focus:ring-primary w-64" placeholder="Search analytics..." type="text"/>
+</div>
+</div>
+<div class="flex items-center gap-lg">
+<div class="flex gap-md">
+<span class="material-symbols-outlined text-primary cursor-pointer hover:opacity-80 transition-opacity" data-icon="notifications">notifications</span>
+<span class="material-symbols-outlined text-primary cursor-pointer hover:opacity-80 transition-opacity" data-icon="trending_up">trending_up</span>
+</div>
+<div class="h-8 w-8 rounded-full bg-secondary-container flex items-center justify-center overflow-hidden">
+<img alt="User profile avatar" data-alt="A clean, minimalist profile icon placeholder against a vibrant geometric background. The colors are dominated by professional indigo and soft surface tones, fitting a modern corporate educational platform. The lighting is even and flat, emphasizing a clean and user-friendly digital interface design." src="https://lh3.googleusercontent.com/aida-public/AB6AXuB5aDpk9CUihoUJ2r-wCxA1nJCOmWDvyj-7WjZXLTMLnNm6iCyxtLITRSBpm9gEGTa6B3Nahf666U0EEMAHN_hDd5z9rz8YoiIWT30DVuPI3pgj2JidopEnqR0qh7m3OfqcK_vJkul5MQQUkNCKtBCYsxxHrnu9HIZVjMm8WWYJ9KtgakMPipeQEMBYOlHOt5ZyTvJx2yag_JBQwpuMPNHa8euwHLsKbnCM1XvRSAyag4NovMDR4G97QDfyIlMzVSdXTHCCIvvESPtv"/>
+</div>
+</div>
+</header>
+<!-- Dashboard Content -->
+<div class="p-xl max-w-max-width mx-auto">
+<!-- Header Section -->
+<div class="mb-xl">
+<h1 class="text-headline-lg font-headline-lg text-on-surface">Admin Portal Overview</h1>
+<p class="text-body-md font-body-md text-on-surface-variant mt-xs">Monitor learning performance and content updates across all modules.</p>
+</div>
+<!-- Bento Grid Dashboard -->
+<div class="grid grid-cols-1 md:grid-cols-4 gap-lg">
+<!-- Stat Card: Total Lessons -->
+<div class="bg-surface-container-lowest border border-outline-variant p-lg rounded-xl shadow-sm hover:shadow-md transition-shadow">
+<div class="flex items-center justify-between mb-md">
+<div class="p-sm bg-primary-container rounded-lg">
+<span class="material-symbols-outlined text-on-primary-container" data-icon="menu_book">menu_book</span>
+</div>
+<span class="text-caption font-caption text-tertiary flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">trending_up</span> +12%
+                        </span>
+</div>
+<p class="text-caption font-caption text-on-surface-variant uppercase tracking-wider">Total Lessons</p>
+<p class="text-display-lg font-display-lg text-primary">248</p>
+</div>
+<!-- Stat Card: Total Students -->
+<div class="bg-surface-container-lowest border border-outline-variant p-lg rounded-xl shadow-sm hover:shadow-md transition-shadow">
+<div class="flex items-center justify-between mb-md">
+<div class="p-sm bg-secondary-container rounded-lg">
+<span class="material-symbols-outlined text-on-secondary-container" data-icon="group">group</span>
+</div>
+<span class="text-caption font-caption text-tertiary flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">trending_up</span> +5.2k
+                        </span>
+</div>
+<p class="text-caption font-caption text-on-surface-variant uppercase tracking-wider">Total Students</p>
+<p class="text-display-lg font-display-lg text-secondary">14.2k</p>
+</div>
+<!-- Stat Card: Completion Rate -->
+<div class="md:col-span-2 bg-inverse-surface text-inverse-on-surface p-lg rounded-xl shadow-lg relative overflow-hidden">
+<div class="relative z-10 h-full flex flex-col">
+<p class="text-caption font-caption text-outline-variant uppercase tracking-wider mb-sm">Course Completion Rate</p>
+<div class="flex items-baseline gap-md mb-md">
+<p class="text-display-lg font-display-lg">78.4%</p>
+<p class="text-body-md font-body-md opacity-80">System Average</p>
+</div>
+<div class="mt-auto">
+<div class="w-full bg-white/10 h-2 rounded-full mb-2">
+<div class="bg-tertiary-fixed-dim h-full rounded-full w-[78.4%]"></div>
+</div>
+<p class="text-caption font-caption opacity-60">Calculated across 15 active departments</p>
+</div>
+</div>
+<!-- Decorative Element -->
+<div class="absolute -right-8 -bottom-8 opacity-10">
+<span class="material-symbols-outlined text-[120px]" data-icon="verified">verified</span>
+</div>
+</div>
+<!-- Main Content Row -->
+<!-- Recent Updates (Asymmetric Layout) -->
+<div class="md:col-span-3 bg-surface-container-lowest border border-outline-variant rounded-xl overflow-hidden flex flex-col shadow-sm">
+<div class="p-lg border-b border-outline-variant flex justify-between items-center">
+<h2 class="text-title-md font-title-md">Recent Content Updates</h2>
+<button class="text-primary text-label-md font-label-md hover:underline">View All Activity</button>
+</div>
+<div class="divide-y divide-outline-variant">
+<!-- Update Item -->
+<div class="p-md hover:bg-surface-container-low transition-colors flex items-center gap-md">
+<div class="w-12 h-12 rounded bg-surface-variant flex-shrink-0 flex items-center justify-center">
+<span class="material-symbols-outlined text-primary" data-icon="edit_note">edit_note</span>
+</div>
+<div class="flex-grow">
+<p class="text-body-md font-body-md font-bold">Advanced Thermodynamics Module</p>
+<p class="text-caption font-caption text-on-surface-variant">Updated by Sarah Chen • 2 hours ago</p>
+</div>
+<div class="flex gap-sm">
+<span class="px-sm py-xs rounded bg-surface-variant text-on-surface-variant text-caption font-caption">Module 4</span>
+<span class="px-sm py-xs rounded bg-tertiary-container text-on-tertiary-container text-caption font-caption">Live</span>
+</div>
+</div>
+<!-- Update Item -->
+<div class="p-md hover:bg-surface-container-low transition-colors flex items-center gap-md">
+<div class="w-12 h-12 rounded bg-surface-variant flex-shrink-0 flex items-center justify-center">
+<span class="material-symbols-outlined text-primary" data-icon="video_library">video_library</span>
+</div>
+<div class="flex-grow">
+<p class="text-body-md font-body-md font-bold">Intro to Quantum Physics - Video 3</p>
+<p class="text-caption font-caption text-on-surface-variant">Re-uploaded for quality • 5 hours ago</p>
+</div>
+<div class="flex gap-sm">
+<span class="px-sm py-xs rounded bg-surface-variant text-on-surface-variant text-caption font-caption">Module 1</span>
+<span class="px-sm py-xs rounded bg-outline-variant text-on-surface-variant text-caption font-caption">Review</span>
+</div>
+</div>
+<!-- Update Item -->
+<div class="p-md hover:bg-surface-container-low transition-colors flex items-center gap-md">
+<div class="w-12 h-12 rounded bg-surface-variant flex-shrink-0 flex items-center justify-center">
+<span class="material-symbols-outlined text-primary" data-icon="quiz">quiz</span>
+</div>
+<div class="flex-grow">
+<p class="text-body-md font-body-md font-bold">Weekly Evaluation: Organic Chemistry</p>
+<p class="text-caption font-caption text-on-surface-variant">Question bank expanded • Yesterday</p>
+</div>
+<div class="flex gap-sm">
+<span class="px-sm py-xs rounded bg-surface-variant text-on-surface-variant text-caption font-caption">Weekly Quiz</span>
+<span class="px-sm py-xs rounded bg-tertiary-container text-on-tertiary-container text-caption font-caption">Live</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Quick Management Links -->
+<div class="md:col-span-1 flex flex-col gap-md">
+<div class="bg-primary p-lg rounded-xl text-on-primary flex flex-col gap-md shadow-lg group hover:scale-[1.02] transition-transform cursor-pointer">
+<span class="material-symbols-outlined text-[32px]" data-icon="add_circle">add_circle</span>
+<div>
+<p class="text-title-md font-title-md">Create Lesson</p>
+<p class="text-caption font-caption opacity-80">Launch a new learning module with the builder tool.</p>
+</div>
+</div>
+<div class="bg-surface-container-high border border-outline-variant p-lg rounded-xl flex flex-col gap-md hover:bg-surface-container-highest transition-colors cursor-pointer">
+<span class="material-symbols-outlined text-[32px] text-secondary" data-icon="analytics">analytics</span>
+<div>
+<p class="text-title-md font-title-md">Reports</p>
+<p class="text-caption font-caption text-on-surface-variant">Detailed student performance &amp; export options.</p>
+</div>
+</div>
+<div class="bg-surface-container-lowest border border-outline-variant p-lg rounded-xl flex flex-col gap-md hover:bg-surface-container-high transition-colors cursor-pointer">
+<span class="material-symbols-outlined text-[32px] text-on-surface-variant" data-icon="forum">forum</span>
+<div>
+<p class="text-title-md font-title-md">Student Feedback</p>
+<p class="text-caption font-caption text-on-surface-variant">24 unread responses to course survey.</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Focus Area: Engagement Visualization -->
+<section class="mt-xl bg-surface-container-low border border-outline-variant rounded-2xl p-xl">
+<div class="flex justify-between items-end mb-lg">
+<div>
+<h3 class="text-headline-lg font-headline-lg text-on-surface">Learning Trajectory</h3>
+<p class="text-body-md font-body-md text-on-surface-variant">Global student engagement hours over the last 30 days.</p>
+</div>
+<div class="flex gap-sm">
+<button class="px-md py-sm bg-surface-container-highest rounded-lg text-label-md font-label-md">Daily</button>
+<button class="px-md py-sm bg-primary text-on-primary rounded-lg text-label-md font-label-md">Weekly</button>
+<button class="px-md py-sm bg-surface-container-highest rounded-lg text-label-md font-label-md">Monthly</button>
+</div>
+</div>
+<div class="h-64 flex items-end gap-md">
+<!-- Simple Bar Chart Mockup -->
+<div class="flex-grow bg-surface-container-highest h-[40%] rounded-t-lg relative group">
+<div class="absolute inset-0 bg-primary opacity-0 group-hover:opacity-20 transition-opacity"></div>
+</div>
+<div class="flex-grow bg-surface-container-highest h-[65%] rounded-t-lg relative group">
+<div class="absolute inset-0 bg-primary opacity-0 group-hover:opacity-20 transition-opacity"></div>
+</div>
+<div class="flex-grow bg-primary h-[85%] rounded-t-lg relative">
+<div class="absolute -top-10 left-1/2 -translate-x-1/2 bg-on-surface text-surface text-caption font-caption px-sm py-xs rounded">8.2k hrs</div>
+</div>
+<div class="flex-grow bg-surface-container-highest h-[55%] rounded-t-lg relative group">
+<div class="absolute inset-0 bg-primary opacity-0 group-hover:opacity-20 transition-opacity"></div>
+</div>
+<div class="flex-grow bg-surface-container-highest h-[75%] rounded-t-lg relative group">
+<div class="absolute inset-0 bg-primary opacity-0 group-hover:opacity-20 transition-opacity"></div>
+</div>
+<div class="flex-grow bg-surface-container-highest h-[60%] rounded-t-lg relative group">
+<div class="absolute inset-0 bg-primary opacity-0 group-hover:opacity-20 transition-opacity"></div>
+</div>
+<div class="flex-grow bg-surface-container-highest h-[90%] rounded-t-lg relative group">
+<div class="absolute inset-0 bg-primary opacity-0 group-hover:opacity-20 transition-opacity"></div>
+</div>
+</div>
+<div class="flex justify-between mt-md px-2 text-caption font-caption text-on-surface-variant">
+<span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span>Fri</span><span>Sat</span><span>Sun</span>
+</div>
+</section>
+</div>
+</main>
+<script>
+        // Simple micro-interactions
+        document.querySelectorAll('a, button, .cursor-pointer').forEach(el => {
+            el.addEventListener('click', (e) => {
+                const ripple = document.createElement('div');
+                ripple.className = 'absolute bg-white/20 rounded-full animate-ping pointer-events-none';
+                ripple.style.width = '20px';
+                ripple.style.height = '20px';
+                ripple.style.left = `${e.clientX - el.getBoundingClientRect().left - 10}px`;
+                ripple.style.top = `${e.clientY - el.getBoundingClientRect().top - 10}px`;
+                el.style.position = 'relative';
+                el.appendChild(ripple);
+                setTimeout(() => ripple.remove(), 600);
+            });
+        });
+    </script>
+</body></html>
+
+<!-- Admin Dashboard Overview -->
+<!DOCTYPE html><html class="light" lang="en"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>EduFocus - Tasks &amp; Assignments</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;family=Hanken+Grotesk:wght@600;700;800&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "on-background": "#0b1c30",
+                    "outline": "#737686",
+                    "surface-container-low": "#eff4ff",
+                    "on-secondary-fixed": "#0f0069",
+                    "inverse-surface": "#213145",
+                    "tertiary-container": "#007d55",
+                    "on-primary-container": "#eeefff",
+                    "surface-container": "#e5eeff",
+                    "on-surface": "#0b1c30",
+                    "tertiary-fixed-dim": "#4edea3",
+                    "surface-dim": "#cbdbf5",
+                    "on-error": "#ffffff",
+                    "on-error-container": "#93000a",
+                    "secondary": "#4b41e1",
+                    "primary-fixed-dim": "#b4c5ff",
+                    "tertiary": "#006242",
+                    "surface": "#f8f9ff",
+                    "surface-container-high": "#dce9ff",
+                    "surface-container-highest": "#d3e4fe",
+                    "error": "#ba1a1a",
+                    "on-tertiary": "#ffffff",
+                    "primary": "#004ac6",
+                    "primary-fixed": "#dbe1ff",
+                    "inverse-primary": "#b4c5ff",
+                    "background": "#f8f9ff",
+                    "on-secondary-container": "#fffbff",
+                    "primary-container": "#2563eb",
+                    "outline-variant": "#c3c6d7",
+                    "on-tertiary-container": "#bdffdb",
+                    "surface-tint": "#0053db",
+                    "surface-bright": "#f8f9ff",
+                    "on-primary-fixed-variant": "#003ea8",
+                    "secondary-fixed-dim": "#c3c0ff",
+                    "secondary-container": "#645efb",
+                    "on-primary-fixed": "#00174b",
+                    "tertiary-fixed": "#6ffbbe",
+                    "inverse-on-surface": "#eaf1ff",
+                    "on-tertiary-fixed-variant": "#005236",
+                    "error-container": "#ffdad6",
+                    "secondary-fixed": "#e2dfff",
+                    "on-tertiary-fixed": "#002113",
+                    "surface-variant": "#d3e4fe",
+                    "on-surface-variant": "#434655",
+                    "surface-container-lowest": "#ffffff",
+                    "on-secondary-fixed-variant": "#3323cc",
+                    "on-secondary": "#ffffff",
+                    "on-primary": "#ffffff"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "xl": "32px",
+                    "sm": "8px",
+                    "margin-mobile": "16px",
+                    "md": "16px",
+                    "margin-desktop": "48px",
+                    "gutter": "24px",
+                    "max-width": "1280px",
+                    "xs": "4px",
+                    "lg": "24px",
+                    "unit": "4px"
+            },
+            "fontFamily": {
+                    "caption": ["Inter"],
+                    "display-lg": ["Hanken Grotesk"],
+                    "body-md": ["Inter"],
+                    "title-md": ["Hanken Grotesk"],
+                    "headline-lg": ["Hanken Grotesk"],
+                    "body-lg": ["Inter"],
+                    "headline-lg-mobile": ["Hanken Grotesk"],
+                    "label-md": ["Inter"]
+            },
+            "fontSize": {
+                    "caption": ["12px", {"lineHeight": "16px", "fontWeight": "400"}],
+                    "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                    "title-md": ["20px", {"lineHeight": "28px", "fontWeight": "600"}],
+                    "headline-lg": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                    "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                    "headline-lg-mobile": ["28px", {"lineHeight": "36px", "fontWeight": "600"}],
+                    "label-md": ["14px", {"lineHeight": "20px", "letterSpacing": "0.01em", "fontWeight": "500"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        body {
+            background-color: #f8f9ff;
+            color: #0b1c30;
+        }
+        .kanban-column {
+            min-height: calc(100vh - 280px);
+        }
+        .task-card:hover {
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            transform: translateY(-2px);
+        }
+    </style>
+</head>
+<body class="font-body-md text-body-md">
+<!-- TopAppBar Section -->
+<header class="fixed top-0 left-0 right-0 z-50 bg-surface border-b border-outline-variant flex justify-between items-center w-full px-lg py-sm">
+<div class="flex items-center gap-lg max-w-max-width mx-auto w-full">
+<div class="flex items-center gap-md">
+<span class="text-title-md font-title-md font-bold text-primary">EduFocus</span>
+</div>
+<div class="hidden md:flex flex-1 max-w-md ml-lg">
+<div class="relative w-full">
+<span class="material-symbols-outlined absolute left-md top-1/2 -translate-y-1/2 text-outline">search</span>
+<input class="w-full bg-surface-container-low border-none rounded-xl pl-xl py-sm text-body-md focus:ring-2 focus:ring-primary" placeholder="Search tasks..." type="text">
+</div>
+</div>
+<div class="flex items-center gap-md">
+<button class="p-sm rounded-full hover:bg-surface-container-low transition-colors relative">
+<span class="material-symbols-outlined text-on-surface-variant" data-icon="notifications">notifications</span>
+<span class="absolute top-1 right-1 w-2 h-2 bg-error rounded-full"></span>
+</button>
+<button class="p-sm rounded-full hover:bg-surface-container-low transition-colors">
+<span class="material-symbols-outlined text-on-surface-variant" data-icon="trending_up">trending_up</span>
+</button>
+<div class="w-10 h-10 rounded-full overflow-hidden border border-outline-variant">
+<img alt="User profile avatar" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDDZdQPwO8GUK9jQBnDVgy8Cymyh4dnjZEEMDrJxtvyOAoEBWL9DiJEGxYAAEXXapIJKFMb1KBMpoIvxgNL_x634oZDSL7MbB50s4ZYrEpWHREVJMsos3MYEkqQ8hORz8CoQHyiAuhQVI7lVTd2zY3fYpw__Q4AyJgks4LTfTkKx4JJR-hCoPXwgDQSTnCUPXQgyGk4LtqxSexOjryAtVjW9K-5YOIYdjoXNEW_AiWYffd2RgRZ3u23CCAamjgVO_ot3_-M5E2oqG3_">
+</div>
+</div>
+</div>
+</header>
+<div class="flex pt-[64px]">
+<!-- SideNavBar Section -->
+<aside class="fixed left-0 top-[64px] h-[calc(100vh-64px)] w-64 bg-surface-container-lowest border-r border-outline-variant hidden md:flex flex-col p-md z-40">
+<div class="mb-xl px-md">
+<div class="flex flex-col">
+<span class="text-label-md font-label-md text-outline">Student</span>
+<span class="font-title-md text-title-md text-on-background">Alex Johnson</span>
+<div class="mt-sm bg-surface-container rounded-full h-1.5 w-full">
+<div class="bg-tertiary-container h-full rounded-full" style="width: 65%"></div>
+</div>
+<span class="text-caption font-caption text-outline mt-xs">Course Progress: 65%</span>
+</div>
+</div>
+<nav class="flex-1 space-y-sm">
+<a class="flex items-center gap-md text-on-surface-variant px-md py-sm hover:bg-surface-container-high transition-all rounded-lg font-label-md" href="#">
+<span class="material-symbols-outlined" data-icon="calendar_today">calendar_today</span>
+<span class="">Daily Lessons</span>
+</a>
+<a class="flex items-center gap-md text-on-surface-variant px-md py-sm hover:bg-surface-container-high transition-all rounded-lg font-label-md" href="#">
+<span class="material-symbols-outlined" data-icon="leaderboard">leaderboard</span>
+<span class="">Leaderboard</span>
+</a>
+<a class="flex items-center gap-md bg-secondary-container text-on-secondary-container px-md py-sm rounded-lg font-label-md scale-[0.98]" href="#">
+<span class="material-symbols-outlined" data-icon="assignment_turned_in">assignment_turned_in</span>
+<span class="">Tasks</span>
+</a>
+<a class="flex items-center gap-md text-on-surface-variant px-md py-sm hover:bg-surface-container-high transition-all rounded-lg font-label-md" href="#">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+<span class="">Settings</span>
+</a>
+</nav>
+<div class="mt-auto p-md bg-primary-container rounded-xl text-on-primary-container">
+<p class="text-label-md font-bold mb-sm">Upgrade to Pro</p>
+<p class="text-caption mb-md opacity-90">Unlock personalized mentoring and advanced analytics.</p>
+<button class="w-full bg-surface-container-lowest text-primary font-bold py-sm rounded-lg text-label-md transition-transform hover:scale-105">Learn More</button>
+</div>
+</aside>
+<!-- Main Content Canvas -->
+<main class="flex-1 md:ml-64 p-lg max-w-max-width mx-auto w-full">
+<header class="mb-xl flex flex-col md:flex-row md:items-end justify-between gap-md">
+<div>
+<h1 class="font-headline-lg text-headline-lg text-on-background">Tasks &amp; Assignments</h1>
+<p class="text-body-md text-on-surface-variant">Manage your post-lesson activities and track academic progress.</p>
+</div>
+
+</header>
+<!-- Kanban Board -->
+<div class="flex flex-col gap-lg"><div class="flex items-center justify-between px-sm"><h2 class="text-title-md font-title-md text-on-background">All Tasks</h2><span class="bg-surface-container-high text-on-surface-variant px-sm py-0.5 rounded-full text-caption font-bold">17</span></div><div class="flex flex-col gap-md"><div class="task-card bg-surface-container-lowest p-md rounded-xl border border-outline-variant transition-all flex items-start gap-md"><div class="mt-1"><span class="material-symbols-outlined text-outline">radio_button_unchecked</span></div><div class="flex-1"><div class="flex justify-between items-start mb-sm"><span class="bg-primary-fixed text-on-primary-fixed-variant px-sm py-0.5 rounded-full text-caption font-medium">Research</span><span class="text-caption text-outline">Due: Oct 24</span></div><h3 class="font-bold text-on-background mb-xs">Competitive Analysis Draft</h3><p class="text-caption text-on-surface-variant mb-md">Outline top 5 competitors in the ed-tech space with feature comparison matrix.</p><div class="flex items-center gap-xs text-caption font-medium text-secondary"><span class="material-symbols-outlined text-[16px]">history_edu</span>From Day 3: Market Analysis</div></div></div><div class="task-card bg-surface-container-lowest p-md rounded-xl border border-outline-variant transition-all flex items-start gap-md"><div class="mt-1"><span class="material-symbols-outlined text-primary">pending</span></div><div class="flex-1"><div class="flex justify-between items-start mb-sm"><span class="bg-tertiary-fixed text-on-tertiary-fixed-variant px-sm py-0.5 rounded-full text-caption font-medium">Coding</span><span class="text-caption text-outline">Due: Tomorrow</span></div><h3 class="font-bold text-on-background mb-xs">Basic React Component Set</h3><p class="text-caption text-on-surface-variant mb-md">Build a reusable button, input, and card component using props.</p><div class="flex items-center gap-xs text-caption font-medium text-secondary"><span class="material-symbols-outlined text-[16px]">history_edu</span>From Day 8: React Basics</div></div></div><div class="task-card bg-surface-container-low p-md rounded-xl border border-outline-variant transition-all flex items-start gap-md opacity-75 grayscale-[0.3]"><div class="mt-1"><span class="material-symbols-outlined text-tertiary" style="font-variation-settings: 'FILL' 1;">check_circle</span></div><div class="flex-1"><div class="flex justify-between items-start mb-sm"><span class="bg-tertiary-container/10 text-tertiary px-sm py-0.5 rounded-full text-caption font-medium">Done</span><span class="text-caption text-outline">Finished: Oct 20</span></div><h3 class="font-bold text-on-background mb-xs line-through opacity-60">Brand Style Guide Draft</h3><p class="text-caption text-on-surface-variant mb-md opacity-60">Selection of typography, colors, and logo variations for the project.</p><div class="flex items-center gap-xs text-caption font-medium text-secondary/60"><span class="material-symbols-outlined text-[16px]">history_edu</span>From Day 1: Branding Intro</div></div></div></div></div>
+<!-- Bento Grid Section: Insights -->
+<section class="mt-xl grid grid-cols-1 md:grid-cols-4 gap-lg">
+<div class="md:col-span-2 bg-surface-container-lowest p-lg rounded-xl border border-outline-variant shadow-sm relative overflow-hidden">
+<div class="relative z-10">
+<h4 class="font-title-md text-title-md text-on-background mb-sm">Weekly Productivity</h4>
+<div class="flex items-end gap-sm h-32 mt-md">
+<div class="flex-1 bg-primary/20 rounded-t-lg h-1/2"></div>
+<div class="flex-1 bg-primary/20 rounded-t-lg h-2/3"></div>
+<div class="flex-1 bg-primary/20 rounded-t-lg h-3/4"></div>
+<div class="flex-1 bg-primary/20 rounded-t-lg h-full"></div>
+<div class="flex-1 bg-primary rounded-t-lg h-[85%]"></div>
+<div class="flex-1 bg-surface-container-high rounded-t-lg h-[40%]"></div>
+<div class="flex-1 bg-surface-container-high rounded-t-lg h-[20%]"></div>
+</div>
+<div class="flex justify-between mt-sm text-caption text-outline">
+<span class="">Mon</span><span class="">Tue</span><span class="">Wed</span><span class="">Thu</span><span class="">Fri</span><span class="">Sat</span><span class="">Sun</span>
+</div>
+</div>
+</div>
+<div class="md:col-span-1 bg-secondary-container p-lg rounded-xl text-on-secondary-container flex flex-col justify-between">
+<div>
+<span class="material-symbols-outlined text-display-lg" data-icon="bolt">bolt</span>
+<h4 class="text-title-md font-title-md mt-md">Focus Streak</h4>
+</div>
+<div>
+<span class="text-[40px] font-bold">12</span>
+<span class="text-body-md opacity-80"> Days</span>
+</div>
+</div>
+<div class="md:col-span-1 bg-surface-container-highest p-lg rounded-xl border border-outline-variant flex flex-col items-center justify-center text-center">
+<div class="relative w-24 h-24 mb-md">
+<svg class="w-full h-full transform -rotate-90">
+<circle class="text-surface-container" cx="48" cy="48" fill="transparent" r="40" stroke="currentColor" stroke-width="8"></circle>
+<circle class="text-tertiary-container" cx="48" cy="48" fill="transparent" r="40" stroke="currentColor" stroke-dasharray="251.2" stroke-dashoffset="88" stroke-width="8"></circle>
+</svg>
+<div class="absolute inset-0 flex items-center justify-center font-bold text-title-md">65%</div>
+</div>
+<span class="text-label-md font-bold text-on-surface">Overall Progress</span>
+</div>
+</section>
+</main>
+</div>
+<!-- Mobile Bottom Navigation -->
+<nav class="md:hidden fixed bottom-0 left-0 right-0 bg-surface border-t border-outline-variant flex justify-around items-center p-sm z-50">
+<a class="flex flex-col items-center gap-xs text-on-surface-variant p-sm" href="#">
+<span class="material-symbols-outlined" data-icon="calendar_today">calendar_today</span>
+<span class="text-[10px] font-label-md">Daily</span>
+</a>
+<a class="flex flex-col items-center gap-xs text-on-surface-variant p-sm" href="#">
+<span class="material-symbols-outlined" data-icon="leaderboard">leaderboard</span>
+<span class="text-[10px] font-label-md">Rank</span>
+</a>
+<a class="flex flex-col items-center gap-xs text-primary p-sm border-t-2 border-primary" href="#">
+<span class="material-symbols-outlined" data-icon="assignment_turned_in" style="font-variation-settings: 'FILL' 1;">assignment_turned_in</span>
+<span class="text-[10px] font-bold">Tasks</span>
+</a>
+<a class="flex flex-col items-center gap-xs text-on-surface-variant p-sm" href="#">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+<span class="text-[10px] font-label-md">Settings</span>
+</a>
+</nav>
+<script>
+        // Simple drag and drop visual feedback
+        const cards = document.querySelectorAll('.task-card');
+        cards.forEach(card => {
+            card.addEventListener('dragstart', () => {
+                card.classList.add('opacity-40');
+            });
+            card.addEventListener('dragend', () => {
+                card.classList.remove('opacity-40');
+            });
+        });
+
+        // Search interaction
+        const searchInput = document.querySelector('input[type="text"]');
+        searchInput.addEventListener('focus', () => {
+            searchInput.parentElement.classList.add('scale-[1.02]');
+            searchInput.parentElement.classList.add('transition-transform');
+        });
+        searchInput.addEventListener('blur', () => {
+            searchInput.parentElement.classList.remove('scale-[1.02]');
+        });
+    </script>
+
+
+</body></html>
+
+<!-- Task Management Board -->
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Lesson View - EduFocus</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600;700&amp;family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-background": "#0b1c30",
+                        "outline": "#737686",
+                        "surface-container-low": "#eff4ff",
+                        "on-secondary-fixed": "#0f0069",
+                        "inverse-surface": "#213145",
+                        "tertiary-container": "#007d55",
+                        "on-primary-container": "#eeefff",
+                        "surface-container": "#e5eeff",
+                        "on-surface": "#0b1c30",
+                        "tertiary-fixed-dim": "#4edea3",
+                        "surface-dim": "#cbdbf5",
+                        "on-error": "#ffffff",
+                        "on-error-container": "#93000a",
+                        "secondary": "#4b41e1",
+                        "primary-fixed-dim": "#b4c5ff",
+                        "tertiary": "#006242",
+                        "surface": "#f8f9ff",
+                        "surface-container-high": "#dce9ff",
+                        "surface-container-highest": "#d3e4fe",
+                        "error": "#ba1a1a",
+                        "on-tertiary": "#ffffff",
+                        "primary": "#004ac6",
+                        "primary-fixed": "#dbe1ff",
+                        "inverse-primary": "#b4c5ff",
+                        "background": "#f8f9ff",
+                        "on-secondary-container": "#fffbff",
+                        "primary-container": "#2563eb",
+                        "outline-variant": "#c3c6d7",
+                        "on-tertiary-container": "#bdffdb",
+                        "surface-tint": "#0053db",
+                        "surface-bright": "#f8f9ff",
+                        "on-primary-fixed-variant": "#003ea8",
+                        "secondary-fixed-dim": "#c3c0ff",
+                        "secondary-container": "#645efb",
+                        "on-primary-fixed": "#00174b",
+                        "tertiary-fixed": "#6ffbbe",
+                        "inverse-on-surface": "#eaf1ff",
+                        "on-tertiary-fixed-variant": "#005236",
+                        "error-container": "#ffdad6",
+                        "secondary-fixed": "#e2dfff",
+                        "on-tertiary-fixed": "#002113",
+                        "surface-variant": "#d3e4fe",
+                        "on-surface-variant": "#434655",
+                        "surface-container-lowest": "#ffffff",
+                        "on-secondary-fixed-variant": "#3323cc",
+                        "on-secondary": "#ffffff",
+                        "on-primary": "#ffffff"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "xl": "32px",
+                        "sm": "8px",
+                        "margin-mobile": "16px",
+                        "md": "16px",
+                        "margin-desktop": "48px",
+                        "gutter": "24px",
+                        "max-width": "1280px",
+                        "xs": "4px",
+                        "lg": "24px",
+                        "unit": "4px"
+                    },
+                    "fontFamily": {
+                        "caption": ["Inter"],
+                        "display-lg": ["Hanken Grotesk"],
+                        "body-md": ["Inter"],
+                        "title-md": ["Hanken Grotesk"],
+                        "headline-lg": ["Hanken Grotesk"],
+                        "body-lg": ["Inter"],
+                        "headline-lg-mobile": ["Hanken Grotesk"],
+                        "label-md": ["Inter"]
+                    },
+                    "fontSize": {
+                        "caption": ["12px", {"lineHeight": "16px", "fontWeight": "400"}],
+                        "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                        "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                        "title-md": ["20px", {"lineHeight": "28px", "fontWeight": "600"}],
+                        "headline-lg": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                        "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                        "headline-lg-mobile": ["28px", {"lineHeight": "36px", "fontWeight": "600"}],
+                        "label-md": ["14px", {"lineHeight": "20px", "letterSpacing": "0.01em", "fontWeight": "500"}]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        body {
+            background-color: #f8f9ff;
+            color: #0b1c30;
+            font-family: 'Inter', sans-serif;
+            -webkit-font-smoothing: antialiased;
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            vertical-align: middle;
+        }
+        .lesson-content-shadow {
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        }
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: #f1f5f9;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 10px;
+        }
+    </style>
+</head>
+<body class="bg-background min-h-screen">
+<!-- Top Navigation Bar -->
+<header class="fixed top-0 left-0 right-0 z-50 bg-surface border-b border-outline-variant">
+<div class="max-w-max-width mx-auto px-lg py-sm flex justify-between items-center">
+<div class="flex items-center gap-md">
+<button class="p-sm hover:bg-surface-container-low rounded-full transition-colors">
+<span class="material-symbols-outlined text-primary">arrow_back</span>
+</button>
+<div class="flex flex-col">
+<span class="font-title-md text-title-md font-bold text-primary">EduFocus</span>
+<span class="font-caption text-caption text-on-surface-variant">Module 4: Advanced Data Architectures</span>
+</div>
+</div>
+<div class="hidden md:flex items-center gap-xl">
+<nav class="flex gap-lg">
+<a class="text-primary font-bold border-b-2 border-primary py-xs font-label-md text-label-md" href="#">Daily Lessons</a>
+<a class="text-on-surface-variant font-medium hover:text-primary transition-colors py-xs font-label-md text-label-md" href="#">Leaderboard</a>
+<a class="text-on-surface-variant font-medium hover:text-primary transition-colors py-xs font-label-md text-label-md" href="#">Tasks</a>
+</nav>
+<div class="flex items-center gap-md">
+<span class="material-symbols-outlined text-on-surface-variant cursor-pointer hover:text-primary">notifications</span>
+<div class="h-8 w-8 rounded-full bg-primary-fixed flex items-center justify-center overflow-hidden border border-outline-variant">
+<img alt="Alex Johnson" data-alt="A professional headshot of a young student with a friendly expression, captured in soft studio lighting with a clean, blurred academic background. The lighting is bright and modern, matching the minimalist corporate aesthetic of the platform. The color palette is neutral and professional." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBMexqnYitv0d00BUvsaYyRCtlSEgCZ736EU-3kjxaSx6NAh5uej0KLGQo0RGf0qjtPOuLNss_XYyjFuR_Wb6gYdTPzWIiA5emVtbybpylPKdO2n6oN52oQe_UkQUxe5gW67XT5VJFLugJPRo8seDX9f_D5Ixjq5LpbpzJazy1mRpJRgPWo3fZoCuZ0xiD74kaML3iy9G3gmYSOA4xxTD05-Zx3wbOBUZ5aHfJT3xSzAxk_bUeRIaXbGuJaN9zDBDzgBZmWexFTTBvN"/>
+</div>
+</div>
+</div>
+</div>
+</header>
+<!-- Side Navigation Bar (Hidden on Mobile) -->
+<aside class="fixed left-0 top-0 h-full w-64 pt-24 hidden lg:flex flex-col p-md bg-surface-container-lowest border-r border-outline-variant z-40">
+<div class="flex flex-col gap-sm">
+<div class="flex items-center gap-md bg-secondary-container text-on-secondary-container rounded-lg px-md py-sm">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">calendar_today</span>
+<span class="font-label-md text-label-md">Daily Lessons</span>
+</div>
+<a class="flex items-center gap-md text-on-surface-variant px-md py-sm hover:bg-surface-container-high rounded-lg transition-all" href="#">
+<span class="material-symbols-outlined">leaderboard</span>
+<span class="font-label-md text-label-md">Leaderboard</span>
+</a>
+<a class="flex items-center gap-md text-on-surface-variant px-md py-sm hover:bg-surface-container-high rounded-lg transition-all" href="#">
+<span class="material-symbols-outlined">assignment_turned_in</span>
+<span class="font-label-md text-label-md">Tasks</span>
+</a>
+<a class="flex items-center gap-md text-on-surface-variant px-md py-sm hover:bg-surface-container-high rounded-lg transition-all" href="#">
+<span class="material-symbols-outlined">settings</span>
+<span class="font-label-md text-label-md">Settings</span>
+</a>
+</div>
+<div class="mt-auto p-md bg-surface-container-low rounded-xl border border-outline-variant">
+<p class="font-label-md text-label-md font-bold text-primary mb-xs">Upgrade to Pro</p>
+<p class="font-caption text-caption text-on-surface-variant mb-md">Unlock advanced certifications and mentor chats.</p>
+<button class="w-full bg-primary text-on-primary py-sm rounded-lg font-label-md text-label-md hover:opacity-90 transition-opacity">Learn More</button>
+</div>
+</aside>
+<!-- Main Content Canvas -->
+<main class="lg:ml-64 pt-24 pb-xl px-md md:px-lg max-w-max-width mx-auto">
+<div class="flex flex-col gap-xl">
+<!-- Video / Media Section -->
+<section class="w-full">
+<div class="relative aspect-video w-full bg-on-background rounded-xl overflow-hidden lesson-content-shadow group">
+<div class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity bg-black/20 z-10">
+<button class="w-16 h-16 bg-primary/90 text-white rounded-full flex items-center justify-center shadow-xl transform scale-90 group-hover:scale-100 transition-transform">
+<span class="material-symbols-outlined text-4xl" style="font-variation-settings: 'FILL' 1;">play_arrow</span>
+</button>
+</div>
+<div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
+<img alt="Lesson Preview" class="w-full h-full object-cover" data-alt="A wide cinematic shot of a clean, high-tech workspace featuring a large glowing monitor displaying complex data visualizations and code. The room is dimly lit with ambient cool blue and white light, creating a focused, scholarly atmosphere. A single focused person is partially visible in the foreground, looking at the screen. The aesthetic is modern corporate with high-quality depth of field." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAv8oo_re84rTjg73cuC0Qhe0jh6PWV_rAx30wrV6NWj3oYk-2FvcAnFbyMr6hL8gWRhdTpi2KLfRS1RMX4CXa2C-jOOnMoEaQzCmkiW4J1ljE9xtqQiJ4hOYDD4Ty4Awo6u2m5S_XgwrL93K5cVfao96BlZEIQ-6wJVtB9zJ452Z7wFCTJA1TBAEpqkRgYxfiDOq8F_DdRyf1exVZ0cE4Oc449pnsQeGoW4AAy-Pvq3PDm-3UjB7jEBas3Fwql6PONTcq_vseoCZSn"/>
+<!-- Overlay Controls Mock -->
+<div class="absolute bottom-0 left-0 right-0 p-lg flex items-center justify-between z-20 text-white">
+<div class="flex items-center gap-md">
+<span class="material-symbols-outlined">play_circle</span>
+<div class="h-1.5 w-48 md:w-96 bg-white/30 rounded-full overflow-hidden">
+<div class="h-full bg-tertiary-fixed-dim w-1/3"></div>
+</div>
+<span class="text-caption font-caption">12:45 / 35:00</span>
+</div>
+<div class="flex items-center gap-md">
+<span class="material-symbols-outlined">settings</span>
+<span class="material-symbols-outlined">fullscreen</span>
+</div>
+</div>
+</div>
+</section>
+<!-- Lesson Info & Text -->
+<section class="grid grid-cols-1 lg:grid-cols-3 gap-xl items-start">
+<div class="lg:col-span-2 space-y-lg">
+<header>
+<div class="flex items-center gap-sm mb-xs">
+<span class="bg-surface-container-high text-on-primary-fixed-variant px-sm py-xs rounded text-caption font-caption">Intermediate</span>
+<span class="text-on-surface-variant text-caption font-caption">35 mins</span>
+</div>
+<h1 class="font-headline-lg text-headline-lg text-on-surface">Understanding Distributed Consensus Engines</h1>
+</header>
+<div class="prose prose-slate max-w-none">
+<p class="font-body-lg text-body-lg text-on-surface-variant leading-relaxed">
+                            In this lesson, we dive deep into the fundamental mechanisms of distributed consensus. We'll explore how modern systems maintain state across geographical boundaries without compromising data integrity. Focus areas include the Paxos algorithm, Raft consensus protocol, and the practical challenges of network partitioning (the CAP theorem).
+                        </p>
+<div class="p-lg bg-surface-container-low border-l-4 border-primary rounded-r-xl my-xl">
+<p class="font-body-md text-body-md text-primary-fixed-variant italic">
+                                "Consensus is not about everyone agreeing; it's about the system agreeing on a single source of truth despite individual node failures."
+                            </p>
+</div>
+</div>
+<!-- Tasks Section -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-xl p-lg space-y-md lesson-content-shadow">
+<div class="flex items-center justify-between">
+<h3 class="font-title-md text-title-md font-bold text-on-surface flex items-center gap-sm">
+<span class="material-symbols-outlined text-primary">checklist</span>
+                                Tasks for this Lesson
+                            </h3>
+<span class="text-caption font-caption text-on-surface-variant">2 of 3 completed</span>
+</div>
+<div class="space-y-sm">
+<label class="flex items-center gap-md p-md border border-outline-variant rounded-lg hover:bg-surface-container-low cursor-pointer transition-colors group">
+<input checked="" class="w-5 h-5 rounded border-outline text-primary focus:ring-primary transition-all" type="checkbox"/>
+<span class="font-body-md text-body-md text-on-surface-variant line-through opacity-60">Watch the introductory consensus lecture</span>
+</label>
+<label class="flex items-center gap-md p-md border border-outline-variant rounded-lg hover:bg-surface-container-low cursor-pointer transition-colors group">
+<input checked="" class="w-5 h-5 rounded border-outline text-primary focus:ring-primary transition-all" type="checkbox"/>
+<span class="font-body-md text-body-md text-on-surface-variant line-through opacity-60">Download the Raft protocol whitepaper</span>
+</label>
+<label class="flex items-center gap-md p-md border border-outline-variant rounded-lg hover:bg-surface-container-low cursor-pointer transition-colors group">
+<input class="w-5 h-5 rounded border-outline text-primary focus:ring-primary transition-all" type="checkbox"/>
+<span class="font-body-md text-body-md text-on-surface">Submit a 200-word summary of the CAP Theorem</span>
+</label>
+</div>
+</div>
+</div>
+<!-- Course Sidebar / Navigation -->
+<div class="space-y-lg">
+<div class="bg-surface border border-outline-variant rounded-xl p-md">
+<h4 class="font-label-md text-label-md font-bold text-primary mb-md uppercase tracking-wider">Module Outline</h4>
+<div class="space-y-sm">
+<div class="flex items-center gap-md p-sm rounded-lg bg-surface-container text-on-surface">
+<span class="material-symbols-outlined text-sm" style="font-variation-settings: 'FILL' 1;">play_circle</span>
+<span class="font-caption text-caption font-bold truncate">1. Introduction to Systems</span>
+</div>
+<div class="flex items-center gap-md p-sm rounded-lg border border-primary bg-primary/5">
+<span class="material-symbols-outlined text-sm text-primary">pause_circle</span>
+<span class="font-caption text-caption font-bold text-primary truncate">2. Distributed Consensus</span>
+</div>
+<div class="flex items-center gap-md p-sm rounded-lg opacity-50">
+<span class="material-symbols-outlined text-sm">lock</span>
+<span class="font-caption text-caption truncate">3. Sharding &amp; Replication</span>
+</div>
+<div class="flex items-center gap-md p-sm rounded-lg opacity-50">
+<span class="material-symbols-outlined text-sm">lock</span>
+<span class="font-caption text-caption truncate">4. Final Module Assessment</span>
+</div>
+</div>
+</div>
+<div class="p-lg bg-primary-container text-on-primary-container rounded-xl flex flex-col items-center text-center gap-md">
+<div class="w-12 h-12 bg-white/20 rounded-full flex items-center justify-center">
+<span class="material-symbols-outlined">emoji_events</span>
+</div>
+<div>
+<p class="font-label-md text-label-md font-bold">Alex, you're on a streak!</p>
+<p class="font-caption text-caption opacity-90">Finish this lesson to reach Level 12.</p>
+</div>
+<div class="w-full bg-white/20 h-2 rounded-full overflow-hidden">
+<div class="bg-tertiary-fixed-dim h-full w-4/5"></div>
+</div>
+</div>
+</div>
+</section>
+<!-- Bottom Lesson Navigation -->
+<footer class="mt-xl pt-lg border-t border-outline-variant flex flex-col md:flex-row justify-between items-center gap-lg">
+<button class="w-full md:w-auto px-xl py-md border border-outline text-on-surface-variant rounded-lg font-label-md text-label-md flex items-center justify-center gap-md hover:bg-surface-container-low transition-colors group">
+<span class="material-symbols-outlined group-hover:-translate-x-1 transition-transform">chevron_left</span>
+                    Previous Lesson
+                </button>
+<div class="flex items-center gap-md order-first md:order-none">
+<div class="h-2 w-2 rounded-full bg-primary"></div>
+<div class="h-2 w-2 rounded-full bg-outline-variant"></div>
+<div class="h-2 w-2 rounded-full bg-outline-variant"></div>
+<div class="h-2 w-2 rounded-full bg-outline-variant"></div>
+</div>
+<button class="w-full md:w-auto px-xl py-md bg-primary text-on-primary rounded-lg font-label-md text-label-md flex items-center justify-center gap-md hover:shadow-lg hover:opacity-95 transition-all group">
+                    Next Lesson
+                    <span class="material-symbols-outlined group-hover:translate-x-1 transition-transform">chevron_right</span>
+</button>
+</footer>
+</div>
+</main>
+<!-- Success Feedback Overlay (Hidden by default) -->
+<div class="fixed inset-0 z-[60] flex items-center justify-center bg-on-background/40 backdrop-blur-sm pointer-events-none opacity-0 transition-opacity duration-300" id="success-overlay">
+<div class="bg-white p-xl rounded-xl text-center shadow-2xl scale-90 transition-transform duration-300" id="success-card">
+<div class="w-20 h-20 bg-tertiary-container text-white rounded-full flex items-center justify-center mx-auto mb-lg">
+<span class="material-symbols-outlined text-4xl">check_circle</span>
+</div>
+<h2 class="font-headline-lg text-headline-lg text-on-surface mb-sm">Task Completed!</h2>
+<p class="font-body-md text-body-md text-on-surface-variant">Your progress has been synchronized.</p>
+</div>
+</div>
+<script>
+        // Micro-interactions for checkboxes
+        const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+        const overlay = document.getElementById('success-overlay');
+        const card = document.getElementById('success-card');
+
+        checkboxes.forEach(cb => {
+            cb.addEventListener('change', function() {
+                if(this.checked) {
+                    // Visual feedback
+                    overlay.classList.remove('opacity-0', 'pointer-events-none');
+                    card.classList.remove('scale-90');
+                    card.classList.add('scale-100');
+                    
+                    setTimeout(() => {
+                        overlay.classList.add('opacity-0', 'pointer-events-none');
+                        card.classList.remove('scale-100');
+                        card.classList.add('scale-90');
+                    }, 1500);
+                }
+            });
+        });
+
+        // Hover lift effect for sidebar elements
+        const sideNavItems = document.querySelectorAll('aside a, aside div');
+        sideNavItems.forEach(item => {
+            item.addEventListener('mousedown', () => {
+                item.style.transform = 'scale(0.98)';
+            });
+            item.addEventListener('mouseup', () => {
+                item.style.transform = 'scale(1)';
+            });
+        });
+    </script>
+</body></html>

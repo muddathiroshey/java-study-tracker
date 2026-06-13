@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>EduFocus Admin | Course Management</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;600;700;800&amp;family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "on-secondary-container": "#fffbff",
+                    "on-surface": "#0b1c30",
+                    "tertiary": "#006242",
+                    "secondary-fixed-dim": "#c3c0ff",
+                    "on-primary-fixed-variant": "#003ea8",
+                    "on-tertiary": "#ffffff",
+                    "secondary": "#4b41e1",
+                    "on-primary": "#ffffff",
+                    "surface-container": "#e5eeff",
+                    "tertiary-fixed": "#6ffbbe",
+                    "surface-container-highest": "#d3e4fe",
+                    "on-tertiary-fixed-variant": "#005236",
+                    "on-primary-fixed": "#00174b",
+                    "tertiary-container": "#007d55",
+                    "surface-bright": "#f8f9ff",
+                    "on-primary-container": "#eeefff",
+                    "background": "#f8f9ff",
+                    "on-secondary": "#ffffff",
+                    "on-tertiary-fixed": "#002113",
+                    "on-surface-variant": "#434655",
+                    "surface-variant": "#d3e4fe",
+                    "primary-fixed-dim": "#b4c5ff",
+                    "on-error-container": "#93000a",
+                    "primary": "#004ac6",
+                    "on-secondary-fixed-variant": "#3323cc",
+                    "secondary-fixed": "#e2dfff",
+                    "primary-fixed": "#dbe1ff",
+                    "outline": "#737686",
+                    "secondary-container": "#645efb",
+                    "on-secondary-fixed": "#0f0069",
+                    "on-tertiary-container": "#bdffdb",
+                    "surface-container-low": "#eff4ff",
+                    "inverse-on-surface": "#eaf1ff",
+                    "error": "#ba1a1a",
+                    "surface-tint": "#0053db",
+                    "tertiary-fixed-dim": "#4edea3",
+                    "primary-container": "#2563eb",
+                    "inverse-surface": "#213145",
+                    "on-error": "#ffffff",
+                    "surface-container-lowest": "#ffffff",
+                    "surface-dim": "#cbdbf5",
+                    "surface-container-high": "#dce9ff",
+                    "on-background": "#0b1c30",
+                    "error-container": "#ffdad6",
+                    "surface": "#f8f9ff",
+                    "inverse-primary": "#b4c5ff",
+                    "outline-variant": "#c3c6d7"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "md": "16px",
+                    "sm": "8px",
+                    "margin-mobile": "16px",
+                    "xs": "4px",
+                    "max-width": "1280px",
+                    "lg": "24px",
+                    "gutter": "24px",
+                    "xl": "32px",
+                    "margin-desktop": "48px",
+                    "unit": "4px"
+            },
+            "fontFamily": {
+                    "label-md": ["Inter"],
+                    "body-lg": ["Inter"],
+                    "title-md": ["Hanken Grotesk"],
+                    "headline-lg": ["Hanken Grotesk"],
+                    "caption": ["Inter"],
+                    "body-md": ["Inter"],
+                    "headline-lg-mobile": ["Hanken Grotesk"],
+                    "display-lg": ["Hanken Grotesk"]
+            },
+            "fontSize": {
+                    "label-md": ["14px", {"lineHeight": "20px", "letterSpacing": "0.01em", "fontWeight": "500"}],
+                    "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                    "title-md": ["20px", {"lineHeight": "28px", "fontWeight": "600"}],
+                    "headline-lg": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                    "caption": ["12px", {"lineHeight": "16px", "fontWeight": "400"}],
+                    "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                    "headline-lg-mobile": ["28px", {"lineHeight": "36px", "fontWeight": "600"}],
+                    "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        body {
+            background-color: #f8f9ff;
+            color: #0b1c30;
+            overflow-x: hidden;
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(195, 198, 215, 0.3);
+        }
+        .bento-card {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .bento-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 10px 25px -5px rgba(0, 74, 198, 0.1);
+        }
+    </style>
+</head>
+<body class="font-body-md text-body-md">
+<!-- Sidebar Navigation -->
+<aside class="fixed left-0 top-0 h-full flex flex-col p-md z-40 bg-surface-container-lowest border-r border-outline-variant w-64 hidden md:flex">
+<div class="mb-xl px-md">
+<h1 class="text-headline-lg font-headline-lg text-primary">EduFocus</h1>
+<div class="mt-md flex items-center gap-sm">
+<img alt="Alex Johnson" class="w-10 h-10 rounded-full object-cover" data-alt="A professional close-up portrait of a young administrator with a friendly expression. They are set against a soft, out-of-focus modern office background with clean architectural lines. The lighting is natural and bright, reinforcing a scholarly yet accessible professional identity consistent with high-end educational software." src="https://lh3.googleusercontent.com/aida-public/AB6AXuC-SYRSvE6nhf1xJ5DjZ6sCIWP5paRptqWSpGnXohuFmmtBW0KENBvRDzOWm99av7rgiHKsXKL08f8RGxngf71hiJ-lfzPwk7F7wMc8iqOH6uj_s9RBCmuyoBUMvjNPhBveDU5Nj-KZoRTIzW6WTc2kCm11j6Jrpmk_LRX0WPnPiMg7zoqB1jjrQ6SVP-fJboE5o3fppl-n4auqVvgYf_sXlrs_rXW9fRX9ulZps8NpWAg14CNLatk3CuhKQMZa0CqLviNDO-f_vyhR"/>
+<div>
+<p class="font-label-md text-label-md text-on-surface">Alex Johnson</p>
+<p class="text-caption text-on-surface-variant">Course Admin</p>
+</div>
+</div>
+</div>
+<nav class="flex-1 flex flex-col gap-xs">
+<a class="flex items-center gap-md text-on-surface-variant px-md py-sm hover:bg-surface-container-high transition-all rounded-lg" href="#">
+<span class="material-symbols-outlined">calendar_today</span>
+<span class="font-label-md">Daily Lessons</span>
+</a>
+<a class="flex items-center gap-md text-on-surface-variant px-md py-sm hover:bg-surface-container-high transition-all rounded-lg" href="#">
+<span class="material-symbols-outlined">leaderboard</span>
+<span class="font-label-md">Leaderboard</span>
+</a>
+<a class="flex items-center gap-md bg-secondary-container text-on-secondary-container px-md py-sm rounded-lg scale-[0.98]" href="#">
+<span class="material-symbols-outlined">assignment_turned_in</span>
+<span class="font-label-md">Tasks</span>
+</a>
+<a class="flex items-center gap-md text-on-surface-variant px-md py-sm hover:bg-surface-container-high transition-all rounded-lg" href="#">
+<span class="material-symbols-outlined">settings</span>
+<span class="font-label-md">Settings</span>
+</a>
+</nav>
+<div class="mt-auto p-md">
+<button class="w-full bg-primary text-on-primary py-sm rounded-lg font-label-md shadow-sm hover:opacity-90 transition-opacity">
+                Upgrade to Pro
+            </button>
+</div>
+</aside>
+<!-- Top App Bar -->
+<header class="fixed top-0 right-0 left-0 md:left-64 h-16 bg-surface border-b border-outline-variant z-30 flex items-center justify-between px-lg">
+<div class="flex items-center gap-md">
+<span class="material-symbols-outlined text-primary">search</span>
+<input class="bg-transparent border-none focus:ring-0 text-body-md w-64" placeholder="Search course modules..." type="text"/>
+</div>
+<div class="flex items-center gap-lg">
+<button class="relative">
+<span class="material-symbols-outlined text-on-surface-variant">notifications</span>
+<span class="absolute top-0 right-0 w-2 h-2 bg-error rounded-full"></span>
+</button>
+<span class="material-symbols-outlined text-on-surface-variant">trending_up</span>
+<div class="w-8 h-8 rounded-full bg-primary-container flex items-center justify-center text-on-primary-container font-bold text-xs">AJ</div>
+</div>
+</header>
+<!-- Main Content Area -->
+<main class="pt-24 pb-12 px-md md:pl-80 md:pr-12 max-w-max-width mx-auto">
+<!-- Header Section -->
+<section class="flex flex-col md:flex-row md:items-end justify-between gap-md mb-xl">
+<div>
+<h2 class="text-headline-lg font-headline-lg text-on-surface">Curriculum Management</h2>
+<p class="text-body-md text-on-surface-variant mt-xs">Organize daily learning journeys and task assignments.</p>
+</div>
+<button class="flex items-center justify-center gap-sm bg-primary text-on-primary px-lg py-md rounded-xl font-title-md hover:shadow-lg transition-shadow">
+<span class="material-symbols-outlined">add_circle</span>
+                Add New Day
+            </button>
+</section>
+<!-- Bento Grid Content -->
+<div class="grid grid-cols-1 md:grid-cols-12 gap-gutter">
+<!-- Day 1 Card -->
+<div class="md:col-span-8 bento-card bg-surface-container-lowest p-lg rounded-xl border border-outline-variant shadow-sm flex flex-col gap-md">
+<div class="flex justify-between items-start">
+<div>
+<div class="flex items-center gap-sm mb-xs">
+<span class="bg-tertiary-fixed text-on-tertiary-fixed-variant px-sm py-xs rounded text-xs font-bold uppercase tracking-wider">Active</span>
+<h3 class="text-title-md font-title-md text-on-surface">Day 1: Introduction to Data Structures</h3>
+</div>
+<p class="text-body-md text-on-surface-variant">The fundamentals of memory management and basic arrays.</p>
+</div>
+<button class="p-sm hover:bg-surface-container-high rounded-full transition-colors">
+<span class="material-symbols-outlined text-primary">edit</span>
+</button>
+</div>
+<div class="grid grid-cols-1 sm:grid-cols-2 gap-md mt-sm">
+<div class="bg-surface-container-low p-md rounded-lg flex items-center gap-md">
+<div class="w-12 h-12 bg-primary-container rounded-lg flex items-center justify-center">
+<span class="material-symbols-outlined text-primary">videocam</span>
+</div>
+<div>
+<p class="font-bold text-on-surface">4 Videos</p>
+<p class="text-caption text-on-surface-variant">42 mins total</p>
+</div>
+</div>
+<div class="bg-surface-container-low p-md rounded-lg flex items-center gap-md">
+<div class="w-12 h-12 bg-secondary-container rounded-lg flex items-center justify-center">
+<span class="material-symbols-outlined text-on-secondary-container">task_alt</span>
+</div>
+<div>
+<p class="font-bold text-on-surface">3 Tasks</p>
+<p class="text-caption text-on-surface-variant">Estimated 2 hours</p>
+</div>
+</div>
+</div>
+<div class="mt-auto pt-md border-t border-outline-variant flex justify-between items-center">
+<div class="flex -space-x-2">
+<img class="w-8 h-8 rounded-full border-2 border-surface-container-lowest" data-alt="Close-up avatar of a female student with a bright smile, captured in soft studio lighting." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAsakE9E_Xi0BPx01zQndNc8TxIuH6WEKEyDsOHCVCecsY6vpfOw4P79YsjbdmsxLmZSVjMRbrV0fc8GkEDVr2PPL9s6qfTAw5w8_kOBtAkwAM0jP4s_SrLgqYFz4Ejhjn76pjM6E3DOArxVXjZOvWEvI927jred-7sqjkx8v2M_Jfy_d3EKRfnW5qhHxR46C1KHdal6-0zY2OUDuTxPDJQiCvIuOGGOKFm_FW7T6HTqS9I3zKWvBhqIBHmKwtG_y2It8jraqSzEpgt"/>
+<img class="w-8 h-8 rounded-full border-2 border-surface-container-lowest" data-alt="Close-up avatar of a male student with glasses, looking thoughtful, set against a neutral grey background." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBH_LvwiMWlyDwqrrAf07Ac1NUoMwSpWBYvXRiCDndWjK2bXH_tfaONtV0UBfXBWaX0EBVsdWsuWRwUJfOCnpyGYSmUgt8SbO4NSsV-zBrWNXe-o5zQeKdvWmASEO1WAwLzwfS5uerw255CISrI4WXOcM0cX9LUGPv67C_IqcPRmmvhJHt0_mQduHT68OFWcAWaCx9Dyi1MWEnzjYbdpUseD1LoJIVDZE7JM4GlqV7D-Gs09tJT9EnJCET07JhVc1UtGPoGGzSHtaEq"/>
+<div class="w-8 h-8 rounded-full border-2 border-surface-container-lowest bg-outline-variant flex items-center justify-center text-[10px] font-bold">+12</div>
+</div>
+<span class="text-caption text-on-surface-variant">Last edited: 2 hours ago</span>
+</div>
+</div>
+<!-- Stats Mini Card -->
+<div class="md:col-span-4 bento-card bg-primary p-lg rounded-xl flex flex-col justify-between text-on-primary relative overflow-hidden">
+<div class="relative z-10">
+<h4 class="text-title-md font-title-md mb-xs">Course Health</h4>
+<p class="text-caption opacity-80">Average completion rate across all active days.</p>
+</div>
+<div class="mt-xl relative z-10">
+<div class="text-display-lg font-display-lg mb-xs">88%</div>
+<div class="w-full bg-white/20 h-2 rounded-full overflow-hidden">
+<div class="bg-tertiary-fixed-dim h-full w-[88%]"></div>
+</div>
+</div>
+<!-- Decorative background elements -->
+<div class="absolute -right-8 -bottom-8 w-32 h-32 bg-white/10 rounded-full blur-2xl"></div>
+</div>
+<!-- Day 2 Card -->
+<div class="md:col-span-6 bento-card bg-surface-container-lowest p-lg rounded-xl border border-outline-variant shadow-sm flex flex-col gap-md">
+<div class="flex justify-between items-start">
+<div>
+<h3 class="text-title-md font-title-md text-on-surface">Day 2: Linked Lists</h3>
+<p class="text-body-md text-on-surface-variant mt-xs">Deep dive into dynamic memory and pointers.</p>
+</div>
+<button class="p-sm hover:bg-surface-container-high rounded-full transition-colors">
+<span class="material-symbols-outlined text-primary">edit</span>
+</button>
+</div>
+<div class="flex gap-md">
+<div class="flex items-center gap-xs text-on-surface-variant">
+<span class="material-symbols-outlined text-sm">play_circle</span>
+<span class="text-caption">3 Videos</span>
+</div>
+<div class="flex items-center gap-xs text-on-surface-variant">
+<span class="material-symbols-outlined text-sm">quiz</span>
+<span class="text-caption">1 Quiz</span>
+</div>
+</div>
+<div class="mt-4 flex items-center justify-between">
+<span class="text-label-md font-label-md text-primary bg-primary-fixed px-md py-xs rounded-full">Draft</span>
+<button class="text-primary font-bold text-sm hover:underline">Manage Content</button>
+</div>
+</div>
+<!-- Day 3 Card -->
+<div class="md:col-span-6 bento-card bg-surface-container-lowest p-lg rounded-xl border border-outline-variant shadow-sm flex flex-col gap-md">
+<div class="flex justify-between items-start">
+<div>
+<h3 class="text-title-md font-title-md text-on-surface">Day 3: Stacks &amp; Queues</h3>
+<p class="text-body-md text-on-surface-variant mt-xs">Practical applications of LIFO and FIFO patterns.</p>
+</div>
+<button class="p-sm hover:bg-surface-container-high rounded-full transition-colors">
+<span class="material-symbols-outlined text-primary">edit</span>
+</button>
+</div>
+<div class="flex gap-md">
+<div class="flex items-center gap-xs text-on-surface-variant">
+<span class="material-symbols-outlined text-sm">play_circle</span>
+<span class="text-caption">5 Videos</span>
+</div>
+<div class="flex items-center gap-xs text-on-surface-variant">
+<span class="material-symbols-outlined text-sm">list_alt</span>
+<span class="text-caption">4 Exercises</span>
+</div>
+</div>
+<div class="mt-4 flex items-center justify-between">
+<span class="text-label-md font-label-md text-outline bg-surface-variant px-md py-xs rounded-full">Scheduled</span>
+<button class="text-primary font-bold text-sm hover:underline">Manage Content</button>
+</div>
+</div>
+<!-- Sidebar / Quick Actions -->
+<div class="md:col-span-12 grid grid-cols-1 sm:grid-cols-3 gap-gutter mt-lg">
+<div class="bg-surface-container-high p-lg rounded-xl border border-outline-variant flex flex-col items-center text-center">
+<span class="material-symbols-outlined text-primary text-4xl mb-sm">auto_stories</span>
+<p class="font-title-md text-on-surface">Generate AI Quizzes</p>
+<p class="text-caption text-on-surface-variant">Create questions from your video transcripts instantly.</p>
+</div>
+<div class="bg-surface-container-high p-lg rounded-xl border border-outline-variant flex flex-col items-center text-center">
+<span class="material-symbols-outlined text-tertiary text-4xl mb-sm">analytics</span>
+<p class="font-title-md text-on-surface">Student Insights</p>
+<p class="text-caption text-on-surface-variant">See which days have the highest dropout rate.</p>
+</div>
+<div class="bg-surface-container-high p-lg rounded-xl border border-outline-variant flex flex-col items-center text-center">
+<span class="material-symbols-outlined text-secondary text-4xl mb-sm">cloud_upload</span>
+<p class="font-title-md text-on-surface">Bulk Import</p>
+<p class="text-caption text-on-surface-variant">Upload CSV or JSON curriculum structures.</p>
+</div>
+</div>
+</div>
+</main>
+<!-- Mobile Bottom Navigation (Visible only on mobile) -->
+<nav class="md:hidden fixed bottom-0 left-0 right-0 bg-surface border-t border-outline-variant flex justify-around p-sm z-50">
+<button class="flex flex-col items-center text-primary">
+<span class="material-symbols-outlined">calendar_today</span>
+<span class="text-[10px] font-bold">Lessons</span>
+</button>
+<button class="flex flex-col items-center text-on-surface-variant">
+<span class="material-symbols-outlined">leaderboard</span>
+<span class="text-[10px]">Leaderboard</span>
+</button>
+<button class="flex flex-col items-center text-on-surface-variant">
+<span class="material-symbols-outlined">assignment_turned_in</span>
+<span class="text-[10px]">Tasks</span>
+</button>
+<button class="flex flex-col items-center text-on-surface-variant">
+<span class="material-symbols-outlined">settings</span>
+<span class="text-[10px]">Settings</span>
+</button>
+</nav>
+<!-- Micro-interaction Scripts -->
+<script>
+        document.querySelectorAll('.bento-card').forEach(card => {
+            card.addEventListener('mouseenter', () => {
+                // Subtle feedback handled by CSS transitions
+            });
+        });
+
+        // Search bar interaction
+        const searchInput = document.querySelector('input[type="text"]');
+        searchInput.addEventListener('focus', () => {
+            searchInput.parentElement.classList.add('ring-1', 'ring-primary', 'rounded-lg', 'bg-surface-container-low');
+        });
+        searchInput.addEventListener('blur', () => {
+            searchInput.parentElement.classList.remove('ring-1', 'ring-primary', 'rounded-lg', 'bg-surface-container-low');
+        });
+    </script>
+</body></html>

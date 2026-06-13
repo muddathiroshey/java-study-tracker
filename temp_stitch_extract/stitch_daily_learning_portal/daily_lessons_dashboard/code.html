@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Daily Lessons | EduFocus</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600;700&amp;family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-background": "#0b1c30",
+                        "outline": "#737686",
+                        "surface-container-low": "#eff4ff",
+                        "on-secondary-fixed": "#0f0069",
+                        "inverse-surface": "#213145",
+                        "tertiary-container": "#007d55",
+                        "on-primary-container": "#eeefff",
+                        "surface-container": "#e5eeff",
+                        "on-surface": "#0b1c30",
+                        "tertiary-fixed-dim": "#4edea3",
+                        "surface-dim": "#cbdbf5",
+                        "on-error": "#ffffff",
+                        "on-error-container": "#93000a",
+                        "secondary": "#4b41e1",
+                        "primary-fixed-dim": "#b4c5ff",
+                        "tertiary": "#006242",
+                        "surface": "#f8f9ff",
+                        "surface-container-high": "#dce9ff",
+                        "surface-container-highest": "#d3e4fe",
+                        "error": "#ba1a1a",
+                        "on-tertiary": "#ffffff",
+                        "primary": "#004ac6",
+                        "primary-fixed": "#dbe1ff",
+                        "inverse-primary": "#b4c5ff",
+                        "background": "#f8f9ff",
+                        "on-secondary-container": "#fffbff",
+                        "primary-container": "#2563eb",
+                        "outline-variant": "#c3c6d7",
+                        "on-tertiary-container": "#bdffdb",
+                        "surface-tint": "#0053db",
+                        "surface-bright": "#f8f9ff",
+                        "on-primary-fixed-variant": "#003ea8",
+                        "secondary-fixed-dim": "#c3c0ff",
+                        "secondary-container": "#645efb",
+                        "on-primary-fixed": "#00174b",
+                        "tertiary-fixed": "#6ffbbe",
+                        "inverse-on-surface": "#eaf1ff",
+                        "on-tertiary-fixed-variant": "#005236",
+                        "error-container": "#ffdad6",
+                        "secondary-fixed": "#e2dfff",
+                        "on-tertiary-fixed": "#002113",
+                        "surface-variant": "#d3e4fe",
+                        "on-surface-variant": "#434655",
+                        "surface-container-lowest": "#ffffff",
+                        "on-secondary-fixed-variant": "#3323cc",
+                        "on-secondary": "#ffffff",
+                        "on-primary": "#ffffff"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "xl": "32px",
+                        "sm": "8px",
+                        "margin-mobile": "16px",
+                        "md": "16px",
+                        "margin-desktop": "48px",
+                        "gutter": "24px",
+                        "max-width": "1280px",
+                        "xs": "4px",
+                        "lg": "24px",
+                        "unit": "4px"
+                    },
+                    "fontFamily": {
+                        "caption": ["Inter"],
+                        "display-lg": ["Hanken Grotesk"],
+                        "body-md": ["Inter"],
+                        "title-md": ["Hanken Grotesk"],
+                        "headline-lg": ["Hanken Grotesk"],
+                        "body-lg": ["Inter"],
+                        "headline-lg-mobile": ["Hanken Grotesk"],
+                        "label-md": ["Inter"]
+                    },
+                    "fontSize": {
+                        "caption": ["12px", {"lineHeight": "16px", "fontWeight": "400"}],
+                        "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                        "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                        "title-md": ["20px", {"lineHeight": "28px", "fontWeight": "600"}],
+                        "headline-lg": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                        "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                        "headline-lg-mobile": ["28px", {"lineHeight": "36px", "fontWeight": "600"}],
+                        "label-md": ["14px", {"lineHeight": "20px", "letterSpacing": "0.01em", "fontWeight": "500"}]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        body { font-family: 'Inter', sans-serif; background-color: #f8f9ff; }
+        .font-headline-lg { font-family: 'Hanken Grotesk', sans-serif; }
+        .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+        .timeline-connector { width: 2px; background-color: #c3c6d7; position: absolute; left: 23px; top: 40px; bottom: -40px; }
+        .glass-card { background: rgba(255, 255, 255, 0.8); backdrop-filter: blur(12px); border: 1px solid rgba(195, 198, 215, 0.3); }
+        .active-dot { box-shadow: 0 0 0 4px #dbe1ff; }
+    </style>
+</head>
+<body class="text-on-surface">
+<!-- TopAppBar -->
+<header class="fixed top-0 left-0 right-0 z-50 bg-surface dark:bg-on-background border-b border-outline-variant dark:border-outline">
+<div class="flex justify-between items-center w-full px-lg py-sm max-w-max-width mx-auto">
+<div class="flex items-center gap-md">
+<span class="text-title-md font-title-md font-bold text-primary dark:text-primary-fixed">EduFocus</span>
+</div>
+<div class="flex items-center gap-md">
+<div class="hidden md:flex items-center bg-surface-container-low px-md py-xs rounded-full">
+<span class="material-symbols-outlined text-outline">search</span>
+<input class="bg-transparent border-none focus:ring-0 text-body-md" placeholder="Search lessons..." type="text"/>
+</div>
+<button class="material-symbols-outlined text-primary hover:bg-surface-container-low p-sm rounded-full transition-colors">notifications</button>
+<button class="material-symbols-outlined text-primary hover:bg-surface-container-low p-sm rounded-full transition-colors">trending_up</button>
+<div class="w-10 h-10 rounded-full overflow-hidden border-2 border-primary-fixed">
+<img alt="User profile avatar" class="w-full h-full object-cover" data-alt="Close-up portrait of a diverse university student with a friendly expression, soft natural indoor lighting, clean scholarly background with blurred books, modern academic aesthetic using soft blues and whites." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBTiCRJ79BKA-PstjpWqkZdbV1VQPeu1q_pQw23iC9L6J4K0iMCgv30znLF7kiuTjax0yzQYCXMVnNtBJQspjNh06RaNTJIREQThDdlLs_oTKKn1XBl5TH-JFGsGHEG61XiiOKeGNUgpyUMkZub8_z5CA6PuC1qiHOQs_LlcikWXDwyNV1FoeFhavqxx5cknMLSPYfQ93Lt1tYqzywa3R378K0kojG-31l7RWxQXHDJuZ3sqjPnKg0EavroT0O1HpCfGJCiYAml9kQl"/>
+</div>
+</div>
+</div>
+</header>
+<!-- SideNavBar -->
+<nav class="fixed left-0 top-0 h-full flex flex-col p-md z-40 bg-surface-container-lowest dark:bg-inverse-surface border-r border-outline-variant dark:border-outline docked h-screen w-64 pt-24">
+<div class="flex flex-col gap-sm mb-xl">
+<div class="flex flex-col items-center p-md">
+<div class="w-16 h-16 rounded-full overflow-hidden mb-sm border-2 border-secondary-container">
+<img alt="Student Portrait" class="w-full h-full object-cover" data-alt="A professional headshot of a young adult student Alex Johnson, wearing a clean smart-casual navy sweater, set against a bright minimalist studio background. The lighting is crisp and even, reflecting a focused and scholarly persona consistent with a high-end educational dashboard." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCp3ukVaw49TowqWawl2PUpVbcovGx21NPvKZCV2g73_P0NZDtlQF1CC0ZV6YxGA7h-TR5HU0KaiAVDGsNSej_RrHU8m7h46zKhGmv6JrCBYwg22QFeoFmEbRGXjab-Dm3FG-pepXGxziAw-LhERRF2ZsOTRYWWX1qKrENuPaz6iQ_eoxCQ--XLF1uM7DOBYaboLReUNZWv6xW89zdbu8_ljTB2VV_Ak6hGBisHgC4hayutUng3N34toUy4XgKWRa-0WdNTKBokzI2L"/>
+</div>
+<span class="text-body-md font-bold text-on-surface">Alex Johnson</span>
+<span class="text-label-md text-on-surface-variant">Course Progress: 65%</span>
+<div class="w-full bg-outline-variant h-1.5 rounded-full mt-sm overflow-hidden">
+<div class="bg-tertiary-fixed-dim h-full" style="width: 65%"></div>
+</div>
+</div>
+</div>
+<div class="flex flex-col gap-xs flex-grow">
+<!-- Active Navigation -->
+<a class="flex items-center gap-md bg-secondary-container dark:bg-secondary text-on-secondary-container dark:text-on-secondary rounded-lg px-md py-sm scale-[0.98] transition-transform duration-200" href="#">
+<span class="material-symbols-outlined">calendar_today</span>
+<span class="text-label-md font-label-md">Daily Lessons</span>
+</a>
+<a class="flex items-center gap-md text-on-surface-variant dark:text-outline-variant px-md py-sm hover:bg-surface-container-high dark:hover:bg-surface-container transition-all" href="#">
+<span class="material-symbols-outlined">leaderboard</span>
+<span class="text-label-md font-label-md">Leaderboard</span>
+</a>
+<a class="flex items-center gap-md text-on-surface-variant dark:text-outline-variant px-md py-sm hover:bg-surface-container-high dark:hover:bg-surface-container transition-all" href="#">
+<span class="material-symbols-outlined">assignment_turned_in</span>
+<span class="text-label-md font-label-md">Tasks</span>
+</a>
+<a class="flex items-center gap-md text-on-surface-variant dark:text-outline-variant px-md py-sm hover:bg-surface-container-high dark:hover:bg-surface-container transition-all" href="#">
+<span class="material-symbols-outlined">settings</span>
+<span class="text-label-md font-label-md">Settings</span>
+</a>
+</div>
+<button class="mt-auto bg-primary text-on-primary font-bold py-md px-lg rounded-xl shadow-sm hover:opacity-90 transition-opacity">
+            Upgrade to Pro
+        </button>
+</nav>
+<!-- Main Content Canvas -->
+<main class="ml-64 pt-24 pb-12 px-margin-desktop min-h-screen">
+<div class="max-w-4xl mx-auto">
+<header class="mb-xl">
+<h1 class="font-headline-lg text-headline-lg text-on-background mb-sm">Your Learning Path</h1>
+<p class="text-body-md text-on-surface-variant">Stay consistent. Every lesson brings you closer to your goal.</p>
+</header>
+<!-- Timeline Section -->
+<div class="relative space-y-12">
+<!-- Day 1 (Completed) -->
+<div class="relative flex gap-lg group">
+<div class="timeline-connector bg-tertiary"></div>
+<div class="z-10 mt-2">
+<div class="w-12 h-12 rounded-full bg-tertiary flex items-center justify-center text-on-tertiary">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+</div>
+</div>
+<div class="flex-grow">
+<div class="flex items-center gap-md mb-md">
+<h3 class="text-title-md font-title-md text-on-background">Day 1: Foundations of Focus</h3>
+<span class="px-sm py-xs bg-tertiary-container text-on-tertiary-container text-caption rounded-lg font-medium">Completed</span>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-md">
+<div class="glass-card p-lg rounded-xl flex flex-col gap-sm">
+<div class="flex justify-between items-start">
+<h4 class="text-body-md font-bold text-on-surface">Cognitive Load Theory</h4>
+<span class="text-caption text-on-surface-variant">12 mins</span>
+</div>
+<div class="flex items-center gap-xs text-tertiary font-medium">
+<span class="material-symbols-outlined text-[18px]">verified</span>
+<span class="text-label-md">Score: 95%</span>
+</div>
+</div>
+<div class="glass-card p-lg rounded-xl flex flex-col gap-sm">
+<div class="flex justify-between items-start">
+<h4 class="text-body-md font-bold text-on-surface">The Flow State Intro</h4>
+<span class="text-caption text-on-surface-variant">8 mins</span>
+</div>
+<div class="flex items-center gap-md">
+<span class="px-sm py-xs bg-primary-fixed text-on-primary-fixed-variant text-caption rounded-lg font-bold">Post-lesson Task</span>
+<span class="material-symbols-outlined text-tertiary text-[18px]">check_circle</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Day 2 (In Progress / Active) -->
+<div class="relative flex gap-lg group">
+<div class="timeline-connector"></div>
+<div class="z-10 mt-2">
+<div class="w-12 h-12 rounded-full bg-primary flex items-center justify-center text-on-primary active-dot">
+<span class="text-label-md font-bold">2</span>
+</div>
+</div>
+<div class="flex-grow">
+<div class="flex items-center gap-md mb-md">
+<h3 class="text-title-md font-title-md text-on-background">Day 2: Behavioral Mechanics</h3>
+<span class="px-sm py-xs bg-secondary-container text-on-secondary-container text-caption rounded-lg font-medium">In Progress</span>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-md">
+<div class="bg-surface-container-highest border-2 border-primary-container p-lg rounded-xl flex flex-col gap-sm shadow-md">
+<div class="flex justify-between items-start">
+<h4 class="text-body-md font-bold text-on-surface">Dopamine Loops</h4>
+<span class="text-caption text-on-surface-variant">15 mins</span>
+</div>
+<div class="w-full bg-surface-container-low h-2 rounded-full mt-sm">
+<div class="bg-primary h-full rounded-full" style="width: 45%"></div>
+</div>
+<button class="mt-md text-primary font-bold text-label-md flex items-center gap-xs group-hover:translate-x-1 transition-transform">
+                                    Resume Lesson <span class="material-symbols-outlined">arrow_forward</span>
+</button>
+</div>
+<div class="glass-card p-lg rounded-xl flex flex-col gap-sm opacity-60">
+<div class="flex justify-between items-start">
+<h4 class="text-body-md font-bold text-on-surface">Environment Design</h4>
+<span class="text-caption text-on-surface-variant">20 mins</span>
+</div>
+<div class="flex items-center gap-md">
+<span class="px-sm py-xs bg-primary-fixed text-on-primary-fixed-variant text-caption rounded-lg font-bold">Post-lesson Task</span>
+<span class="material-symbols-outlined text-outline text-[18px]">radio_button_unchecked</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Day 3 (Locked) -->
+<div class="relative flex gap-lg group">
+<div class="timeline-connector"></div>
+<div class="z-10 mt-2">
+<div class="w-12 h-12 rounded-full bg-outline-variant flex items-center justify-center text-on-surface-variant">
+<span class="material-symbols-outlined">lock</span>
+</div>
+</div>
+<div class="flex-grow">
+<div class="flex items-center gap-md mb-md">
+<h3 class="text-title-md font-title-md text-outline">Day 3: Deep Work Habits</h3>
+<span class="px-sm py-xs bg-surface-variant text-on-surface-variant text-caption rounded-lg font-medium">Locked</span>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-1">
+<div class="border border-dashed border-outline-variant p-xl rounded-xl flex flex-col items-center justify-center text-center bg-surface-container-low opacity-50">
+<span class="material-symbols-outlined text-xl mb-sm">lock_open</span>
+<p class="text-body-md text-on-surface-variant">Complete Day 2 to unlock this masterclass section.</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Day 4 (Locked) -->
+<div class="relative flex gap-lg group">
+<div class="z-10 mt-2">
+<div class="w-12 h-12 rounded-full bg-outline-variant flex items-center justify-center text-on-surface-variant">
+<span class="material-symbols-outlined">lock</span>
+</div>
+</div>
+<div class="flex-grow">
+<div class="flex items-center gap-md mb-md">
+<h3 class="text-title-md font-title-md text-outline">Day 4: Sustained Performance</h3>
+<span class="px-sm py-xs bg-surface-variant text-on-surface-variant text-caption rounded-lg font-medium">Locked</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Featured Section (Bento Style) -->
+<div class="max-w-4xl mx-auto mt-xl pt-xl border-t border-outline-variant">
+<h2 class="text-title-md font-title-md mb-lg">Recommended Enrichment</h2>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-lg h-64">
+<div class="md:col-span-2 bg-primary-container rounded-xl p-lg relative overflow-hidden text-on-primary-container shadow-lg group cursor-pointer">
+<div class="relative z-10">
+<h4 class="text-headline-lg font-headline-lg mb-sm">Expert Spotlight</h4>
+<p class="text-body-md opacity-90 max-w-sm">Dr. Aris Thorne discusses the neural pathways of academic persistence.</p>
+<button class="mt-lg bg-on-primary-container text-primary-container px-lg py-sm rounded-lg font-bold transition-all hover:scale-105">Watch Interview</button>
+</div>
+<div class="absolute right-0 bottom-0 w-1/2 h-full opacity-40 group-hover:scale-110 transition-transform duration-500">
+<img alt="Expert Thumbnail" class="w-full h-full object-cover" data-alt="A cinematic, high-contrast black and white photograph of an intellectual professor in a sunlit old library. The subject is surrounded by towering mahogany bookshelves and dust motes dancing in shafts of golden light. The mood is scholarly, prestigious, and deeply focused, embodying a premium educational environment." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAO8_wlgDqnp0XuCq-2i74XAjhzPNFtoHVBHtrnm0vQvNfPMvaE0e3paPzK2Nq6DSWpfsTLO5ftsr9ecV8ZEIGC94zWxsOoEeWJ93l9IyCpTcqSez7f1VMHmJ10jfOFBml5MOD3Vv1EyA9OhhPyvwvwDEMb2h7YIxJ1utypH8xnJScjGW1oVL6NGc6-0606qzEQk7lV5rd-6UAGQOnUPmR6WAN05O8Z9p6maSW-XclA0jxgPU24AFRjX77hU9Y06Ruw-h79Ac41-TPD"/>
+</div>
+</div>
+<div class="bg-surface-container-highest rounded-xl p-lg flex flex-col justify-between border border-outline-variant hover:border-primary transition-colors cursor-pointer">
+<span class="material-symbols-outlined text-primary text-display-lg" style="font-variation-settings: 'wght' 200;">psychology</span>
+<div>
+<h4 class="text-label-md font-bold">Mental Refresher</h4>
+<p class="text-caption text-on-surface-variant">5-min mindfulness session</p>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- Floating Action Button (Active only on Dashboards) -->
+<div class="fixed bottom-lg right-lg z-50">
+<button class="flex items-center gap-sm bg-secondary-container text-on-secondary-container px-lg py-md rounded-full shadow-lg hover:shadow-xl hover:scale-105 transition-all duration-300">
+<span class="material-symbols-outlined">bolt</span>
+<span class="font-bold">Quick Review</span>
+</button>
+</div>
+<script>
+        // Micro-interaction for lesson cards
+        document.querySelectorAll('.glass-card, .bg-surface-container-highest').forEach(card => {
+            card.addEventListener('mouseenter', () => {
+                card.style.transform = 'translateY(-2px)';
+            });
+            card.addEventListener('mouseleave', () => {
+                card.style.transform = 'translateY(0)';
+            });
+        });
+    </script>
+</body></html>

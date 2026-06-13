@@ -1,0 +1,7 @@
+split these videos:
+Chapter 2 part 1 into 2 videos: the first one ends at 00:42:16
+chapter 4 into 2 videos: the first one ends at 00:43:20
+Chapter 7 part 2 into 2 videos: the first one ends at 00:31:03
+
+and the arrangement is that we are doing weekly content: each week would be unlocked sunday starting from the next Sunday, and inside the week we will have 7 days, Friday is off and Saturday is practice with problems, so five lectures each week.
+

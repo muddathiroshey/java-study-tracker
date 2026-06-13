@@ -1,0 +1,15 @@
+Java Project prompt
+
+in the Java playlist text file you will find two links that lead to two playlists in java, the first one is fundamentals of java and the second one is oop.
+
+you are required to create a website that would be able to be uploaded and hosted in v0, the website is a course of java from this playlist in the span of a month and half starting from the 15th of this month until the end of next month. 
+split the days as you see fit per topic.
+after each set of connected lessons add a minor task for the students to practice those lessons learnt. you can make them minor tasks or problems to be solved whichever you see fit best.
+the website will show a link to the videos with the thumbnail and duration of the video.
+the website will have a progress bar that tracks their learning journey and what's left of both playlists.
+future lessons will be locked until their day arrives and will be visitable.
+the website will of course have login and register and a database that holds users data and dynamic login and save account progress and all of that.
+the website will be able to run on my computer first for testing before deploying to v0.
+
+in this website: https://v0-ccna-study-tracker-seven.vercel.app/
+is a v0 study tracker you may make use of it in the design i quite like the theme of it (the colors) make it primary 

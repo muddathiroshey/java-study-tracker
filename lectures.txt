@@ -1,0 +1,46 @@
+Ch 1: Hardware, Operating Systems & Setup
+Ch 1: First Java Program & Syntax Check
+Ch 2: Variables, Types & Simple Calculations
+Ch 2: Console Inputs & Scanners
+Ch 2: Expressions, Arithmetic & Integer Digits Sum
+Practice: Population Projection
+Ch 3: Conditionals & Selections Part 1
+Ch 3: Conditionals & Selections Part 2
+Ch 4: Math Functions & Characters
+Ch 4: Strings & Regular Polygons
+Ch 4: Geometry Estimate Areas
+Practice: ISBN-10 Checksum Validator
+Ch 5: Loops & Conversion Tables
+Ch 5: Tuition Projections
+Ch 6: Defining and Invoking Helper Methods
+Ch 6: Palindrome Checker Method
+Ch 6: Sorting Three Numbers
+Practice: Find Two Highest Scores
+Ch 7: Single-Dimensional Arrays (Part A)
+Ch 7: Array Frequencies & Minimum Element
+Ch 8: Sum Matrix Diagonal
+Ch 9: Objects and Classes (Part 1)
+Ch 9: Stock Change Percentage Class
+Ch 9: Date & Random Built-in API Classes
+Ch 9: GregorianCalendar & Stopwatches
+Ch 9: Fan State & Math Equations Classes
+Practice: Quadratic & Linear Equations
+Ch 10: Thinking in Objects (Part 1)
+Ch 10: Thinking in Objects (Part 2)
+Ch 10: Queue API & Point Distances
+Ch 10: Circle2D & Rectangles Composition
+Ch 10: Mersenne Primes & BigInteger Classes
+Ch 11: Inheritance and Polymorphism (Part 1)
+Ch 11: Inheritance and Polymorphism (Part 2)
+Ch 11: Polymorphic Accounts & Checking/Savings
+Ch 11: Transactions Tracking List
+Ch 11: Polymorphism Design Recaps
+Practice: Inheritance Review Tasks
+Ch 13: Abstract Classes & Geometry Rules
+Ch 13: Implementing Interfaces (Comparable & Cloneable)
+Ch 12: Exception Handling (Part 1)
+Ch 12: Try-Catch Array Boundaries Protection
+Ch 12: Write and Read Data Files
+Final Capstone: OOP Architecture Design
+Final Capstone: Polymorphism Recap
+Practice: Final Knowledge Recaps & Graduation
