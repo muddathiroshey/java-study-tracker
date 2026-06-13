@@ -1,10 +1,13 @@
 'use client';
 
+import { useState, useEffect } from 'react';
 import { useApp } from '../context/AppContext';
 import { usePathname, useRouter } from 'next/navigation';
 import Auth from './Auth';
 import Sidebar from './Sidebar';
 import TopAppBar from './TopAppBar';
+import InstructionsModal from './InstructionsModal';
+import { updateUserProgress } from '../lib/storage';
 
 export default function AppLayoutWrapper({ children }) {
   const { 
@@ -23,8 +26,34 @@ export default function AppLayoutWrapper({ children }) {
     setMobileSidebarOpen
   } = useApp();
 
+  const [showInstructionsModal, setShowInstructionsModal] = useState(false);
+
   const pathname = usePathname();
   const router = useRouter();
+
+  // Show instructions modal for new users
+  useEffect(() => {
+    if (user && loaded && !user.settings?.seenInstructions) {
+      setShowInstructionsModal(true);
+    }
+  }, [user, loaded]);
+
+  const handleInstructionsModalClose = async () => {
+    if (user) {
+      // Mark instructions as seen
+      const updated = await updateUserProgress(user.username, (u) => ({
+        ...u,
+        settings: {
+          ...u.settings,
+          seenInstructions: true,
+        }
+      }));
+      if (updated) onUserUpdate(updated);
+    }
+    setShowInstructionsModal(false);
+    // Navigate to main page
+    router.push('/');
+  };
 
   if (dbError) {
     return (
@@ -131,6 +160,14 @@ export default function AppLayoutWrapper({ children }) {
         />
         {children}
       </div>
+
+      {/* Instructions Modal for New Users */}
+      {showInstructionsModal && (
+        <InstructionsModal 
+          onClose={handleInstructionsModalClose}
+          videoUrl="/instructions.mp4"
+        />
+      )}
     </div>
   );
 }

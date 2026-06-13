@@ -2,8 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { useApp } from '../context/AppContext';
-import { updateUserProgress, updateUserProfile, logoutUser, resetStoredSchedule, saveGlobalConfig, deleteUserAccount } from '../lib/storage';
-
+import { updateUserProgress, updateUserProfile, logoutUser, resetStoredSchedule, saveGlobalConfig, deleteUserAccount } from '../lib/storage';import InstructionsModal from './InstructionsModal';
 export default function Settings({ user, onUserUpdate, onLogout }) {
   const { globalConfig, onGlobalConfigUpdate } = useApp();
   // Profile editing states
@@ -19,6 +18,9 @@ export default function Settings({ user, onUserUpdate, onLogout }) {
   const [openAvailabilityForAll, setOpenAvailabilityForAll] = useState(globalConfig?.openAvailabilityForAll || false);
   const [resetConfirm, setResetConfirm] = useState(false);
   const [deleteConfirm, setDeleteConfirm] = useState(false);
+  
+  // Instructions modal state
+  const [showInstructionsModal, setShowInstructionsModal] = useState(false);
 
   useEffect(() => {
     if (globalConfig) {
@@ -263,6 +265,24 @@ export default function Settings({ user, onUserUpdate, onLogout }) {
           </div>
         )}
 
+        {/* Instructions */}
+        <div className="bg-surface-container-lowest border border-outline-variant rounded-2xl p-6 mb-6">
+          <h2 className="font-bold text-on-background text-label-md mb-5 flex items-center gap-2 border-b border-outline-variant/30 pb-3">
+            <span className="material-symbols-outlined text-primary">info</span>
+            Instructions
+          </h2>
+          <p className="text-body-sm text-on-surface-variant mb-4">
+            Learn how to use the Java Study Platform by watching the instructional video.
+          </p>
+          <button
+            onClick={() => setShowInstructionsModal(true)}
+            className="flex items-center gap-2 px-6 py-2.5 bg-primary text-on-primary font-bold rounded-xl hover:bg-primary/90 transition-all cursor-pointer shadow-sm"
+          >
+            <span className="material-symbols-outlined text-xl">play_circle</span>
+            Watch Instructions
+          </button>
+        </div>
+
         {/* Danger Zone */}
         <div className="bg-error/5 border border-error/20 rounded-2xl p-6 mb-6">
           <h2 className="font-bold text-error text-label-md mb-2 flex items-center gap-2">
@@ -320,6 +340,14 @@ export default function Settings({ user, onUserUpdate, onLogout }) {
             Sign Out
           </button>
         </div>
+
+        {/* Instructions Modal */}
+        {showInstructionsModal && (
+          <InstructionsModal 
+            onClose={() => setShowInstructionsModal(false)}
+            videoUrl="/instructions.mp4"
+          />
+        )}
       </div>
     </div>
   );

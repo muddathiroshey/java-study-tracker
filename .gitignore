@@ -42,4 +42,6 @@ next-env.d.ts
 
 # large local files
 /Introduction to Java Programming and Data Structures Textbook.pdf
+instructions.mp4
+public/instructions.mp4
 
