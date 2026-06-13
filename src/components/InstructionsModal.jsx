@@ -63,33 +63,6 @@ export default function InstructionsModal({ onClose, videoUrl }) {
             </div>
           </div>
 
-          {/* Quick Tips */}
-          <div className="mb-6">
-            <h3 className="font-bold text-lg text-on-surface dark:text-zinc-100 mb-3">Quick Tips:</h3>
-            <ul className="space-y-2 text-sm text-on-surface-variant dark:text-zinc-400">
-              <li className="flex gap-2">
-                <span className="text-primary font-bold">✓</span>
-                <span>Track your daily progress through the Daily Lessons dashboard</span>
-              </li>
-              <li className="flex gap-2">
-                <span className="text-primary font-bold">✓</span>
-                <span>Complete lessons and projects to build your streak</span>
-              </li>
-              <li className="flex gap-2">
-                <span className="text-primary font-bold">✓</span>
-                <span>Compete with others on the Leaderboard</span>
-              </li>
-              <li className="flex gap-2">
-                <span className="text-primary font-bold">✓</span>
-                <span>Access additional resources anytime from the Resources page</span>
-              </li>
-              <li className="flex gap-2">
-                <span className="text-primary font-bold">✓</span>
-                <span>Manage your settings and preferences</span>
-              </li>
-            </ul>
-          </div>
-
           {/* Action Button */}
           <button
             onClick={onClose}
