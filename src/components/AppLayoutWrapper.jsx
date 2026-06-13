@@ -165,7 +165,6 @@ export default function AppLayoutWrapper({ children }) {
       {showInstructionsModal && (
         <InstructionsModal 
           onClose={handleInstructionsModalClose}
-          videoUrl="/instructions.mp4"
         />
       )}
     </div>

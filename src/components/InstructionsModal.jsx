@@ -2,9 +2,7 @@
 
 import { useState } from 'react';
 
-export default function InstructionsModal({ onClose, videoUrl }) {
-  const [videoLoaded, setVideoLoaded] = useState(false);
-
+export default function InstructionsModal({ onClose }) {
   return (
     <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
       <div className="bg-white dark:bg-zinc-900 rounded-2xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
@@ -22,24 +20,15 @@ export default function InstructionsModal({ onClose, videoUrl }) {
 
         {/* Content */}
         <div className="p-8">
-          {/* Video */}
+          {/* Video Placeholder */}
           <div className="mb-6">
-            <div className="relative w-full aspect-video bg-black rounded-xl overflow-hidden mb-4">
-              <video
-                src={videoUrl}
-                title="Platform Instructions"
-                controls
-                className="w-full h-full"
-                onLoadedData={() => setVideoLoaded(true)}
-                style={{ display: videoLoaded ? 'block' : 'none' }}
-              />
-              {!videoLoaded && (
-                <div className="absolute inset-0 bg-zinc-800 flex items-center justify-center">
-                  <span className="material-symbols-outlined text-white text-5xl animate-pulse">
-                    play_circle
-                  </span>
-                </div>
-              )}
+            <div className="relative w-full aspect-video bg-gradient-to-br from-slate-700 to-slate-900 rounded-xl overflow-hidden mb-4 flex items-center justify-center">
+              <div className="text-center">
+                <span className="material-symbols-outlined text-slate-400 text-6xl mb-3 inline-block">
+                  video_library
+                </span>
+                <p className="text-slate-400 text-sm font-semibold">Instructional video coming soon</p>
+              </div>
             </div>
           </div>
 

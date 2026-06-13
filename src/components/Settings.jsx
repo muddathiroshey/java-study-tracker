@@ -345,7 +345,6 @@ export default function Settings({ user, onUserUpdate, onLogout }) {
         {showInstructionsModal && (
           <InstructionsModal 
             onClose={() => setShowInstructionsModal(false)}
-            videoUrl="/instructions.mp4"
           />
         )}
       </div>
