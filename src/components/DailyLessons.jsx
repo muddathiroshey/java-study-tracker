@@ -222,6 +222,8 @@ export default function DailyLessons({
   // ── Auto-expand weeks + scroll on mount ────────────────────────────────────
   useEffect(() => {
     if (!schedule.length) return;
+    if (scrollRestoredRef.current) return;
+    scrollRestoredRef.current = true;
 
     const savedScroll = sessionStorage.getItem(SCROLL_KEY);
     const savedExpanded = sessionStorage.getItem('dailyLessons_expandedWeeks');
