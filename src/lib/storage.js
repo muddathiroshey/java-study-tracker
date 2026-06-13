@@ -89,6 +89,9 @@ export function checkAndUpdateStreak(user) {
   }
   
   if (lastActive === todayStr) {
+    if (!user.streak || user.streak < 1) {
+      user.streak = 1;
+    }
     return user;
   }
   

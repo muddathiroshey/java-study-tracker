@@ -108,6 +108,57 @@ export async function getCurrentUserSessionAction() {
       }
     }
   }
+
+  // Double-check if the user completed any video, task, or submission today
+  // If they did, ensure their lastActiveDate is todayStr and their streak is at least 1 (fixes overwritten/reset streaks)
+  const todayStr = new Date().toISOString().split('T')[0];
+  let hasActivityToday = false;
+
+  if (user.lessonsProgress) {
+    Object.keys(user.lessonsProgress).forEach(key => {
+      const entry = user.lessonsProgress[key];
+      if (entry && entry.completed && entry.dateCompleted === todayStr) {
+        hasActivityToday = true;
+      }
+    });
+  }
+
+  if (user.tasksProgress) {
+    Object.keys(user.tasksProgress).forEach(key => {
+      const entry = user.tasksProgress[key];
+      if (entry && entry.completed && entry.submittedAt && entry.submittedAt.startsWith(todayStr)) {
+        hasActivityToday = true;
+      }
+    });
+  }
+
+  if (user.submissions) {
+    Object.keys(user.submissions).forEach(key => {
+      const entry = user.submissions[key];
+      if (entry && entry.submittedAt && entry.submittedAt.startsWith(todayStr)) {
+        hasActivityToday = true;
+      }
+    });
+  }
+
+  if (hasActivityToday) {
+    if (user.lastActiveDate !== todayStr || !user.streak || user.streak < 1) {
+      const newStreak = Math.max(1, user.streak || 1);
+      const updated = await dbUpdateUserProgress(
+        user.username, 
+        user.lessonsProgress, 
+        user.tasksProgress, 
+        user.submissions, 
+        user.settings, 
+        newStreak, 
+        todayStr
+      );
+      if (updated) {
+        user.streak = updated.streak;
+        user.lastActiveDate = updated.lastActiveDate;
+      }
+    }
+  }
   
   return user;
 }
