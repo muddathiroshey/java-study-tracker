@@ -1,96 +1,51 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useRef, useEffect } from 'react';
 
+// Page numbers inside the PDF (as given by user)
 const CHAPTERS = [
-  {
-    num: 1,
-    title: "Introduction to Computers, Programs, and Java",
-    pdfPage: 27,
-    exercisesPdfPage: 49
-  },
-  {
-    num: 2,
-    title: "Elementary Programming",
-    pdfPage: 74,
-    exercisesPdfPage: 96
-  },
-  {
-    num: 3,
-    title: "Selections",
-    pdfPage: 109,
-    exercisesPdfPage: 130
-  },
-  {
-    num: 4,
-    title: "Mathematical Functions, Characters, and Strings",
-    pdfPage: 151,
-    exercisesPdfPage: 169
-  },
-  {
-    num: 5,
-    title: "Loops",
-    pdfPage: 191,
-    exercisesPdfPage: 212
-  },
-  {
-    num: 6,
-    title: "Methods",
-    pdfPage: 235,
-    exercisesPdfPage: 253
-  },
-  {
-    num: 7,
-    title: "Single-Dimensional Arrays",
-    pdfPage: 275,
-    exercisesPdfPage: 294
-  },
-  {
-    num: 8,
-    title: "Multidimensional Arrays",
-    pdfPage: 325,
-    exercisesPdfPage: 338
-  },
-  {
-    num: 9,
-    title: "Objects and Classes",
-    pdfPage: 361,
-    exercisesPdfPage: 385
-  },
-  {
-    num: 10,
-    title: "Thinking in Objects",
-    pdfPage: 405,
-    exercisesPdfPage: 423
-  },
-  {
-    num: 11,
-    title: "Inheritance and Polymorphism",
-    pdfPage: 447,
-    exercisesPdfPage: 463
-  },
-  {
-    num: 12,
-    title: "Exception Handling and Text IO",
-    pdfPage: 487,
-    exercisesPdfPage: 504
-  },
-  {
-    num: 13,
-    title: "Abstract Classes and Interfaces",
-    pdfPage: 535,
-    exercisesPdfPage: 550
-  }
+  { num: 1,  title: "Introduction to Computers, Programs, and Java", pdfPage: 24,  exercisesPdfPage: 53  },
+  { num: 2,  title: "Elementary Programming",                          pdfPage: 56,  exercisesPdfPage: 93  },
+  { num: 3,  title: "Selections",                                      pdfPage: 100, exercisesPdfPage: 133 },
+  { num: 4,  title: "Mathematical Functions, Characters, and Strings", pdfPage: 144, exercisesPdfPage: 174 },
+  { num: 5,  title: "Loops",                                           pdfPage: 182, exercisesPdfPage: 217 },
+  { num: 6,  title: "Methods",                                         pdfPage: 228, exercisesPdfPage: 259 },
+  { num: 7,  title: "Single-Dimensional Arrays",                       pdfPage: 272, exercisesPdfPage: 303 },
+  { num: 8,  title: "Multidimensional Arrays",                         pdfPage: 312, exercisesPdfPage: 330 },
+  { num: 9,  title: "Objects and Classes",                             pdfPage: 346, exercisesPdfPage: 385 },
+  { num: 10, title: "Thinking in Objects",                             pdfPage: 390, exercisesPdfPage: 424 },
+  { num: 11, title: "Inheritance and Polymorphism",                    pdfPage: 434, exercisesPdfPage: 470 },
+  { num: 12, title: "Exception Handling and Text IO",                  pdfPage: 476, exercisesPdfPage: 515 },
+  { num: 13, title: "Abstract Classes and Interfaces",                 pdfPage: 522, exercisesPdfPage: 558 },
 ];
 
-export default function TextbookView() {
-  const [currentPage, setCurrentPage] = useState(27); // Default to Chapter 1 (page 27 in PDF)
-  const [activeChapter, setActiveChapter] = useState(1);
+const LAST_PAGE = 563; // End of Chapter 13
 
-  const handleSelectChapter = (chNum, pageNum) => {
+export default function TextbookView() {
+  const [currentPage, setCurrentPage] = useState(24); // Default to Chapter 1
+  const [activeChapter, setActiveChapter] = useState(1);
+  const [activeSection, setActiveSection] = useState('chapter'); // 'chapter' | 'exercises'
+
+  // We keep the iframe always mounted (hidden when tab is not active) so it never reloads
+  const iframeRef = useRef(null);
+
+  const navigateTo = (chNum, pageNum, section) => {
     setActiveChapter(chNum);
-    setCurrentPage(pageNum);
+    setActiveSection(section);
+    const clampedPage = Math.min(pageNum, LAST_PAGE);
+    setCurrentPage(clampedPage);
+    // Update iframe src directly to avoid full remount
+    if (iframeRef.current) {
+      iframeRef.current.src = `/textbook.pdf#page=${clampedPage}`;
+    }
   };
+
+  // Set initial src
+  useEffect(() => {
+    if (iframeRef.current) {
+      iframeRef.current.src = `/textbook.pdf#page=${currentPage}`;
+    }
+  }, []);
 
   return (
     <div className="flex-1 overflow-y-auto pt-20 pb-12 select-none min-h-screen">
@@ -102,7 +57,7 @@ export default function TextbookView() {
             Textbook Reader
           </h1>
           <p className="text-body-md text-on-surface-variant max-w-2xl">
-            Access course reading materials. Use the chapter list on the left to jump directly to any of the first 13 chapters, and view their corresponding exercises in the book.
+            Access course reading materials — Chapters 1–13. Use the chapter list on the left to jump directly to any chapter or its exercises.
           </p>
         </div>
 
@@ -117,13 +72,14 @@ export default function TextbookView() {
             </h3>
             <div className="flex flex-col gap-xs">
               {CHAPTERS.map((ch) => {
-                const isSelected = activeChapter === ch.num;
+                const isChActive = activeChapter === ch.num && activeSection === 'chapter';
+                const isExActive = activeChapter === ch.num && activeSection === 'exercises';
                 return (
                   <div key={ch.num} className="flex flex-col border-b border-outline-variant/20 py-2">
                     <button
-                      onClick={() => handleSelectChapter(ch.num, ch.pdfPage)}
+                      onClick={() => navigateTo(ch.num, ch.pdfPage, 'chapter')}
                       className={`text-left font-label-md py-2 px-3 rounded-xl cursor-pointer transition-all flex items-start gap-2 ${
-                        isSelected && currentPage === ch.pdfPage
+                        isChActive
                           ? 'bg-primary/5 text-primary font-black'
                           : 'text-on-surface-variant hover:bg-surface-container hover:text-on-surface'
                       }`}
@@ -134,11 +90,11 @@ export default function TextbookView() {
                       <span className="leading-snug">{ch.title}</span>
                     </button>
 
-                    {/* Link to chapter's programming exercises page inside the textbook */}
+                    {/* Link to chapter's exercises inside the textbook */}
                     <button
-                      onClick={() => handleSelectChapter(ch.num, ch.exercisesPdfPage)}
+                      onClick={() => navigateTo(ch.num, ch.exercisesPdfPage, 'exercises')}
                       className={`text-left text-xs font-bold py-1 px-3 rounded-lg ml-6 mt-1 cursor-pointer transition-all flex items-center gap-1.5 ${
-                        isSelected && currentPage === ch.exercisesPdfPage
+                        isExActive
                           ? 'text-primary bg-primary/5'
                           : 'text-on-surface-variant hover:text-primary hover:bg-surface-container/50'
                       }`}
@@ -154,9 +110,13 @@ export default function TextbookView() {
 
           {/* Textbook Visual Viewport Card */}
           <div className="lg:col-span-3 flex flex-col gap-lg h-full">
-            <div className="relative aspect-[3/4] lg:aspect-auto lg:h-[75vh] bg-[#f8f9fc] border border-outline-variant rounded-2xl overflow-hidden shadow-sm flex flex-col justify-between">
+            <div className="relative aspect-[3/4] lg:aspect-auto lg:h-[75vh] bg-[#f8f9fc] border border-outline-variant rounded-2xl overflow-hidden shadow-sm">
+              {/* 
+                The iframe is always mounted so it never reloads when switching tabs.
+                We set the initial src via useEffect and navigate via direct .src assignment.
+              */}
               <iframe
-                src={`/textbook.pdf#page=${currentPage}`}
+                ref={iframeRef}
                 className="w-full h-full border-0 bg-[#f8f9fc]"
                 title="Textbook PDF Viewer"
               />
@@ -166,7 +126,7 @@ export default function TextbookView() {
             <div className="flex justify-center sm:justify-start">
               <a
                 href="/textbook.pdf"
-                download="Introduction_to_Java_Programming_and_Data_Structures.pdf"
+                download="Introduction to Java Programming and Data Structures Textbook.pdf"
                 className="px-xl py-3.5 bg-primary text-on-primary hover:bg-primary-hover font-bold text-label-md rounded-xl transition-all shadow-md hover:shadow-lg flex items-center justify-center gap-2 cursor-pointer border border-primary-hover active:scale-[0.98]"
               >
                 <span className="material-symbols-outlined font-black">download</span>

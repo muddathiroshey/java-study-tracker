@@ -543,3 +543,20 @@ export async function dbSaveGlobalConfig(config) {
     });
   }
 }
+
+export async function dbDeleteUser(username) {
+  await dbInit();
+  const p = getPool();
+  if (p) {
+    await p.query(`DELETE FROM java_study_users WHERE LOWER(username) = LOWER($1)`, [username]);
+  } else {
+    return runFsQueue(async () => {
+      const data = JSON.parse(fs.readFileSync(LOCAL_DB_PATH, 'utf8'));
+      data.users = data.users.filter(
+        u => u.username.toLowerCase() !== username.toLowerCase()
+      );
+      fs.writeFileSync(LOCAL_DB_PATH, JSON.stringify(data, null, 2), 'utf8');
+    });
+  }
+}
+

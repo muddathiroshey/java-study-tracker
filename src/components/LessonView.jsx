@@ -33,6 +33,11 @@ export default function LessonView({ user, day, onBack, onComplete, onUserUpdate
     }
     return 'video';
   }); // 'video' | 'code' | 'project'
+
+  const activeTabRef = useRef(activeTab);
+  useEffect(() => {
+    activeTabRef.current = activeTab;
+  }, [activeTab]);
   const [projectRepo, setProjectRepo] = useState('');
   const [projectNotes, setProjectNotes] = useState('');
   const [code, setCode] = useState(day?.task?.codeTemplate || '');
@@ -217,6 +222,10 @@ export default function LessonView({ user, day, onBack, onComplete, onUserUpdate
     if (playerRef.current) {
       try {
         if (isMuted) {
+          // Block unmuting during first 5 seconds from start
+          if (startSecs === 0 && currentTime < 5) {
+            return;
+          }
           if (typeof playerRef.current.unMute === 'function') playerRef.current.unMute();
           setIsMuted(false);
           hasAutoUnmuted.current = true;
@@ -240,6 +249,14 @@ export default function LessonView({ user, day, onBack, onComplete, onUserUpdate
           playerRef.current.setVolume(vol);
         }
         if (vol > 0) {
+          // Block unmuting during first 5 seconds from start
+          if (startSecs === 0 && currentTime < 5) {
+            if (typeof playerRef.current.mute === 'function') {
+              playerRef.current.mute();
+            }
+            setIsMuted(true);
+            return;
+          }
           if (isMuted) {
             if (typeof playerRef.current.unMute === 'function') {
               playerRef.current.unMute();
@@ -496,7 +513,7 @@ export default function LessonView({ user, day, onBack, onComplete, onUserUpdate
             }
             
             // If the user is on the code/project tab when the player mounts, ensure it is paused
-            if (activeTab !== 'video') {
+            if (activeTabRef.current !== 'video') {
               try {
                 if (player && typeof player.pauseVideo === 'function') {
                   player.pauseVideo();
@@ -512,9 +529,10 @@ export default function LessonView({ user, day, onBack, onComplete, onUserUpdate
           onStateChange: (e) => {
             if (e.data === window.YT.PlayerState.PLAYING) {
               // Block background playback if they switched tabs while player was loading/buffering
-              if (activeTab !== 'video') {
+              if (activeTabRef.current !== 'video') {
                 try {
                   e.target.pauseVideo();
+                  setIsPlaying(false);
                 } catch (err) {}
                 return;
               }
@@ -634,7 +652,7 @@ export default function LessonView({ user, day, onBack, onComplete, onUserUpdate
         // Auto-mute first 5 seconds of videos starting from the beginning
         if (startSecs === 0) {
           if (elapsed < 5) {
-            if (playerRef.current && typeof playerRef.current.isMuted === 'function' && !playerRef.current.isMuted() && !hasAutoUnmuted.current) {
+            if (playerRef.current && typeof playerRef.current.isMuted === 'function' && !playerRef.current.isMuted()) {
               try {
                 playerRef.current.mute();
                 setIsMuted(true);

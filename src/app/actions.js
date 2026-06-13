@@ -11,7 +11,8 @@ import {
   dbGetStoredSchedule,
   dbSaveStoredSchedule,
   dbGetGlobalConfig,
-  dbSaveGlobalConfig
+  dbSaveGlobalConfig,
+  dbDeleteUser
 } from '../lib/db';
 import { courseSchedule } from '../lib/courseData';
 
@@ -298,6 +299,15 @@ export async function saveGlobalConfigAction(config) {
   return { success: true };
 }
 
+export async function deleteUserAccountAction(username) {
+  try {
+    await dbDeleteUser(username);
+    return { success: true };
+  } catch (err) {
+    return { success: false, error: err.message };
+  }
+}
+
 // Real Java compiler via Wandbox API (free, no key required)
 export async function runJavaCodeAction(code) {
   try {
@@ -305,7 +315,7 @@ export async function runJavaCodeAction(code) {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        compiler: 'openjdk-head',
+        compiler: 'openjdk-jdk-22+36',
         code: code,
         'compiler-option-raw': '',
         'runtime-option-raw': '',

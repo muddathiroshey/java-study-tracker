@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { useApp } from '../context/AppContext';
-import { updateUserProgress, updateUserProfile, logoutUser, resetStoredSchedule, saveGlobalConfig } from '../lib/storage';
+import { updateUserProgress, updateUserProfile, logoutUser, resetStoredSchedule, saveGlobalConfig, deleteUserAccount } from '../lib/storage';
 
 export default function Settings({ user, onUserUpdate, onLogout }) {
   const { globalConfig, onGlobalConfigUpdate } = useApp();
@@ -18,6 +18,7 @@ export default function Settings({ user, onUserUpdate, onLogout }) {
   const [openAvailability, setOpenAvailability] = useState(user?.settings?.openAvailability || false);
   const [openAvailabilityForAll, setOpenAvailabilityForAll] = useState(globalConfig?.openAvailabilityForAll || false);
   const [resetConfirm, setResetConfirm] = useState(false);
+  const [deleteConfirm, setDeleteConfirm] = useState(false);
 
   useEffect(() => {
     if (globalConfig) {
@@ -98,6 +99,19 @@ export default function Settings({ user, onUserUpdate, onLogout }) {
     resetStoredSchedule();
     if (updated) onUserUpdate(updated);
     setResetConfirm(false);
+  };
+
+  const handleDeleteAccount = async () => {
+    if (!deleteConfirm) {
+      setDeleteConfirm(true);
+      return;
+    }
+    // Actually delete the account
+    const res = await deleteUserAccount(user.username);
+    if (res?.success) {
+      await logoutUser();
+      onLogout();
+    }
   };
 
   return (
@@ -269,6 +283,24 @@ export default function Settings({ user, onUserUpdate, onLogout }) {
             <span className="material-symbols-outlined text-xl">delete_sweep</span>
             {resetConfirm ? 'Click Again to Confirm Reset' : 'Reset My Progress'}
           </button>
+
+          {/* Divider */}
+          <div className="border-t border-error/20 pt-4 mt-2">
+            <p className="text-body-sm text-on-surface-variant mb-3">
+              Permanently delete your account and all associated data. <strong className="text-error">This cannot be undone.</strong>
+            </p>
+            <button
+              onClick={handleDeleteAccount}
+              className={`flex items-center gap-2 px-5 py-2.5 rounded-xl font-bold text-label-md transition-all cursor-pointer ${
+                deleteConfirm
+                  ? 'bg-error text-on-error animate-pulse'
+                  : 'bg-error/20 text-error hover:bg-error/30 border border-error/30'
+              }`}
+            >
+              <span className="material-symbols-outlined text-xl">person_remove</span>
+              {deleteConfirm ? '⚠️ Click Again — Account will be DELETED' : 'Delete My Account Permanently'}
+            </button>
+          </div>
         </div>
 
         {/* Logout */}

@@ -13,9 +13,9 @@ import {
   saveStoredScheduleAction,
   getGlobalConfigAction,
   saveGlobalConfigAction,
-  runJavaCodeAction
+  runJavaCodeAction,
+  deleteUserAccountAction
 } from '../app/actions';
-
 
 export async function getDB() {
   const users = await getLeaderboardAction();
@@ -154,3 +154,6 @@ export async function runJavaCode(code) {
   return await runJavaCodeAction(code);
 }
 
+export async function deleteUserAccount(username) {
+  return await deleteUserAccountAction(username);
+}
