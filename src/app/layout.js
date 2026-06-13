@@ -4,19 +4,19 @@ import AppLayoutWrapper from '../components/AppLayoutWrapper';
 
 export const metadata = {
   metadataBase: new URL('https://java-study-tracker.vercel.app'),
-  title: 'EduFocus | Java Course Portal',
+  title: 'Java Study Tracker | Course Portal',
   description: 'Master Java Zero to Hero OOP Curriculum',
   openGraph: {
-    title: 'EduFocus | Java Course Portal',
+    title: 'Java Study Tracker | Course Portal',
     description: 'Master Java Zero to Hero OOP Curriculum',
     url: 'https://java-study-tracker.vercel.app',
-    siteName: 'EduFocus',
+    siteName: 'Java Study Tracker',
     locale: 'en_US',
     type: 'website',
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'EduFocus | Java Course Portal',
+    title: 'Java Study Tracker | Course Portal',
     description: 'Master Java Zero to Hero OOP Curriculum',
   },
 };
