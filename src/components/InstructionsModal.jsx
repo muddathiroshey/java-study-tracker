@@ -1,7 +1,5 @@
 'use client';
 
-import { useState } from 'react';
-
 export default function InstructionsModal({ onClose }) {
   return (
     <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
@@ -20,15 +18,18 @@ export default function InstructionsModal({ onClose }) {
 
         {/* Content */}
         <div className="p-8">
-          {/* Video Placeholder */}
+          {/* Video */}
           <div className="mb-6">
-            <div className="relative w-full aspect-video bg-gradient-to-br from-slate-700 to-slate-900 rounded-xl overflow-hidden mb-4 flex items-center justify-center">
-              <div className="text-center">
-                <span className="material-symbols-outlined text-slate-400 text-6xl mb-3 inline-block">
-                  video_library
-                </span>
-                <p className="text-slate-400 text-sm font-semibold">Instructional video coming soon</p>
-              </div>
+            <div className="relative w-full aspect-video bg-black rounded-xl overflow-hidden mb-4">
+              <video
+                src="/instructions.mp4"
+                controls
+                controlsList="nodownload"
+                className="w-full h-full"
+                title="Platform Instructions"
+              >
+                Your browser does not support the video tag.
+              </video>
             </div>
           </div>
 
