@@ -556,8 +556,8 @@ export default function LessonView({ user, day, onBack, onComplete, onUserUpdate
     if (playerRef.current) {
       try {
         if (isMuted) {
-          // Block unmuting during first 5 seconds from start
-          if (startSecs === 0 && currentTime < 5) {
+          // Block unmuting during first 6 seconds from start
+          if (startSecs === 0 && currentTime < 6) {
             return;
           }
           if (typeof playerRef.current.unMute === 'function') playerRef.current.unMute();
@@ -583,8 +583,8 @@ export default function LessonView({ user, day, onBack, onComplete, onUserUpdate
           playerRef.current.setVolume(vol);
         }
         if (vol > 0) {
-          // Block unmuting during first 5 seconds from start
-          if (startSecs === 0 && currentTime < 5) {
+          // Block unmuting during first 6 seconds from start
+          if (startSecs === 0 && currentTime < 6) {
             if (typeof playerRef.current.mute === 'function') {
               playerRef.current.mute();
             }
@@ -832,8 +832,8 @@ export default function LessonView({ user, day, onBack, onComplete, onUserUpdate
               console.error("Error getting user session in onReady", err);
             }
 
-            // Auto-mute first 5 seconds of videos starting from the beginning
-            if (startSecs === 0 && startPosition < 5) {
+            // Auto-mute first 6 seconds of videos starting from the beginning
+            if (startSecs === 0 && startPosition < 6) {
               try {
                 if (player && typeof player.mute === 'function') {
                   player.mute();
@@ -983,9 +983,9 @@ export default function LessonView({ user, day, onBack, onComplete, onUserUpdate
         
         const elapsed = Math.max(0, t - startSecs);
 
-        // Auto-mute first 5 seconds of videos starting from the beginning
+        // Auto-mute first 6 seconds of videos starting from the beginning
         if (startSecs === 0) {
-          if (elapsed < 5) {
+          if (elapsed < 6) {
             if (playerRef.current && typeof playerRef.current.isMuted === 'function' && !playerRef.current.isMuted()) {
               try {
                 playerRef.current.mute();
@@ -993,7 +993,7 @@ export default function LessonView({ user, day, onBack, onComplete, onUserUpdate
               } catch (e) {}
             }
             hasAutoUnmuted.current = false;
-          } else if (elapsed >= 5 && !hasAutoUnmuted.current) {
+          } else if (elapsed >= 6 && !hasAutoUnmuted.current) {
             if (playerRef.current && typeof playerRef.current.unMute === 'function') {
               try {
                 playerRef.current.unMute();
