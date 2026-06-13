@@ -29,7 +29,7 @@ export default function AppLayoutWrapper({ children }) {
   if (dbError) {
     return (
       <div className="min-h-screen bg-slate-50 dark:bg-zinc-950 flex items-center justify-center p-4">
-        <div className="w-full max-w-md flex flex-col items-center gap-5 text-center p-8 bg-white dark:bg-zinc-900 border border-slate-200 dark:border-zinc-800 rounded-3xl shadow-xl">
+        <div className="w-full max-w-md min-w-[300px] sm:min-w-[420px] flex flex-col items-center gap-5 text-center p-8 bg-white dark:bg-zinc-900 border border-slate-200 dark:border-zinc-800 rounded-3xl shadow-xl">
           <div className="w-16 h-16 bg-rose-50 dark:bg-rose-950/30 text-rose-500 rounded-full flex items-center justify-center shadow-md animate-pulse">
             <span className="material-symbols-outlined text-3xl font-bold">cloud_off</span>
           </div>
