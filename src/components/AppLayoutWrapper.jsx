@@ -84,7 +84,6 @@ export default function AppLayoutWrapper({ children }) {
       return day ? `Day ${day.day}` : 'Lesson';
     }
     if (pathname === '/leaderboard') return 'Leaderboard';
-    if (pathname === '/tasks') return 'Tasks Board';
     if (pathname === '/resources') return 'Resources';
     if (pathname === '/settings') return 'Settings';
     if (pathname === '/admin') return 'Admin Panel';

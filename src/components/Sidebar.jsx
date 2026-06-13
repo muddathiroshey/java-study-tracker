@@ -24,7 +24,6 @@ export default function Sidebar({
   const menuItems = [
     { id: 'dashboard', name: 'Daily Lessons', icon: 'calendar_today' },
     { id: 'leaderboard', name: 'Leaderboard', icon: 'leaderboard' },
-    { id: 'tasks', name: 'Tasks Board', icon: 'assignment_turned_in' },
     { id: 'resources', name: 'Resources', icon: 'menu_book' },
     { id: 'settings', name: 'Settings', icon: 'settings' },
   ];
