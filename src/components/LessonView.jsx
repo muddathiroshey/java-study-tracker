@@ -1162,8 +1162,12 @@ export default function LessonView({ user, day, onBack, onComplete, onUserUpdate
     router.push('/lessons/' + dayNum);
   };
 
-  const prevDay = day.day > 1 ? schedule.find(d => d.day === day.day - 1) : null;
-  const nextDay = day.day < schedule.length ? schedule.find(d => d.day === day.day + 1) : null;
+  const prevDay = day.day > 1 
+    ? [...schedule].reverse().find(d => d.day < day.day && d.type !== 'off') 
+    : null;
+  const nextDay = day.day < schedule.length 
+    ? schedule.find(d => d.day > day.day && d.type !== 'off') 
+    : null;
   
   const activeWeekNum = Math.floor((day.day - 1) / 7) + 1;
   const currentWeekDays = schedule.filter(d => Math.floor((d.day - 1) / 7) + 1 === activeWeekNum);
@@ -1871,14 +1875,15 @@ export default function LessonView({ user, day, onBack, onComplete, onUserUpdate
                     
                     const isLocked = sundayDate > new Date(currentDate) && !user?.settings?.devWarpTime && !user?.settings?.openAvailability && !globalConfig?.openAvailabilityForAll;
 
+                    const isOff = d.type === 'off';
                     return (
                       <div 
                         key={d.day}
-                        onClick={() => !isLocked && handleDaySelect(d.day)}
+                        onClick={() => !isLocked && !isOff && handleDaySelect(d.day)}
                         className={`flex items-center gap-md p-sm rounded-lg transition-all ${
                           isActive
                             ? 'border border-primary bg-primary/5 text-primary font-bold'
-                            : isLocked
+                            : isLocked || isOff
                             ? 'opacity-40 cursor-not-allowed text-on-surface-variant'
                             : 'hover:bg-surface-container-high cursor-pointer text-on-surface'
                         }`}
