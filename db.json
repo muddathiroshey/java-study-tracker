@@ -32,7 +32,7 @@
       "email": "muddathirmohali@gmail.com",
       "password": "64913728",
       "enrolledDate": "2026-06-13",
-      "streak": 0,
+      "streak": 1,
       "lastActiveDate": "2026-06-13",
       "totalStudyTime": 0,
       "isAdmin": false,
@@ -69,6 +69,16 @@
           "completed": false,
           "lastPosition": 0.649231,
           "totalDuration": 2320
+        },
+        "NSDD8LUwCeM_day39": {
+          "completed": false,
+          "lastPosition": 0.725103,
+          "totalDuration": 2007
+        },
+        "Ly1wkba3EZk_day47": {
+          "completed": false,
+          "lastPosition": 14.366585112533569,
+          "totalDuration": 2676
         }
       },
       "tasksProgress": {

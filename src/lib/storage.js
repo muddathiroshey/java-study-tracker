@@ -12,8 +12,10 @@ import {
   getStoredScheduleAction,
   saveStoredScheduleAction,
   getGlobalConfigAction,
-  saveGlobalConfigAction
+  saveGlobalConfigAction,
+  runJavaCodeAction
 } from '../app/actions';
+
 
 export async function getDB() {
   const users = await getLeaderboardAction();
@@ -147,3 +149,8 @@ export async function getGlobalConfig() {
 export async function saveGlobalConfig(config) {
   return await saveGlobalConfigAction(config);
 }
+
+export async function runJavaCode(code) {
+  return await runJavaCodeAction(code);
+}
+

@@ -297,3 +297,77 @@ export async function saveGlobalConfigAction(config) {
   await dbSaveGlobalConfig(config);
   return { success: true };
 }
+
+// Real Java compiler via Wandbox API (free, no key required)
+export async function runJavaCodeAction(code) {
+  try {
+    const response = await fetch('https://wandbox.org/api/compile.json', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        compiler: 'openjdk-head',
+        code: code,
+        'compiler-option-raw': '',
+        'runtime-option-raw': '',
+        save: false
+      })
+    });
+
+    if (!response.ok) {
+      return { 
+        success: false, 
+        error: `Compiler service unavailable (HTTP ${response.status}). Please try again.`,
+        type: 'network_error'
+      };
+    }
+
+    const data = await response.json();
+    // Wandbox response fields:
+    // status: exit code (0 = success)
+    // compiler_output: stdout from compiler (javac messages)
+    // compiler_error: stderr from compiler (error messages)
+    // program_output: stdout from the running program
+    // program_error: stderr from the running program
+
+    const exitCode = parseInt(data.status, 10);
+    const compilerError = (data.compiler_error || '').trim();
+    const programOutput = (data.program_output || '').trim();
+    const programError = (data.program_error || '').trim();
+
+    // Compilation failed
+    if (compilerError && exitCode !== 0) {
+      return {
+        success: false,
+        type: 'compile_error',
+        error: compilerError,
+        output: null
+      };
+    }
+
+    // Compiled but runtime error
+    if (programError && exitCode !== 0) {
+      return {
+        success: false,
+        type: 'runtime_error',
+        error: programError,
+        output: programOutput || null
+      };
+    }
+
+    // Success
+    return {
+      success: true,
+      type: 'success',
+      output: programOutput,
+      error: null
+    };
+  } catch (err) {
+    return {
+      success: false,
+      type: 'network_error',
+      error: `Could not reach the compiler service: ${err.message}`,
+      output: null
+    };
+  }
+}
+
