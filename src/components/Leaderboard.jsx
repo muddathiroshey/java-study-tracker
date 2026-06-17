@@ -38,6 +38,9 @@ const getTrend = (u) => {
   return { icon: 'trending_down', color: 'text-error' };
 };
 
+// Accounts hidden from the leaderboard (not deleted, just not shown)
+const HIDDEN_USERNAMES = new Set(['admin', 'محمد هاشم', 'مدثر']);
+
 export default function Leaderboard({ user }) {
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -48,6 +51,7 @@ export default function Leaderboard({ user }) {
     const db = await getDB();
     if (!db || !db.users) return;
     const scored = db.users
+      .filter(u => !HIDDEN_USERNAMES.has(u.username))
       .map(u => ({
         ...u,
         points: calculateUserPoints(u),

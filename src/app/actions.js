@@ -1,7 +1,7 @@
 'use server';
 
 import { cookies } from 'next/headers';
-import { getLocalDateString, getLocalISOString } from '../lib/dateUtils';
+import { getLocalDateString, getLocalISOString, allMissedDaysExcused } from '../lib/dateUtils';
 import {
   dbGetUserByUsernameOrEmail,
   dbCreateUser,
@@ -98,7 +98,10 @@ export async function getCurrentUserSessionAction() {
         if (diffDays === 1) {
           newStreak += 1;
         } else if (diffDays > 1) {
-          newStreak = 1;
+          // Only reset if the gap contains non-excused days
+          if (!allMissedDaysExcused(lastActive, todayStr, courseSchedule, user)) {
+            newStreak = 1;
+          }
         }
       }
       

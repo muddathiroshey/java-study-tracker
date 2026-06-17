@@ -1,5 +1,6 @@
 // Database helper mapping client actions to server-side SQL/Actions
-import { getLocalDateString } from './dateUtils';
+import { getLocalDateString, allMissedDaysExcused } from './dateUtils';
+import { courseSchedule } from './courseData';
 import {
   getCurrentUserSessionAction,
   loginUserAction,
@@ -105,9 +106,16 @@ export function checkAndUpdateStreak(user) {
   
   let newStreak = user.streak;
   if (diffDays === 1) {
+    // Consecutive day — increment
     newStreak += 1;
   } else if (diffDays > 1) {
-    newStreak = 1;
+    // Gap exists — check if all missed days were excused (Friday rest day or nothing to study)
+    if (allMissedDaysExcused(lastActive, todayStr, courseSchedule, user)) {
+      // Excused gap: keep the streak alive, just don't increment
+      // (no-op — newStreak stays as-is)
+    } else {
+      newStreak = 1;
+    }
   }
   
   user.streak = newStreak;

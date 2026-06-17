@@ -1,7 +1,8 @@
 'use client';
 
 import { useApp } from '../context/AppContext';
-import { getLocalDateString } from '../lib/dateUtils';
+import { getLocalDateString, allMissedDaysExcused } from '../lib/dateUtils';
+import { courseSchedule } from '../lib/courseData';
 
 // Material Symbols used via className="material-symbols-outlined"
 
@@ -20,6 +21,13 @@ export default function Sidebar({
   
   const todayStr = getLocalDateString(user);
   const isStreakActive = user?.lastActiveDate === todayStr;
+
+  // The flame stays orange on excused days (Friday rest day or nothing left to study)
+  // so students aren't worried about losing their streak on those days.
+  const isStreakProtected = !isStreakActive && user?.lastActiveDate
+    ? allMissedDaysExcused(user.lastActiveDate, todayStr, courseSchedule, user)
+    : false;
+  const showActiveFlame = isStreakActive || isStreakProtected;
 
   const menuItems = [
     { id: 'dashboard', name: 'Daily Lessons', icon: 'calendar_today' },
@@ -88,15 +96,15 @@ export default function Sidebar({
 
         {/* Streak Info */}
         <div className={`mt-sm flex items-center gap-1.5 text-caption font-bold transition-all duration-300 ${
-          isStreakActive ? 'text-orange-color' : 'text-slate-400 dark:text-zinc-500'
+          showActiveFlame ? 'text-orange-color' : 'text-slate-400 dark:text-zinc-500'
         }`}>
           <span 
             className="material-symbols-outlined text-[16px] transition-all duration-300" 
-            style={{ fontVariationSettings: isStreakActive ? "'FILL' 1" : "'FILL' 0" }}
+            style={{ fontVariationSettings: showActiveFlame ? "'FILL' 1" : "'FILL' 0" }}
           >
             local_fire_department
           </span>
-          <span>{user?.streak || 0} Day Streak</span>
+          <span>{user?.streak || 0} Day Streak{isStreakProtected ? ' 🛡️' : ''}</span>
         </div>
       </div>
 
