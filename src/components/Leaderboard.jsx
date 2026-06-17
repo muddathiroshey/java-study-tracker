@@ -39,7 +39,7 @@ const getTrend = (u) => {
 };
 
 // Accounts hidden from the leaderboard (not deleted, just not shown)
-const HIDDEN_USERNAMES = new Set(['admin', 'محمد هاشم', 'مدثر']);
+const HIDDEN_USERNAMES = new Set(['admin', 'محمد هاشم', 'مدثر', 'Mustafa Mustafa']);
 
 export default function Leaderboard({ user }) {
   const [users, setUsers] = useState([]);
