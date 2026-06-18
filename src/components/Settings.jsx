@@ -2,7 +2,9 @@
 
 import { useState, useEffect } from 'react';
 import { useApp } from '../context/AppContext';
-import { updateUserProgress, updateUserProfile, logoutUser, resetStoredSchedule, saveGlobalConfig, deleteUserAccount } from '../lib/storage';import InstructionsModal from './InstructionsModal';
+import { updateUserProgress, updateUserProfile, logoutUser, resetStoredSchedule, saveGlobalConfig, deleteUserAccount } from '../lib/storage';
+import { saveGithubSettingsAction } from '../app/actions';
+import InstructionsModal from './InstructionsModal';
 export default function Settings({ user, onUserUpdate, onLogout }) {
   const { globalConfig, onGlobalConfigUpdate } = useApp();
   // Profile editing states
@@ -19,6 +21,14 @@ export default function Settings({ user, onUserUpdate, onLogout }) {
   const [resetConfirm, setResetConfirm] = useState(false);
   const [deleteConfirm, setDeleteConfirm] = useState(false);
   
+  // GitHub integration states (admin only)
+  const [githubToken, setGithubToken] = useState(user?.settings?.githubToken ? '••••••••••••••••' : '');
+  const [githubRepo, setGithubRepo] = useState(user?.settings?.githubRepo || '');
+  const [githubSaved, setGithubSaved] = useState(false);
+  const [githubError, setGithubError] = useState('');
+  const [showGithubToken, setShowGithubToken] = useState(false);
+  const githubConfigured = !!(user?.settings?.githubToken && user?.settings?.githubRepo);
+
   // Instructions modal state
   const [showInstructionsModal, setShowInstructionsModal] = useState(false);
 
@@ -66,6 +76,29 @@ export default function Settings({ user, onUserUpdate, onLogout }) {
       setTimeout(() => setProfileSaved(false), 3000);
     } else {
       setProfileError(res.error);
+    }
+  };
+
+  const handleSaveGithub = async () => {
+    setGithubError('');
+    setGithubSaved(false);
+    const tokenToSave = githubToken.includes('•') ? user?.settings?.githubToken : githubToken;
+    if (!tokenToSave?.trim()) {
+      setGithubError('Please enter a GitHub Personal Access Token.');
+      return;
+    }
+    if (!githubRepo.trim() || !githubRepo.includes('/')) {
+      setGithubError('Repo must be in owner/repo-name format.');
+      return;
+    }
+    const res = await saveGithubSettingsAction(tokenToSave, githubRepo.trim());
+    if (res?.success) {
+      if (res.user) onUserUpdate(res.user);
+      setGithubSaved(true);
+      setGithubToken('••••••••••••••••');
+      setTimeout(() => setGithubSaved(false), 3000);
+    } else {
+      setGithubError(res?.error || 'Failed to save GitHub settings.');
     }
   };
 
@@ -261,6 +294,101 @@ export default function Settings({ user, onUserUpdate, onLogout }) {
                   }`} />
                 </button>
               </div>
+            </div>
+          </div>
+        )}
+
+        {/* GitHub Integration (Admin Only) */}
+        {isAdmin && (
+          <div className="bg-surface-container-lowest border border-outline-variant rounded-2xl p-6 mb-6">
+            <h2 className="font-bold text-on-background text-label-md mb-1 flex items-center gap-2 border-b border-outline-variant/30 pb-3">
+              <span className="material-symbols-outlined text-primary">hub</span>
+              GitHub Integration
+              <span className={`ml-auto flex items-center gap-1 text-caption font-bold px-2 py-0.5 rounded-full ${
+                githubConfigured
+                  ? 'bg-tertiary/10 text-tertiary'
+                  : 'bg-surface-container-high text-on-surface-variant'
+              }`}>
+                <span className="material-symbols-outlined text-[14px]" style={{ fontVariationSettings: githubConfigured ? "'FILL' 1" : "'FILL' 0" }}>
+                  {githubConfigured ? 'check_circle' : 'radio_button_unchecked'}
+                </span>
+                {githubConfigured ? 'Connected' : 'Not configured'}
+              </span>
+            </h2>
+            <p className="text-body-sm text-on-surface-variant mb-4">
+              Automatically push exercise solutions to a GitHub repository when you click the upload button after solving a task.
+              Requires a{' '}
+              <a
+                href="https://github.com/settings/tokens/new?scopes=repo&description=Java+Study+Tracker"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-primary underline hover:opacity-80"
+              >
+                Personal Access Token
+              </a>{' '}
+              with <code className="bg-surface-container-high px-1 rounded text-caption">repo</code> scope.
+            </p>
+
+            <div className="space-y-4">
+              {/* PAT input */}
+              <div>
+                <label className="block text-caption font-bold text-on-surface-variant mb-1.5">Personal Access Token</label>
+                <div className="relative">
+                  <span className="material-symbols-outlined absolute left-3.5 top-1/2 -translate-y-1/2 text-outline text-xl">key</span>
+                  <input
+                    type={showGithubToken ? 'text' : 'password'}
+                    value={githubToken}
+                    onChange={e => { setGithubToken(e.target.value); setGithubSaved(false); }}
+                    onFocus={() => { if (githubToken.includes('•')) setGithubToken(''); }}
+                    placeholder="ghp_xxxxxxxxxxxxxxxxxxxx"
+                    className="w-full pl-11 pr-11 py-2.5 bg-surface-container border border-outline-variant rounded-xl text-on-surface text-body-md focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all font-mono text-sm"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowGithubToken(!showGithubToken)}
+                    className="absolute right-3.5 top-1/2 -translate-y-1/2 text-outline hover:text-on-surface-variant transition-colors cursor-pointer bg-transparent border-0 p-0 flex items-center"
+                  >
+                    <span className="material-symbols-outlined text-xl">{showGithubToken ? 'visibility_off' : 'visibility'}</span>
+                  </button>
+                </div>
+              </div>
+
+              {/* Repo input */}
+              <div>
+                <label className="block text-caption font-bold text-on-surface-variant mb-1.5">Repository (owner/repo-name)</label>
+                <div className="relative">
+                  <span className="material-symbols-outlined absolute left-3.5 top-1/2 -translate-y-1/2 text-outline text-xl">folder_open</span>
+                  <input
+                    type="text"
+                    value={githubRepo}
+                    onChange={e => { setGithubRepo(e.target.value); setGithubSaved(false); }}
+                    placeholder="muddathiroshey/java-solutions"
+                    className="w-full pl-11 pr-4 py-2.5 bg-surface-container border border-outline-variant rounded-xl text-on-surface text-body-md focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all font-semibold"
+                  />
+                </div>
+              </div>
+
+              {/* Error / Success */}
+              {githubError && (
+                <div className="flex items-center gap-2 p-3 bg-error-container text-on-error-container rounded-xl text-body-sm">
+                  <span className="material-symbols-outlined text-[18px]">error</span>
+                  {githubError}
+                </div>
+              )}
+              {githubSaved && (
+                <div className="flex items-center gap-2 p-3 bg-tertiary-container text-on-tertiary-container rounded-xl text-body-sm font-bold">
+                  <span className="material-symbols-outlined text-[18px]">check_circle</span>
+                  GitHub settings saved!
+                </div>
+              )}
+
+              <button
+                onClick={handleSaveGithub}
+                className="flex items-center gap-2 px-6 py-2.5 bg-primary text-on-primary font-bold rounded-xl hover:bg-primary/90 transition-all cursor-pointer shadow-sm"
+              >
+                <span className="material-symbols-outlined text-xl">save</span>
+                Save GitHub Settings
+              </button>
             </div>
           </div>
         )}

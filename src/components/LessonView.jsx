@@ -5,6 +5,8 @@ import { useRouter } from 'next/navigation';
 import { useApp } from '../context/AppContext';
 import { updateUserProgress, checkAndUpdateStreak, getCurrentUserSession, runJavaCode } from '../lib/storage';
 import { getLocalDateString, getLocalISOString } from '../lib/dateUtils';
+import { githubPushSolutionAction } from '../app/actions';
+import GitHubUploadToast from './GitHubUploadToast';
 
 // Utility to parse hh:mm:ss into seconds
 const timeToSecs = (t) => {
@@ -21,6 +23,56 @@ const secsToTime = (s) => {
   const sec = Math.floor(s % 60);
   return [h, m, sec].map(n => n.toString().padStart(2, '0')).join(':');
 };
+
+// ─── GitHub Upload Helpers ────────────────────────────────────────────────────
+
+/**
+ * "Exercise 1.5: Compute Expressions"  →  "exercise_5.java"
+ * Extracts the digit(s) after the first dot in "Exercise X.Y".
+ */
+function buildExerciseFileName(taskTitle) {
+  const match = taskTitle.match(/exercise\s+\d+\.(\d+)/i);
+  if (match) return `exercise_${match[1]}.java`;
+  // Fallback: slugify the whole title
+  return taskTitle.toLowerCase().replace(/[^a-z0-9]+/g, '_').replace(/^_|_$/g, '') + '.java';
+}
+
+/**
+ * (1, "Introduction to Computers, Programs, and Java")
+ *  →  "Chapter_1_Introduction_to_Computers_Programs_and_Java"
+ */
+function buildChapterDirName(chapterNum, chapterTitle) {
+  const slug = (chapterTitle || 'Chapter')
+    .replace(/[^a-zA-Z0-9 ]/g, '')
+    .trim()
+    .replace(/\s+/g, '_');
+  return `Chapter_${chapterNum}_${slug}`;
+}
+
+/**
+ * Builds the full .java file content:
+ *   - A block comment with the problem statement and expected output
+ *   - Followed by the student's solution code
+ */
+function buildFileContent(taskTitle, taskDescription, testCases, solutionCode) {
+  const desc = (taskDescription || '').replace(/\*\//g, '* /');
+  const sampleInput  = testCases?.[0]?.input    ? `\n * Sample Input:\n *   ${testCases[0].input}` : '';
+  const sampleOutput = testCases?.[0]?.expected ? `\n * Expected Output:\n *   ${testCases[0].expected.replace(/\n/g, '\n *   ')}` : '';
+
+  const headerLines = [
+    `/*`,
+    ` * ${taskTitle}`,
+    ` *`,
+    ...desc.split('\n').map(l => ` * ${l}`),
+    sampleInput,
+    sampleOutput,
+    ` */`,
+  ].filter(l => l !== '');
+
+  return `${headerLines.join('\n')}\n${solutionCode}`;
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
 
 // Simulated Java compiler validator
 const validateJavaCode = (code, testCases) => {
@@ -414,6 +466,13 @@ export default function LessonView({ user, day, onBack, onComplete, onUserUpdate
     document.addEventListener('mousedown', handleClickOutside);
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
+
+  const isAdmin = user?.username?.toLowerCase() === 'muddathiradmin' || user?.isAdmin === true;
+
+  // GitHub upload state (admin only)
+  const [ghUploadStatus, setGhUploadStatus] = useState(null); // null | 'uploading' | 'success' | 'error'
+  const [ghUploadUrl, setGhUploadUrl]       = useState('');
+  const [ghUploadError, setGhUploadError]   = useState('');
 
   // Task & Video completions
   const video = day?.videos?.[0];
@@ -1124,6 +1183,29 @@ export default function LessonView({ user, day, onBack, onComplete, onUserUpdate
     }, 1500);
   };
 
+  const handleGithubUpload = async () => {
+    if (!day?.task || !isAdmin) return;
+    setGhUploadStatus('uploading');
+    setGhUploadUrl('');
+    setGhUploadError('');
+
+    const fileName  = buildExerciseFileName(day.task.title);
+    const dirName   = buildChapterDirName(day.chapterNum, day.chapterTitle);
+    const filePath  = `${dirName}/${fileName}`;
+    const content   = buildFileContent(day.task.title, day.task.description, day.task.testCases, code);
+    const commitMsg = `Add solution: ${day.task.title}`;
+
+    const res = await githubPushSolutionAction(filePath, content, commitMsg);
+    if (res?.success) {
+      setGhUploadStatus('success');
+      setGhUploadUrl(res.url || '');
+      setTimeout(() => setGhUploadStatus(null), 6000);
+    } else {
+      setGhUploadStatus('error');
+      setGhUploadError(res?.error || 'Unknown error');
+    }
+  };
+
   const handleProjectSubmit = async (e) => {
     if (e) e.preventDefault();
     if (!projectRepo.trim()) {
@@ -1191,6 +1273,14 @@ export default function LessonView({ user, day, onBack, onComplete, onUserUpdate
 
   return (
     <div className="flex-1 overflow-y-auto pt-20 pb-xl px-md md:px-lg min-h-screen select-none">
+      {/* GitHub Upload Toast (admin only) */}
+      <GitHubUploadToast
+        status={ghUploadStatus}
+        url={ghUploadUrl}
+        error={ghUploadError}
+        onDismiss={() => setGhUploadStatus(null)}
+      />
+
       {/* Success Feedback Overlay */}
       <div 
         className={`fixed inset-0 z-[60] flex items-center justify-center bg-on-background/40 backdrop-blur-sm transition-all duration-300 ${
@@ -1554,13 +1644,31 @@ export default function LessonView({ user, day, onBack, onComplete, onUserUpdate
 
                   {/* IDE Toolbar footer */}
                   <div className="flex items-center justify-between px-4 py-2 bg-[#16212e] border-t border-white/10 shrink-0 select-none">
-                    <button
-                      onClick={handleRunCode}
-                      disabled={runningCode}
-                      className="px-4 py-1.5 bg-primary text-on-primary rounded font-bold text-caption hover:opacity-90 transition-opacity cursor-pointer disabled:opacity-40"
-                    >
-                      {runningCode ? 'Compiling...' : 'Run Code'}
-                    </button>
+                    <div className="flex items-center gap-2">
+                      <button
+                        onClick={handleRunCode}
+                        disabled={runningCode}
+                        className="px-4 py-1.5 bg-primary text-on-primary rounded font-bold text-caption hover:opacity-90 transition-opacity cursor-pointer disabled:opacity-40"
+                      >
+                        {runningCode ? 'Compiling...' : 'Run Code'}
+                      </button>
+
+                      {/* Admin-only: Upload to GitHub (shown after task passes and GitHub is configured) */}
+                      {isAdmin && taskCompleted && user?.settings?.githubRepo && (
+                        <button
+                          onClick={handleGithubUpload}
+                          disabled={ghUploadStatus === 'uploading'}
+                          title="Push this solution to your GitHub repo"
+                          className="flex items-center gap-1.5 px-3 py-1.5 bg-[#24292f] hover:bg-[#30363d] border border-white/10 text-white/80 hover:text-white rounded font-bold text-caption transition-all cursor-pointer disabled:opacity-40"
+                        >
+                          <span className="material-symbols-outlined text-[14px]">
+                            {ghUploadStatus === 'uploading' ? 'progress_activity' : 'upload'}
+                          </span>
+                          {ghUploadStatus === 'uploading' ? 'Uploading…' : 'Upload to GitHub'}
+                        </button>
+                      )}
+                    </div>
+
                     <button
                       onClick={() => setCode(day.task.codeTemplate)}
                       className="text-white/40 hover:text-white/80 font-bold text-caption cursor-pointer"

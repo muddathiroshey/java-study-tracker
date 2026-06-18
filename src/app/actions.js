@@ -385,3 +385,108 @@ export async function runJavaCodeAction(code) {
   }
 }
 
+// ─── GitHub Integration Actions (Admin-Only) ───────────────────────────────
+
+/**
+ * Save the admin's GitHub PAT and target repo to their user settings.
+ * The token is stored server-side only and never returned to the client raw.
+ */
+export async function saveGithubSettingsAction(githubToken, githubRepo) {
+  const cookieStore = await cookies();
+  const session = cookieStore.get(SESSION_COOKIE_NAME);
+  if (!session?.value) return { success: false, error: 'Not authenticated' };
+
+  const user = await dbGetUserByUsernameOrEmail(session.value);
+  if (!user) return { success: false, error: 'User not found' };
+
+  const updatedSettings = {
+    ...user.settings,
+    githubToken: githubToken.trim(),
+    githubRepo: githubRepo.trim(),
+  };
+
+  const updated = await dbUpdateUserProgress(
+    user.username,
+    user.lessonsProgress,
+    user.tasksProgress,
+    user.submissions,
+    updatedSettings,
+    user.streak,
+    user.lastActiveDate
+  );
+
+  if (!updated) return { success: false, error: 'Failed to save settings' };
+  return { success: true, user: updated };
+}
+
+/**
+ * Push a Java solution file to the admin's configured GitHub repo.
+ * Reads the PAT from the DB (never from the client), so the token
+ * is never exposed in the browser network tab.
+ *
+ * @param {string} filePath     - e.g. "Chapter_1_Introduction/exercise_5.java"
+ * @param {string} fileContent  - full file text (comment header + solution code)
+ * @param {string} commitMsg    - git commit message
+ */
+export async function githubPushSolutionAction(filePath, fileContent, commitMsg) {
+  const cookieStore = await cookies();
+  const session = cookieStore.get(SESSION_COOKIE_NAME);
+  if (!session?.value) return { success: false, error: 'Not authenticated' };
+
+  const user = await dbGetUserByUsernameOrEmail(session.value);
+  if (!user) return { success: false, error: 'User not found' };
+
+  const token = user.settings?.githubToken;
+  const repo  = user.settings?.githubRepo; // "owner/repo-name"
+
+  if (!token || !repo) {
+    return { success: false, error: 'GitHub token or repo not configured in Settings.' };
+  }
+
+  const apiUrl = `https://api.github.com/repos/${repo}/contents/${filePath}`;
+  const headers = {
+    Authorization: `Bearer ${token}`,
+    Accept: 'application/vnd.github+json',
+    'X-GitHub-Api-Version': '2022-11-28',
+    'Content-Type': 'application/json',
+  };
+
+  try {
+    // Step 1: Check if the file already exists (need SHA to overwrite)
+    let existingSha = null;
+    const getRes = await fetch(apiUrl, { method: 'GET', headers });
+    if (getRes.ok) {
+      const existing = await getRes.json();
+      existingSha = existing.sha || null;
+    }
+
+    // Step 2: PUT (create or update)
+    const body = {
+      message: commitMsg,
+      content: Buffer.from(fileContent, 'utf-8').toString('base64'),
+    };
+    if (existingSha) body.sha = existingSha;
+
+    const putRes = await fetch(apiUrl, {
+      method: 'PUT',
+      headers,
+      body: JSON.stringify(body),
+    });
+
+    if (!putRes.ok) {
+      const errData = await putRes.json().catch(() => ({}));
+      return {
+        success: false,
+        error: errData.message || `GitHub API error ${putRes.status}`,
+      };
+    }
+
+    const result = await putRes.json();
+    return {
+      success: true,
+      url: result.content?.html_url || `https://github.com/${repo}/blob/main/${filePath}`,
+    };
+  } catch (err) {
+    return { success: false, error: `Network error: ${err.message}` };
+  }
+}
