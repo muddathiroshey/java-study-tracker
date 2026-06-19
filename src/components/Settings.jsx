@@ -79,7 +79,7 @@ export default function Settings({ user, onUserUpdate, onLogout }) {
   };
 
   const isAdmin = user?.username?.toLowerCase() === 'muddathiradmin' || user?.isAdmin === true;
-  const canUseGithub = isAdmin || user?.username === 'مدثر';
+  const canUseGithub = ture;
 
   const handleSaveProfile = async () => {
     setProfileError('');
