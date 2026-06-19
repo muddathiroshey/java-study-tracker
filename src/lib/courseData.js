@@ -397,32 +397,32 @@ export const courseSchedule = [
     "date": "2026-06-25",
     "dayOfWeek": "Thursday",
     "type": "video",
-    "chapterNum": 4,
-    "chapterTitle": "Mathematical Functions, Characters, and Strings",
-    "title": "Ch 4: Geometry Estimate Areas",
-    "slides": "https://fcai.smartpharaohs.com/pl2/2025/Slides/04slide.ppt",
+    "chapterNum": 5,
+    "chapterTitle": "Loops",
+    "title": "Ch 5: Loops & Conversion Tables",
+    "slides": "https://fcai.smartpharaohs.com/pl2/2025/Slides/05slide.ppt",
     "videos": [
       {
-        "videoId": "DeCBRPWCkoc",
-        "title": "Java | Chapter 4 | Mathematical Functions, Characters, and Strings",
-        "duration": "01:19:42",
+        "videoId": "NZzu49ffrgY",
+        "title": "Java | Chapter 5 | Loops",
+        "duration": "00:55:09",
         "assignedStart": "00:00:00",
-        "assignedEnd": "01:19:42",
-        "thumbnail": "https://i.ytimg.com/vi/DeCBRPWCkoc/hqdefault.jpg",
-        "url": "https://www.youtube.com/watch?v=DeCBRPWCkoc"
+        "assignedEnd": "00:55:09",
+        "thumbnail": "https://i.ytimg.com/vi/NZzu49ffrgY/hqdefault.jpg",
+        "url": "https://www.youtube.com/watch?v=NZzu49ffrgY"
       }
     ],
     "task": {
-      "taskId": "task_4_3",
-      "title": "Exercise 4.3: Estimate Geographic Area",
-      "description": "Estimate the bounded area between four cities: Atlanta, Orlando, Savannah, and Charlotte using coordinates and triangles. The class name must be Exercise04_03.",
-      "codeTemplate": "public class Exercise04_03 {\n    public static void main(String[] args) {\n        // Calculate geographic area\n        \n    }\n}",
+      "taskId": "task_5_4",
+      "title": "Exercise 5.4: Conversion Miles to Kilometers",
+      "description": "Write a loop to display a table of conversions from miles (1 to 10) to kilometers (1 mile = 1.609 km). The class name must be Exercise05_04.",
+      "codeTemplate": "public class Exercise05_04 {\n    public static void main(String[] args) {\n        // Display conversion table\n        \n    }\n}",
       "testCases": [
         {
           "id": 1,
           "input": "",
-          "expected": "Area:",
-          "description": "Displays estimated area calculation"
+          "expected": "10      16.09",
+          "description": "Checks final line conversion of table"
         }
       ]
     }
@@ -479,41 +479,6 @@ export const courseSchedule = [
     "type": "video",
     "chapterNum": 5,
     "chapterTitle": "Loops",
-    "title": "Ch 5: Loops & Conversion Tables",
-    "slides": "https://fcai.smartpharaohs.com/pl2/2025/Slides/05slide.ppt",
-    "videos": [
-      {
-        "videoId": "NZzu49ffrgY",
-        "title": "Java | Chapter 5 | Loops",
-        "duration": "00:55:09",
-        "assignedStart": "00:00:00",
-        "assignedEnd": "00:55:09",
-        "thumbnail": "https://i.ytimg.com/vi/NZzu49ffrgY/hqdefault.jpg",
-        "url": "https://www.youtube.com/watch?v=NZzu49ffrgY"
-      }
-    ],
-    "task": {
-      "taskId": "task_5_4",
-      "title": "Exercise 5.4: Conversion Miles to Kilometers",
-      "description": "Write a loop to display a table of conversions from miles (1 to 10) to kilometers (1 mile = 1.609 km). The class name must be Exercise05_04.",
-      "codeTemplate": "public class Exercise05_04 {\n    public static void main(String[] args) {\n        // Display conversion table\n        \n    }\n}",
-      "testCases": [
-        {
-          "id": 1,
-          "input": "",
-          "expected": "10      16.09",
-          "description": "Checks final line conversion of table"
-        }
-      ]
-    }
-  },
-  {
-    "day": 16,
-    "date": "2026-06-29",
-    "dayOfWeek": "Monday",
-    "type": "video",
-    "chapterNum": 5,
-    "chapterTitle": "Loops",
     "title": "Ch 5: Tuition Projections",
     "slides": "https://fcai.smartpharaohs.com/pl2/2025/Slides/05slide.ppt",
     "videos": [
@@ -543,9 +508,9 @@ export const courseSchedule = [
     }
   },
   {
-    "day": 17,
-    "date": "2026-06-30",
-    "dayOfWeek": "Tuesday",
+    "day": 16,
+    "date": "2026-06-29",
+    "dayOfWeek": "Monday",
     "type": "video",
     "chapterNum": 6,
     "chapterTitle": "Methods",
@@ -578,9 +543,9 @@ export const courseSchedule = [
     }
   },
   {
-    "day": 18,
-    "date": "2026-07-01",
-    "dayOfWeek": "Wednesday",
+    "day": 17,
+    "date": "2026-06-30",
+    "dayOfWeek": "Tuesday",
     "type": "video",
     "chapterNum": 6,
     "chapterTitle": "Methods",
@@ -613,9 +578,9 @@ export const courseSchedule = [
     }
   },
   {
-    "day": 19,
-    "date": "2026-07-02",
-    "dayOfWeek": "Thursday",
+    "day": 18,
+    "date": "2026-07-01",
+    "dayOfWeek": "Wednesday",
     "type": "video",
     "chapterNum": 6,
     "chapterTitle": "Methods",
@@ -643,6 +608,41 @@ export const courseSchedule = [
           "input": "",
           "expected": "1.0 2.0 3.0",
           "description": "Output numbers printed as '1.0 2.0 3.0'"
+        }
+      ]
+    }
+  },
+  {
+    "day": 19,
+    "date": "2026-07-02",
+    "dayOfWeek": "Thursday",
+    "type": "video",
+    "chapterNum": 7,
+    "chapterTitle": "Single-Dimensional Arrays",
+    "title": "Ch 7: Single-Dimensional Arrays (Part A)",
+    "slides": "https://fcai.smartpharaohs.com/pl2/2025/Slides/07slide.pptx",
+    "videos": [
+      {
+        "videoId": "qvh6RfT_Kek",
+        "title": "Java | Chapter 7 | Single-Dimensional Arrays",
+        "duration": "00:51:08",
+        "assignedStart": "00:00:00",
+        "assignedEnd": "00:51:08",
+        "thumbnail": "https://i.ytimg.com/vi/qvh6RfT_Kek/hqdefault.jpg",
+        "url": "https://www.youtube.com/watch?v=qvh6RfT_Kek"
+      }
+    ],
+    "task": {
+      "taskId": "task_7_2",
+      "title": "Exercise 7.2: Reverse Array Input",
+      "description": "Read 10 integers from console and display them in the reverse order in which they were read. The class name must be Exercise07_02.",
+      "codeTemplate": "import java.util.Scanner;\n\npublic class Exercise07_02 {\n    public static void main(String[] args) {\n        Scanner input = new Scanner(System.in);\n        // Read 10 numbers and print in reverse order\n        \n    }\n}",
+      "testCases": [
+        {
+          "id": 1,
+          "input": "1 2 3 4 5 6 7 8 9 10",
+          "expected": "10 9 8 7 6 5 4 3 2 1",
+          "description": "10 numbers in reverse order"
         }
       ]
     }
@@ -699,41 +699,6 @@ export const courseSchedule = [
     "type": "video",
     "chapterNum": 7,
     "chapterTitle": "Single-Dimensional Arrays",
-    "title": "Ch 7: Single-Dimensional Arrays (Part A)",
-    "slides": "https://fcai.smartpharaohs.com/pl2/2025/Slides/07slide.pptx",
-    "videos": [
-      {
-        "videoId": "qvh6RfT_Kek",
-        "title": "Java | Chapter 7 | Single-Dimensional Arrays",
-        "duration": "00:51:08",
-        "assignedStart": "00:00:00",
-        "assignedEnd": "00:51:08",
-        "thumbnail": "https://i.ytimg.com/vi/qvh6RfT_Kek/hqdefault.jpg",
-        "url": "https://www.youtube.com/watch?v=qvh6RfT_Kek"
-      }
-    ],
-    "task": {
-      "taskId": "task_7_2",
-      "title": "Exercise 7.2: Reverse Array Input",
-      "description": "Read 10 integers from console and display them in the reverse order in which they were read. The class name must be Exercise07_02.",
-      "codeTemplate": "import java.util.Scanner;\n\npublic class Exercise07_02 {\n    public static void main(String[] args) {\n        Scanner input = new Scanner(System.in);\n        // Read 10 numbers and print in reverse order\n        \n    }\n}",
-      "testCases": [
-        {
-          "id": 1,
-          "input": "1 2 3 4 5 6 7 8 9 10",
-          "expected": "10 9 8 7 6 5 4 3 2 1",
-          "description": "10 numbers in reverse order"
-        }
-      ]
-    }
-  },
-  {
-    "day": 23,
-    "date": "2026-07-06",
-    "dayOfWeek": "Monday",
-    "type": "video",
-    "chapterNum": 7,
-    "chapterTitle": "Single-Dimensional Arrays",
     "title": "Ch 7: Array Frequencies & Minimum Element",
     "slides": "https://fcai.smartpharaohs.com/pl2/2025/Slides/07slide.pptx",
     "videos": [
@@ -763,9 +728,9 @@ export const courseSchedule = [
     }
   },
   {
-    "day": 24,
-    "date": "2026-07-07",
-    "dayOfWeek": "Tuesday",
+    "day": 23,
+    "date": "2026-07-06",
+    "dayOfWeek": "Monday",
     "type": "video",
     "chapterNum": 8,
     "chapterTitle": "Multi-Dimensional Arrays",
@@ -793,6 +758,41 @@ export const courseSchedule = [
           "input": "1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16",
           "expected": "Diagonal Sum: 34.0",
           "description": "Sum of 1 + 6 + 11 + 16 is 34"
+        }
+      ]
+    }
+  },
+  {
+    "day": 24,
+    "date": "2026-07-07",
+    "dayOfWeek": "Tuesday",
+    "type": "video",
+    "chapterNum": 9,
+    "chapterTitle": "Objects and Classes",
+    "title": "Ch 9: Objects and Classes (Part 1)",
+    "slides": "https://fcai.smartpharaohs.com/pl2/2025/Slides/09slide.ppt",
+    "videos": [
+      {
+        "videoId": "RK2ABib7pmI",
+        "title": "Java | Chapter 9 | Objects and Classes",
+        "duration": "00:35:04",
+        "assignedStart": "00:00:00",
+        "assignedEnd": "00:35:04",
+        "thumbnail": "https://i.ytimg.com/vi/RK2ABib7pmI/hqdefault.jpg",
+        "url": "https://www.youtube.com/watch?v=RK2ABib7pmI"
+      }
+    ],
+    "task": {
+      "taskId": "task_9_1",
+      "title": "Exercise 9.1: Rectangle Class",
+      "description": "Define a Rectangle class with width and height (default 1.0), a no-arg constructor, a constructor with width and height, getArea(), and getPerimeter(). Instantiate two rectangles (4.0x40.0 and 3.5x35.9). The class name must be Exercise09_01.",
+      "codeTemplate": "public class Exercise09_01 {\n    public static void main(String[] args) {\n        // Instantiate both Rectangles, print width, height, area, perimeter\n        \n    }\n}\n\nclass Rectangle {\n    // Write fields, constructors and helper methods here\n    \n}",
+      "testCases": [
+        {
+          "id": 1,
+          "input": "",
+          "expected": "Area: 160.0",
+          "description": "Checks first Rectangle area calculation (160.0)"
         }
       ]
     }
@@ -987,41 +987,6 @@ export const courseSchedule = [
     "type": "video",
     "chapterNum": 9,
     "chapterTitle": "Objects and Classes",
-    "title": "Ch 9: Objects and Classes (Part 1)",
-    "slides": "https://fcai.smartpharaohs.com/pl2/2025/Slides/09slide.ppt",
-    "videos": [
-      {
-        "videoId": "RK2ABib7pmI",
-        "title": "Java | Chapter 9 | Objects and Classes",
-        "duration": "00:35:04",
-        "assignedStart": "00:00:00",
-        "assignedEnd": "00:35:04",
-        "thumbnail": "https://i.ytimg.com/vi/RK2ABib7pmI/hqdefault.jpg",
-        "url": "https://www.youtube.com/watch?v=RK2ABib7pmI"
-      }
-    ],
-    "task": {
-      "taskId": "task_9_1",
-      "title": "Exercise 9.1: Rectangle Class",
-      "description": "Define a Rectangle class with width and height (default 1.0), a no-arg constructor, a constructor with width and height, getArea(), and getPerimeter(). Instantiate two rectangles (4.0x40.0 and 3.5x35.9). The class name must be Exercise09_01.",
-      "codeTemplate": "public class Exercise09_01 {\n    public static void main(String[] args) {\n        // Instantiate both Rectangles, print width, height, area, perimeter\n        \n    }\n}\n\nclass Rectangle {\n    // Write fields, constructors and helper methods here\n    \n}",
-      "testCases": [
-        {
-          "id": 1,
-          "input": "",
-          "expected": "Area: 160.0",
-          "description": "Checks first Rectangle area calculation (160.0)"
-        }
-      ]
-    }
-  },
-  {
-    "day": 30,
-    "date": "2026-07-13",
-    "dayOfWeek": "Monday",
-    "type": "video",
-    "chapterNum": 9,
-    "chapterTitle": "Objects and Classes",
     "title": "Ch 9: Stock Change Percentage Class",
     "slides": "https://fcai.smartpharaohs.com/pl2/2025/Slides/09slide.ppt",
     "videos": [
@@ -1051,9 +1016,9 @@ export const courseSchedule = [
     }
   },
   {
-    "day": 31,
-    "date": "2026-07-14",
-    "dayOfWeek": "Tuesday",
+    "day": 30,
+    "date": "2026-07-13",
+    "dayOfWeek": "Monday",
     "type": "video",
     "chapterNum": 9,
     "chapterTitle": "Objects and Classes",
@@ -1086,9 +1051,9 @@ export const courseSchedule = [
     }
   },
   {
-    "day": 32,
-    "date": "2026-07-15",
-    "dayOfWeek": "Wednesday",
+    "day": 31,
+    "date": "2026-07-14",
+    "dayOfWeek": "Tuesday",
     "type": "video",
     "chapterNum": 9,
     "chapterTitle": "Objects and Classes",
@@ -1121,9 +1086,9 @@ export const courseSchedule = [
     }
   },
   {
-    "day": 33,
-    "date": "2026-07-16",
-    "dayOfWeek": "Thursday",
+    "day": 32,
+    "date": "2026-07-15",
+    "dayOfWeek": "Wednesday",
     "type": "video",
     "chapterNum": 9,
     "chapterTitle": "Objects and Classes",
@@ -1151,6 +1116,41 @@ export const courseSchedule = [
           "input": "",
           "expected": "fan is off",
           "description": "Fan state printed on console"
+        }
+      ]
+    }
+  },
+  {
+    "day": 33,
+    "date": "2026-07-16",
+    "dayOfWeek": "Thursday",
+    "type": "video",
+    "chapterNum": 10,
+    "chapterTitle": "Thinking in Objects",
+    "title": "Ch 10: Thinking in Objects (Part 1)",
+    "slides": "https://fcai.smartpharaohs.com/pl2/2025/Slides/10slide.ppt",
+    "videos": [
+      {
+        "videoId": "6hQ2pw4LqYk",
+        "title": "Java | Chapter 10 | Thinking in Objects",
+        "duration": "00:38:18",
+        "assignedStart": "00:00:00",
+        "assignedEnd": "00:38:18",
+        "thumbnail": "https://i.ytimg.com/vi/6hQ2pw4LqYk/hqdefault.jpg",
+        "url": "https://www.youtube.com/watch?v=6hQ2pw4LqYk"
+      }
+    ],
+    "task": {
+      "taskId": "task_10_2",
+      "title": "Exercise 10.2: BMI Class Encapsulation",
+      "description": "Define a BMI class with properties name, age, weight (pounds), height (inches), constructors, getBMI(), and getStatus(). The class name must be Exercise10_02.",
+      "codeTemplate": "public class Exercise10_02 {\n    public static void main(String[] args) {\n        BMI bmi = new BMI(\"Alan\", 25, 150, 70);\n        System.out.println(\"BMI: \" + bmi.getBMI() + \" Status: \" + bmi.getStatus());\n    }\n}\n\nclass BMI {\n    // Write encapsulated BMI fields and methods here\n    \n}",
+      "testCases": [
+        {
+          "id": 1,
+          "input": "",
+          "expected": "Normal",
+          "description": "BMI category status verification"
         }
       ]
     }
@@ -1208,41 +1208,6 @@ export const courseSchedule = [
     "type": "video",
     "chapterNum": 10,
     "chapterTitle": "Thinking in Objects",
-    "title": "Ch 10: Thinking in Objects (Part 1)",
-    "slides": "https://fcai.smartpharaohs.com/pl2/2025/Slides/10slide.ppt",
-    "videos": [
-      {
-        "videoId": "6hQ2pw4LqYk",
-        "title": "Java | Chapter 10 | Thinking in Objects",
-        "duration": "00:38:18",
-        "assignedStart": "00:00:00",
-        "assignedEnd": "00:38:18",
-        "thumbnail": "https://i.ytimg.com/vi/6hQ2pw4LqYk/hqdefault.jpg",
-        "url": "https://www.youtube.com/watch?v=6hQ2pw4LqYk"
-      }
-    ],
-    "task": {
-      "taskId": "task_10_2",
-      "title": "Exercise 10.2: BMI Class Encapsulation",
-      "description": "Define a BMI class with properties name, age, weight (pounds), height (inches), constructors, getBMI(), and getStatus(). The class name must be Exercise10_02.",
-      "codeTemplate": "public class Exercise10_02 {\n    public static void main(String[] args) {\n        BMI bmi = new BMI(\"Alan\", 25, 150, 70);\n        System.out.println(\"BMI: \" + bmi.getBMI() + \" Status: \" + bmi.getStatus());\n    }\n}\n\nclass BMI {\n    // Write encapsulated BMI fields and methods here\n    \n}",
-      "testCases": [
-        {
-          "id": 1,
-          "input": "",
-          "expected": "Normal",
-          "description": "BMI category status verification"
-        }
-      ]
-    }
-  },
-  {
-    "day": 37,
-    "date": "2026-07-20",
-    "dayOfWeek": "Monday",
-    "type": "video",
-    "chapterNum": 10,
-    "chapterTitle": "Thinking in Objects",
     "title": "Ch 10: Thinking in Objects (Part 2)",
     "slides": "https://fcai.smartpharaohs.com/pl2/2025/Slides/10slide.ppt",
     "videos": [
@@ -1272,9 +1237,9 @@ export const courseSchedule = [
     }
   },
   {
-    "day": 38,
-    "date": "2026-07-21",
-    "dayOfWeek": "Tuesday",
+    "day": 37,
+    "date": "2026-07-20",
+    "dayOfWeek": "Monday",
     "type": "video",
     "chapterNum": 10,
     "chapterTitle": "Thinking in Objects",
@@ -1307,9 +1272,9 @@ export const courseSchedule = [
     }
   },
   {
-    "day": 39,
-    "date": "2026-07-22",
-    "dayOfWeek": "Wednesday",
+    "day": 38,
+    "date": "2026-07-21",
+    "dayOfWeek": "Tuesday",
     "type": "video",
     "chapterNum": 10,
     "chapterTitle": "Thinking in Objects",
@@ -1342,9 +1307,9 @@ export const courseSchedule = [
     }
   },
   {
-    "day": 40,
-    "date": "2026-07-23",
-    "dayOfWeek": "Thursday",
+    "day": 39,
+    "date": "2026-07-22",
+    "dayOfWeek": "Wednesday",
     "type": "video",
     "chapterNum": 10,
     "chapterTitle": "Thinking in Objects",
@@ -1372,6 +1337,41 @@ export const courseSchedule = [
           "input": "",
           "expected": "9223372036854775807",
           "description": "Squares exceed Long.MAX_VALUE threshold"
+        }
+      ]
+    }
+  },
+  {
+    "day": 40,
+    "date": "2026-07-23",
+    "dayOfWeek": "Thursday",
+    "type": "video",
+    "chapterNum": 11,
+    "chapterTitle": "Inheritance and Polymorphism",
+    "title": "Ch 11: Inheritance and Polymorphism (Part 1)",
+    "slides": "https://fcai.smartpharaohs.com/pl2/2025/Slides/11slide.ppt",
+    "videos": [
+      {
+        "videoId": "Ly1wkba3EZk",
+        "title": "Java | Chapter 11 | Inheritance and Polymorphism",
+        "duration": "00:44:36",
+        "assignedStart": "00:00:00",
+        "assignedEnd": "00:44:36",
+        "thumbnail": "https://i.ytimg.com/vi/Ly1wkba3EZk/hqdefault.jpg",
+        "url": "https://www.youtube.com/watch?v=Ly1wkba3EZk"
+      }
+    ],
+    "task": {
+      "taskId": "task_11_1",
+      "title": "Exercise 11.1: Triangle & GeometricObject Class",
+      "description": "Define Triangle subclass that extends GeometricObject superclass. Include double variables side1, side2, side3, constructors, and getArea(). The class name must be Exercise11_01.",
+      "codeTemplate": "public class Exercise11_01 {\n    public static void main(String[] args) {\n        Triangle t = new Triangle(1.0, 1.5, 1.0);\n        System.out.println(\"Area: \" + t.getArea());\n    }\n}\n\nclass GeometricObject {\n    // Superclass fields and methods\n}\n\nclass Triangle extends GeometricObject {\n    // Subclass properties\n}",
+      "testCases": [
+        {
+          "id": 1,
+          "input": "",
+          "expected": "Area: 0.496",
+          "description": "Area of triangle sides (1.0, 1.5, 1.0) is ~0.496"
         }
       ]
     }
@@ -1453,41 +1453,6 @@ export const courseSchedule = [
     "type": "video",
     "chapterNum": 11,
     "chapterTitle": "Inheritance and Polymorphism",
-    "title": "Ch 11: Inheritance and Polymorphism (Part 1)",
-    "slides": "https://fcai.smartpharaohs.com/pl2/2025/Slides/11slide.ppt",
-    "videos": [
-      {
-        "videoId": "Ly1wkba3EZk",
-        "title": "Java | Chapter 11 | Inheritance and Polymorphism",
-        "duration": "00:44:36",
-        "assignedStart": "00:00:00",
-        "assignedEnd": "00:44:36",
-        "thumbnail": "https://i.ytimg.com/vi/Ly1wkba3EZk/hqdefault.jpg",
-        "url": "https://www.youtube.com/watch?v=Ly1wkba3EZk"
-      }
-    ],
-    "task": {
-      "taskId": "task_11_1",
-      "title": "Exercise 11.1: Triangle & GeometricObject Class",
-      "description": "Define Triangle subclass that extends GeometricObject superclass. Include double variables side1, side2, side3, constructors, and getArea(). The class name must be Exercise11_01.",
-      "codeTemplate": "public class Exercise11_01 {\n    public static void main(String[] args) {\n        Triangle t = new Triangle(1.0, 1.5, 1.0);\n        System.out.println(\"Area: \" + t.getArea());\n    }\n}\n\nclass GeometricObject {\n    // Superclass fields and methods\n}\n\nclass Triangle extends GeometricObject {\n    // Subclass properties\n}",
-      "testCases": [
-        {
-          "id": 1,
-          "input": "",
-          "expected": "Area: 0.496",
-          "description": "Area of triangle sides (1.0, 1.5, 1.0) is ~0.496"
-        }
-      ]
-    }
-  },
-  {
-    "day": 44,
-    "date": "2026-07-27",
-    "dayOfWeek": "Monday",
-    "type": "video",
-    "chapterNum": 11,
-    "chapterTitle": "Inheritance and Polymorphism",
     "title": "Ch 11: Inheritance and Polymorphism (Part 2)",
     "slides": "https://fcai.smartpharaohs.com/pl2/2025/Slides/11slide.ppt",
     "videos": [
@@ -1517,9 +1482,9 @@ export const courseSchedule = [
     }
   },
   {
-    "day": 45,
-    "date": "2026-07-28",
-    "dayOfWeek": "Tuesday",
+    "day": 44,
+    "date": "2026-07-27",
+    "dayOfWeek": "Monday",
     "type": "video",
     "chapterNum": 11,
     "chapterTitle": "Inheritance and Polymorphism",
@@ -1552,9 +1517,9 @@ export const courseSchedule = [
     }
   },
   {
-    "day": 46,
-    "date": "2026-07-29",
-    "dayOfWeek": "Wednesday",
+    "day": 45,
+    "date": "2026-07-28",
+    "dayOfWeek": "Tuesday",
     "type": "video",
     "chapterNum": 11,
     "chapterTitle": "Inheritance and Polymorphism",
@@ -1587,9 +1552,9 @@ export const courseSchedule = [
     }
   },
   {
-    "day": 47,
-    "date": "2026-07-30",
-    "dayOfWeek": "Thursday",
+    "day": 46,
+    "date": "2026-07-29",
+    "dayOfWeek": "Wednesday",
     "type": "video",
     "chapterNum": 11,
     "chapterTitle": "Inheritance and Polymorphism",
@@ -1605,7 +1570,43 @@ export const courseSchedule = [
         "thumbnail": "https://i.ytimg.com/vi/Ly1wkba3EZk/hqdefault.jpg",
         "url": "https://www.youtube.com/watch?v=Ly1wkba3EZk"
       }
-    ]
+    ],
+    "task": null
+  },
+  {
+    "day": 47,
+    "date": "2026-07-30",
+    "dayOfWeek": "Thursday",
+    "type": "video",
+    "chapterNum": 13,
+    "chapterTitle": "Abstract Classes and Interfaces",
+    "title": "Ch 13: Abstract Classes & Geometry Rules",
+    "slides": "https://fcai.smartpharaohs.com/pl2/2025/Slides/13slide.ppt",
+    "videos": [
+      {
+        "videoId": "bfouLyURcWE",
+        "title": "Java | Chapter 13 | Abstract Classes and Interfaces",
+        "duration": "00:29:49",
+        "assignedStart": "00:00:00",
+        "assignedEnd": "00:29:49",
+        "thumbnail": "https://i.ytimg.com/vi/bfouLyURcWE/hqdefault.jpg",
+        "url": "https://www.youtube.com/watch?v=bfouLyURcWE"
+      }
+    ],
+    "task": {
+      "taskId": "task_13_1",
+      "title": "Exercise 13.1: Abstract Triangle Class",
+      "description": "Define a Triangle class that extends the abstract GeometricObject class. Implement getArea() and getPerimeter() abstract methods. The class name must be Exercise13_01.",
+      "codeTemplate": "public class Exercise13_01 {\n    public static void main(String[] args) {\n        // Test abstract implementations\n        \n    }\n}\n\nabstract class GeometricObject {\n    // Abstract superclass definition\n    public abstract double getArea();\n    public abstract double getPerimeter();\n}\n\nclass Triangle extends GeometricObject {\n    // Implement abstract methods here\n    public double getArea() { return 0.0; }\n    public double getPerimeter() { return 0.0; }\n}",
+      "testCases": [
+        {
+          "id": 1,
+          "input": "",
+          "expected": "GeometricObject",
+          "description": "Triangle implements abstract GeometricObject"
+        }
+      ]
+    }
   },
   {
     "day": 48,
@@ -1648,41 +1649,6 @@ export const courseSchedule = [
     "type": "video",
     "chapterNum": 13,
     "chapterTitle": "Abstract Classes and Interfaces",
-    "title": "Ch 13: Abstract Classes & Geometry Rules",
-    "slides": "https://fcai.smartpharaohs.com/pl2/2025/Slides/13slide.ppt",
-    "videos": [
-      {
-        "videoId": "bfouLyURcWE",
-        "title": "Java | Chapter 13 | Abstract Classes and Interfaces",
-        "duration": "00:29:49",
-        "assignedStart": "00:00:00",
-        "assignedEnd": "00:29:49",
-        "thumbnail": "https://i.ytimg.com/vi/bfouLyURcWE/hqdefault.jpg",
-        "url": "https://www.youtube.com/watch?v=bfouLyURcWE"
-      }
-    ],
-    "task": {
-      "taskId": "task_13_1",
-      "title": "Exercise 13.1: Abstract Triangle Class",
-      "description": "Define a Triangle class that extends the abstract GeometricObject class. Implement getArea() and getPerimeter() abstract methods. The class name must be Exercise13_01.",
-      "codeTemplate": "public class Exercise13_01 {\n    public static void main(String[] args) {\n        // Test abstract implementations\n        \n    }\n}\n\nabstract class GeometricObject {\n    // Abstract superclass definition\n    public abstract double getArea();\n    public abstract double getPerimeter();\n}\n\nclass Triangle extends GeometricObject {\n    // Implement abstract methods here\n    public double getArea() { return 0.0; }\n    public double getPerimeter() { return 0.0; }\n}",
-      "testCases": [
-        {
-          "id": 1,
-          "input": "",
-          "expected": "GeometricObject",
-          "description": "Triangle implements abstract GeometricObject"
-        }
-      ]
-    }
-  },
-  {
-    "day": 51,
-    "date": "2026-08-03",
-    "dayOfWeek": "Monday",
-    "type": "video",
-    "chapterNum": 13,
-    "chapterTitle": "Abstract Classes and Interfaces",
     "title": "Ch 13: Implementing Interfaces (Comparable & Cloneable)",
     "slides": "https://fcai.smartpharaohs.com/pl2/2025/Slides/13slide.ppt",
     "videos": [
@@ -1712,9 +1678,9 @@ export const courseSchedule = [
     }
   },
   {
-    "day": 52,
-    "date": "2026-08-04",
-    "dayOfWeek": "Tuesday",
+    "day": 51,
+    "date": "2026-08-03",
+    "dayOfWeek": "Monday",
     "type": "video",
     "chapterNum": 12,
     "chapterTitle": "Exception Handling and Text IO",
@@ -1747,9 +1713,9 @@ export const courseSchedule = [
     }
   },
   {
-    "day": 53,
-    "date": "2026-08-05",
-    "dayOfWeek": "Wednesday",
+    "day": 52,
+    "date": "2026-08-04",
+    "dayOfWeek": "Tuesday",
     "type": "video",
     "chapterNum": 12,
     "chapterTitle": "Exception Handling and Text IO",
@@ -1782,9 +1748,9 @@ export const courseSchedule = [
     }
   },
   {
-    "day": 54,
-    "date": "2026-08-06",
-    "dayOfWeek": "Thursday",
+    "day": 53,
+    "date": "2026-08-05",
+    "dayOfWeek": "Wednesday",
     "type": "video",
     "chapterNum": 12,
     "chapterTitle": "Exception Handling and Text IO",
@@ -1815,6 +1781,28 @@ export const courseSchedule = [
         }
       ]
     }
+  },
+  {
+    "day": 54,
+    "date": "2026-08-06",
+    "dayOfWeek": "Thursday",
+    "type": "video",
+    "chapterNum": 14,
+    "chapterTitle": "Final Course Project",
+    "title": "Final Capstone: OOP Architecture Design",
+    "slides": null,
+    "videos": [
+      {
+        "videoId": "RK2ABib7pmI",
+        "title": "OOP Design Principles Recap",
+        "duration": "00:35:04",
+        "assignedStart": "00:00:00",
+        "assignedEnd": "00:35:04",
+        "thumbnail": "https://i.ytimg.com/vi/RK2ABib7pmI/hqdefault.jpg",
+        "url": "https://www.youtube.com/watch?v=RK2ABib7pmI"
+      }
+    ],
+    "task": null
   },
   {
     "day": 55,
@@ -1894,27 +1882,6 @@ export const courseSchedule = [
     "type": "video",
     "chapterNum": 14,
     "chapterTitle": "Final Course Project",
-    "title": "Final Capstone: OOP Architecture Design",
-    "slides": null,
-    "videos": [
-      {
-        "videoId": "RK2ABib7pmI",
-        "title": "OOP Design Principles Recap",
-        "duration": "00:35:04",
-        "assignedStart": "00:00:00",
-        "assignedEnd": "00:35:04",
-        "thumbnail": "https://i.ytimg.com/vi/RK2ABib7pmI/hqdefault.jpg",
-        "url": "https://www.youtube.com/watch?v=RK2ABib7pmI"
-      }
-    ]
-  },
-  {
-    "day": 58,
-    "date": "2026-08-10",
-    "dayOfWeek": "Monday",
-    "type": "video",
-    "chapterNum": 14,
-    "chapterTitle": "Final Course Project",
     "title": "Final Capstone: Polymorphism Recap",
     "slides": null,
     "videos": [
@@ -1927,7 +1894,20 @@ export const courseSchedule = [
         "thumbnail": "https://i.ytimg.com/vi/eDxRQEmkoGM/hqdefault.jpg",
         "url": "https://www.youtube.com/watch?v=eDxRQEmkoGM"
       }
-    ]
+    ],
+    "task": null
+  },
+  {
+    "day": 58,
+    "date": "2026-08-10",
+    "dayOfWeek": "Monday",
+    "type": "video",
+    "chapterNum": 14,
+    "chapterTitle": "Final Course Project",
+    "title": "Final Capstone Prep & Review",
+    "slides": null,
+    "videos": [],
+    "task": null
   },
   {
     "day": 59,
