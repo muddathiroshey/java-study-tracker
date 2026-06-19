@@ -269,7 +269,7 @@ export const courseSchedule = [
         {
           "id": 1,
           "input": "",
-          "expected": "[Month]",
+          "expected": "April",
           "description": "Checks if a valid month name is displayed"
         }
       ]
