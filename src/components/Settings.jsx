@@ -49,7 +49,7 @@ export default function Settings({ user, onUserUpdate, onLogout }) {
     }
   }, []);
 
-  const canUseGithub = isAdmin || user?.username === 'مدثر';
+
 
   // Instructions modal state
   const [showInstructionsModal, setShowInstructionsModal] = useState(false);
@@ -72,6 +72,7 @@ export default function Settings({ user, onUserUpdate, onLogout }) {
   };
 
   const isAdmin = user?.username?.toLowerCase() === 'muddathiradmin' || user?.isAdmin === true;
+  const canUseGithub = isAdmin || user?.username === 'مدثر';
 
   const handleSaveProfile = async () => {
     setProfileError('');
