@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import { useApp } from '../context/AppContext';
 import { updateUserProgress, updateUserProfile, logoutUser, resetStoredSchedule, saveGlobalConfig, deleteUserAccount } from '../lib/storage';
-import { saveGithubRepoAction, disconnectGithubAction } from '../app/actions';
+import { saveGithubRepoAction, disconnectGithubAction, getGithubReposAction } from '../app/actions';
 
 import InstructionsModal from './InstructionsModal';
 export default function Settings({ user, onUserUpdate, onLogout }) {
@@ -30,6 +30,13 @@ export default function Settings({ user, onUserUpdate, onLogout }) {
   const [githubToastMsg, setGithubToastMsg]   = useState('');
   const githubConnected = !!(user?.settings?.githubToken);
   const githubLogin     = user?.settings?.githubLogin || null;
+
+  // Repo picker state
+  const [repoPickerOpen, setRepoPickerOpen]   = useState(false);
+  const [repoList, setRepoList]               = useState([]);
+  const [repoLoading, setRepoLoading]         = useState(false);
+  const [repoError, setRepoError]             = useState('');
+  const [repoSearch, setRepoSearch]           = useState('');
 
   // Read ?github= param on mount and show toast
   useEffect(() => {
@@ -102,20 +109,35 @@ export default function Settings({ user, onUserUpdate, onLogout }) {
     }
   };
 
-  const handleSaveRepo = async () => {
+  const handleSaveRepo = async (repoFullName) => {
     setGithubRepoError('');
     setGithubRepoSaved(false);
-    if (!githubRepo.trim() || !githubRepo.includes('/')) {
-      setGithubRepoError('Repo must be in owner/repo-name format (e.g. muddathiroshey/java-solutions).');
+    const repo = repoFullName || githubRepo;
+    if (!repo.trim() || !repo.includes('/')) {
+      setGithubRepoError('Invalid repo name.');
       return;
     }
-    const res = await saveGithubRepoAction(githubRepo.trim());
+    const res = await saveGithubRepoAction(repo.trim());
     if (res?.success) {
       if (res.user) onUserUpdate(res.user);
+      setGithubRepo(repo.trim());
       setGithubRepoSaved(true);
+      setRepoPickerOpen(false);
       setTimeout(() => setGithubRepoSaved(false), 3000);
     } else {
       setGithubRepoError(res?.error || 'Failed to save repo.');
+    }
+  };
+
+  const loadRepos = async () => {
+    setRepoLoading(true);
+    setRepoError('');
+    const res = await getGithubReposAction();
+    setRepoLoading(false);
+    if (res?.success) {
+      setRepoList(res.repos);
+    } else {
+      setRepoError(res?.error || 'Failed to load repositories.');
     }
   };
 
@@ -396,26 +418,108 @@ export default function Settings({ user, onUserUpdate, onLogout }) {
                 {/* Repo picker */}
                 <div>
                   <label className="block text-caption font-bold text-on-surface-variant mb-1.5">
-                    Target Repository <span className="font-normal opacity-70">(owner/repo-name)</span>
+                    Target Repository
                   </label>
-                  <div className="flex gap-2">
-                    <div className="relative flex-1">
-                      <span className="material-symbols-outlined absolute left-3.5 top-1/2 -translate-y-1/2 text-outline text-xl">folder_open</span>
-                      <input
-                        type="text"
-                        value={githubRepo}
-                        onChange={e => { setGithubRepo(e.target.value); setGithubRepoSaved(false); }}
-                        placeholder={`${githubLogin || 'owner'}/java-solutions`}
-                        className="w-full pl-11 pr-4 py-2.5 bg-surface-container border border-outline-variant rounded-xl text-on-surface text-body-md focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all font-semibold"
-                      />
+
+                  {/* Selected repo badge */}
+                  {githubRepo && !repoPickerOpen && (
+                    <div className="flex items-center gap-2 p-3 mb-2 bg-surface-container-low border border-outline-variant/60 rounded-xl">
+                      <span className="material-symbols-outlined text-primary text-xl">folder</span>
+                      <span className="font-bold text-body-sm text-on-surface flex-1 truncate">{githubRepo}</span>
+                      <button
+                        onClick={() => { setRepoPickerOpen(true); setRepoSearch(''); if (repoList.length === 0) loadRepos(); }}
+                        className="text-caption font-bold text-primary hover:underline cursor-pointer bg-transparent border-0 shrink-0"
+                      >
+                        Change
+                      </button>
                     </div>
+                  )}
+
+                  {/* Open picker button (when no repo selected yet) */}
+                  {!githubRepo && !repoPickerOpen && (
                     <button
-                      onClick={handleSaveRepo}
-                      className="px-5 py-2.5 bg-primary text-on-primary font-bold rounded-xl hover:bg-primary/90 transition-all cursor-pointer shadow-sm shrink-0"
+                      onClick={() => { setRepoPickerOpen(true); setRepoSearch(''); loadRepos(); }}
+                      className="w-full flex items-center gap-2.5 px-4 py-3 bg-surface-container border border-outline-variant rounded-xl text-on-surface-variant hover:border-primary hover:text-primary transition-all cursor-pointer font-semibold text-body-sm"
                     >
-                      Save
+                      <span className="material-symbols-outlined text-xl">folder_open</span>
+                      Choose a repository…
+                      <span className="material-symbols-outlined text-xl ml-auto">expand_more</span>
                     </button>
-                  </div>
+                  )}
+
+                  {/* Dropdown repo list */}
+                  {repoPickerOpen && (
+                    <div className="border border-outline-variant rounded-xl overflow-hidden shadow-xl bg-surface-container-lowest">
+                      {/* Search bar */}
+                      <div className="flex items-center gap-2 p-3 border-b border-outline-variant/50 bg-surface-container">
+                        <span className="material-symbols-outlined text-outline text-xl shrink-0">search</span>
+                        <input
+                          autoFocus
+                          type="text"
+                          value={repoSearch}
+                          onChange={e => setRepoSearch(e.target.value)}
+                          placeholder="Search repositories…"
+                          className="flex-1 bg-transparent outline-none text-on-surface text-body-sm font-semibold placeholder:text-on-surface-variant/50"
+                        />
+                        <button
+                          onClick={() => setRepoPickerOpen(false)}
+                          className="shrink-0 text-outline hover:text-on-surface cursor-pointer bg-transparent border-0 p-0 flex items-center"
+                        >
+                          <span className="material-symbols-outlined text-xl">close</span>
+                        </button>
+                      </div>
+
+                      {/* List */}
+                      <div className="max-h-64 overflow-y-auto custom-scrollbar">
+                        {repoLoading && (
+                          <div className="flex items-center justify-center gap-2 py-8 text-on-surface-variant">
+                            <span className="material-symbols-outlined animate-spin text-primary text-2xl">progress_activity</span>
+                            <span className="text-body-sm font-semibold">Loading repositories…</span>
+                          </div>
+                        )}
+                        {repoError && !repoLoading && (
+                          <div className="flex items-center gap-2 p-4 text-error text-body-sm">
+                            <span className="material-symbols-outlined text-xl">error</span>
+                            {repoError}
+                          </div>
+                        )}
+                        {!repoLoading && !repoError && repoList
+                          .filter(r => r.full_name.toLowerCase().includes(repoSearch.toLowerCase()))
+                          .map(repo => (
+                            <button
+                              key={repo.id}
+                              onClick={() => handleSaveRepo(repo.full_name)}
+                              className={`w-full flex items-start gap-3 px-4 py-3 text-left hover:bg-surface-container-high transition-colors cursor-pointer border-0 border-b border-outline-variant/20 last:border-b-0 ${
+                                githubRepo === repo.full_name ? 'bg-primary/5' : ''
+                              }`}
+                            >
+                              <span className="material-symbols-outlined text-outline text-xl mt-0.5 shrink-0">
+                                {repo.private ? 'lock' : 'folder'}
+                              </span>
+                              <div className="min-w-0 flex-1">
+                                <div className="flex items-center gap-2">
+                                  <span className="font-bold text-body-sm text-on-surface truncate">{repo.full_name}</span>
+                                  {repo.private && (
+                                    <span className="shrink-0 text-[9px] font-bold px-1.5 py-0.5 rounded-full bg-surface-container-high text-on-surface-variant uppercase tracking-wider">Private</span>
+                                  )}
+                                  {githubRepo === repo.full_name && (
+                                    <span className="material-symbols-outlined text-primary text-[16px] shrink-0" style={{ fontVariationSettings: "'FILL' 1" }}>check_circle</span>
+                                  )}
+                                </div>
+                                {repo.description && (
+                                  <p className="text-caption text-on-surface-variant truncate mt-0.5">{repo.description}</p>
+                                )}
+                              </div>
+                            </button>
+                          ))
+                        }
+                        {!repoLoading && !repoError && repoList.length > 0 &&
+                          repoList.filter(r => r.full_name.toLowerCase().includes(repoSearch.toLowerCase())).length === 0 && (
+                          <p className="px-4 py-6 text-center text-on-surface-variant text-body-sm">No repositories match "{repoSearch}"</p>
+                        )}
+                      </div>
+                    </div>
+                  )}
 
                   {githubRepoError && (
                     <div className="flex items-center gap-2 mt-2 p-3 bg-error-container text-on-error-container rounded-xl text-body-sm">

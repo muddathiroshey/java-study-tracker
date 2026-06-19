@@ -419,6 +419,57 @@ export async function saveGithubRepoAction(githubRepo) {
 }
 
 /**
+ * Fetch the authenticated user's GitHub repositories using their stored OAuth token.
+ * Returns repos sorted by last-updated (most recent first).
+ */
+export async function getGithubReposAction() {
+  const cookieStore = await cookies();
+  const session = cookieStore.get(SESSION_COOKIE_NAME);
+  if (!session?.value) return { success: false, error: 'Not authenticated', repos: [] };
+
+  const user = await dbGetUserByUsernameOrEmail(session.value);
+  if (!user) return { success: false, error: 'User not found', repos: [] };
+
+  const token = user.settings?.githubToken;
+  if (!token) return { success: false, error: 'GitHub not connected', repos: [] };
+
+  try {
+    // Fetch up to 100 repos sorted by most-recently-updated
+    const res = await fetch(
+      'https://api.github.com/user/repos?sort=updated&per_page=100&affiliation=owner,collaborator',
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          Accept: 'application/vnd.github+json',
+          'X-GitHub-Api-Version': '2022-11-28',
+        },
+      }
+    );
+
+    if (!res.ok) {
+      const err = await res.json().catch(() => ({}));
+      return { success: false, error: err.message || `GitHub API error ${res.status}`, repos: [] };
+    }
+
+    const data = await res.json();
+    // Return only the fields the client needs
+    const repos = data.map(r => ({
+      id:          r.id,
+      full_name:   r.full_name,      // "owner/repo-name"
+      name:        r.name,
+      private:     r.private,
+      description: r.description || '',
+      updated_at:  r.updated_at,
+      html_url:    r.html_url,
+    }));
+
+    return { success: true, repos };
+  } catch (err) {
+    return { success: false, error: `Network error: ${err.message}`, repos: [] };
+  }
+}
+
+/**
  * Disconnect GitHub — clears the token, GitHub login, and repo from the user's settings.
  */
 export async function disconnectGithubAction() {
