@@ -21,7 +21,7 @@ export default function GitHubUploadToast({ status, url, error, onDismiss }) {
     <div
       className={`fixed bottom-6 right-4 z-[100] w-[320px] max-w-[calc(100vw-2rem)] shadow-2xl rounded-2xl border transition-all duration-300 ${
         isUploading ? 'bg-surface-container border-outline-variant'
-        : isSuccess  ? 'bg-tertiary-container border-tertiary/30'
+        : isSuccess  ? 'bg-white border-outline-variant/40'
         : 'bg-error-container border-error/30'
       }`}
     >
@@ -49,7 +49,7 @@ export default function GitHubUploadToast({ status, url, error, onDismiss }) {
         <div className="flex-1 min-w-0">
           <p className={`font-bold text-body-sm ${
             isUploading ? 'text-on-surface'
-            : isSuccess  ? 'text-on-tertiary-container'
+            : isSuccess  ? 'text-on-surface'
             : 'text-on-error-container'
           }`}>
             {isUploading && 'Uploading to GitHub…'}
@@ -62,7 +62,7 @@ export default function GitHubUploadToast({ status, url, error, onDismiss }) {
               href={url}
               target="_blank"
               rel="noopener noreferrer"
-              className="mt-2 inline-flex items-center gap-1.5 px-3 py-1.5 bg-white/90 hover:bg-white text-tertiary font-bold rounded-lg text-caption transition-colors"
+              className="mt-2 inline-flex items-center gap-1.5 px-3 py-1.5 bg-tertiary/10 hover:bg-tertiary/20 text-tertiary font-bold rounded-lg text-caption transition-colors border border-tertiary/20"
             >
               <span className="material-symbols-outlined text-[15px]">open_in_new</span>
               View on GitHub
