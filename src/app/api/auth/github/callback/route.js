@@ -2,7 +2,7 @@ import { cookies } from 'next/headers';
 import {
   dbGetUserByUsernameOrEmail,
   dbUpdateUserProgress,
-} from '../../../../lib/db';
+} from '../../../../../lib/db';
 
 /**
  * GET /api/auth/github/callback?code=…&state=…
