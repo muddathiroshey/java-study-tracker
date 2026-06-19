@@ -39,14 +39,10 @@ function buildExerciseFileName(taskTitle) {
 
 /**
  * (1, "Introduction to Computers, Programs, and Java")
- *  →  "Chapter_1_Introduction_to_Computers_Programs_and_Java"
+ *  →  "Chapter_1"
  */
-function buildChapterDirName(chapterNum, chapterTitle) {
-  const slug = (chapterTitle || 'Chapter')
-    .replace(/[^a-zA-Z0-9 ]/g, '')
-    .trim()
-    .replace(/\s+/g, '_');
-  return `Chapter_${chapterNum}_${slug}`;
+function buildChapterDirName(chapterNum) {
+  return `Chapter_${chapterNum}`;
 }
 
 /**
@@ -1192,7 +1188,7 @@ export default function LessonView({ user, day, onBack, onComplete, onUserUpdate
     setGhUploadError('');
 
     const fileName  = buildExerciseFileName(day.task.title);
-    const dirName   = buildChapterDirName(day.chapterNum, day.chapterTitle);
+    const dirName   = buildChapterDirName(day.chapterNum);
     const filePath  = `${dirName}/${fileName}`;
     const content   = buildFileContent(day.task.title, day.task.description, day.task.testCases, code);
     const commitMsg = `Add solution: ${day.task.title}`;

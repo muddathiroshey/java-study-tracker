@@ -19,7 +19,7 @@ export default function GitHubUploadToast({ status, url, error, onDismiss }) {
 
   return (
     <div
-      className={`fixed bottom-6 right-6 z-[100] max-w-sm w-full shadow-2xl rounded-2xl border transition-all duration-300 ${
+      className={`fixed bottom-6 right-4 z-[100] w-[320px] max-w-[calc(100vw-2rem)] shadow-2xl rounded-2xl border transition-all duration-300 ${
         isUploading ? 'bg-surface-container border-outline-variant'
         : isSuccess  ? 'bg-tertiary-container border-tertiary/30'
         : 'bg-error-container border-error/30'
