@@ -468,6 +468,8 @@ export default function LessonView({ user, day, onBack, onComplete, onUserUpdate
   }, []);
 
   const isAdmin = user?.username?.toLowerCase() === 'muddathiradmin' || user?.isAdmin === true;
+  // GitHub upload is available to admins and مدثر (testing group) — expand to all users later
+  const canUseGithub = isAdmin || user?.username === 'مدثر';
 
   // GitHub upload state (admin only)
   const [ghUploadStatus, setGhUploadStatus] = useState(null); // null | 'uploading' | 'success' | 'error'
@@ -1184,7 +1186,7 @@ export default function LessonView({ user, day, onBack, onComplete, onUserUpdate
   };
 
   const handleGithubUpload = async () => {
-    if (!day?.task || !isAdmin) return;
+    if (!day?.task || !canUseGithub) return;
     setGhUploadStatus('uploading');
     setGhUploadUrl('');
     setGhUploadError('');
@@ -1653,8 +1655,8 @@ export default function LessonView({ user, day, onBack, onComplete, onUserUpdate
                         {runningCode ? 'Compiling...' : 'Run Code'}
                       </button>
 
-                      {/* Admin-only: Upload to GitHub (shown after task passes and GitHub is configured) */}
-                      {isAdmin && taskCompleted && user?.settings?.githubRepo && (
+                      {/* Upload to GitHub (admins + مدثر testing group — expand to all users later) */}
+                      {canUseGithub && taskCompleted && user?.settings?.githubToken && user?.settings?.githubRepo && (
                         <button
                           onClick={handleGithubUpload}
                           disabled={ghUploadStatus === 'uploading'}

@@ -388,10 +388,10 @@ export async function runJavaCodeAction(code) {
 // ─── GitHub Integration Actions (Admin-Only) ───────────────────────────────
 
 /**
- * Save the admin's GitHub PAT and target repo to their user settings.
- * The token is stored server-side only and never returned to the client raw.
+ * Save the target GitHub repo (owner/repo-name) for the logged-in user.
+ * The OAuth token is already stored in DB by the callback route.
  */
-export async function saveGithubSettingsAction(githubToken, githubRepo) {
+export async function saveGithubRepoAction(githubRepo) {
   const cookieStore = await cookies();
   const session = cookieStore.get(SESSION_COOKIE_NAME);
   if (!session?.value) return { success: false, error: 'Not authenticated' };
@@ -401,7 +401,6 @@ export async function saveGithubSettingsAction(githubToken, githubRepo) {
 
   const updatedSettings = {
     ...user.settings,
-    githubToken: githubToken.trim(),
     githubRepo: githubRepo.trim(),
   };
 
@@ -415,9 +414,40 @@ export async function saveGithubSettingsAction(githubToken, githubRepo) {
     user.lastActiveDate
   );
 
-  if (!updated) return { success: false, error: 'Failed to save settings' };
+  if (!updated) return { success: false, error: 'Failed to save repo' };
   return { success: true, user: updated };
 }
+
+/**
+ * Disconnect GitHub — clears the token, GitHub login, and repo from the user's settings.
+ */
+export async function disconnectGithubAction() {
+  const cookieStore = await cookies();
+  const session = cookieStore.get(SESSION_COOKIE_NAME);
+  if (!session?.value) return { success: false, error: 'Not authenticated' };
+
+  const user = await dbGetUserByUsernameOrEmail(session.value);
+  if (!user) return { success: false, error: 'User not found' };
+
+  const updatedSettings = { ...user.settings };
+  delete updatedSettings.githubToken;
+  delete updatedSettings.githubLogin;
+  delete updatedSettings.githubRepo;
+
+  const updated = await dbUpdateUserProgress(
+    user.username,
+    user.lessonsProgress,
+    user.tasksProgress,
+    user.submissions,
+    updatedSettings,
+    user.streak,
+    user.lastActiveDate
+  );
+
+  if (!updated) return { success: false, error: 'Failed to disconnect' };
+  return { success: true, user: updated };
+}
+
 
 /**
  * Push a Java solution file to the admin's configured GitHub repo.

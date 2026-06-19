@@ -3,7 +3,8 @@
 import { useState, useEffect } from 'react';
 import { useApp } from '../context/AppContext';
 import { updateUserProgress, updateUserProfile, logoutUser, resetStoredSchedule, saveGlobalConfig, deleteUserAccount } from '../lib/storage';
-import { saveGithubSettingsAction } from '../app/actions';
+import { saveGithubRepoAction, disconnectGithubAction } from '../app/actions';
+
 import InstructionsModal from './InstructionsModal';
 export default function Settings({ user, onUserUpdate, onLogout }) {
   const { globalConfig, onGlobalConfigUpdate } = useApp();
@@ -21,13 +22,34 @@ export default function Settings({ user, onUserUpdate, onLogout }) {
   const [resetConfirm, setResetConfirm] = useState(false);
   const [deleteConfirm, setDeleteConfirm] = useState(false);
   
-  // GitHub integration states (admin only)
-  const [githubToken, setGithubToken] = useState(user?.settings?.githubToken ? '••••••••••••••••' : '');
-  const [githubRepo, setGithubRepo] = useState(user?.settings?.githubRepo || '');
-  const [githubSaved, setGithubSaved] = useState(false);
-  const [githubError, setGithubError] = useState('');
-  const [showGithubToken, setShowGithubToken] = useState(false);
-  const githubConfigured = !!(user?.settings?.githubToken && user?.settings?.githubRepo);
+  // GitHub OAuth states
+  const [githubRepo, setGithubRepo]         = useState(user?.settings?.githubRepo || '');
+  const [githubRepoSaved, setGithubRepoSaved] = useState(false);
+  const [githubRepoError, setGithubRepoError] = useState('');
+  const [githubToast, setGithubToast]         = useState(null); // 'connected' | 'error' | null
+  const [githubToastMsg, setGithubToastMsg]   = useState('');
+  const githubConnected = !!(user?.settings?.githubToken);
+  const githubLogin     = user?.settings?.githubLogin || null;
+
+  // Read ?github= param on mount and show toast
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    const params = new URLSearchParams(window.location.search);
+    const gh = params.get('github');
+    if (gh === 'connected') {
+      setGithubToast('connected');
+      // Clean the URL
+      window.history.replaceState({}, '', window.location.pathname);
+      setTimeout(() => setGithubToast(null), 5000);
+    } else if (gh === 'error') {
+      const reason = params.get('reason') || 'unknown';
+      setGithubToast('error');
+      setGithubToastMsg(reason.replace(/_/g, ' '));
+      window.history.replaceState({}, '', window.location.pathname);
+    }
+  }, []);
+
+  const canUseGithub = isAdmin || user?.username === 'مدثر';
 
   // Instructions modal state
   const [showInstructionsModal, setShowInstructionsModal] = useState(false);
@@ -79,26 +101,28 @@ export default function Settings({ user, onUserUpdate, onLogout }) {
     }
   };
 
-  const handleSaveGithub = async () => {
-    setGithubError('');
-    setGithubSaved(false);
-    const tokenToSave = githubToken.includes('•') ? user?.settings?.githubToken : githubToken;
-    if (!tokenToSave?.trim()) {
-      setGithubError('Please enter a GitHub Personal Access Token.');
-      return;
-    }
+  const handleSaveRepo = async () => {
+    setGithubRepoError('');
+    setGithubRepoSaved(false);
     if (!githubRepo.trim() || !githubRepo.includes('/')) {
-      setGithubError('Repo must be in owner/repo-name format.');
+      setGithubRepoError('Repo must be in owner/repo-name format (e.g. muddathiroshey/java-solutions).');
       return;
     }
-    const res = await saveGithubSettingsAction(tokenToSave, githubRepo.trim());
+    const res = await saveGithubRepoAction(githubRepo.trim());
     if (res?.success) {
       if (res.user) onUserUpdate(res.user);
-      setGithubSaved(true);
-      setGithubToken('••••••••••••••••');
-      setTimeout(() => setGithubSaved(false), 3000);
+      setGithubRepoSaved(true);
+      setTimeout(() => setGithubRepoSaved(false), 3000);
     } else {
-      setGithubError(res?.error || 'Failed to save GitHub settings.');
+      setGithubRepoError(res?.error || 'Failed to save repo.');
+    }
+  };
+
+  const handleDisconnect = async () => {
+    const res = await disconnectGithubAction();
+    if (res?.success) {
+      if (res.user) onUserUpdate(res.user);
+      setGithubRepo('');
     }
   };
 
@@ -298,98 +322,126 @@ export default function Settings({ user, onUserUpdate, onLogout }) {
           </div>
         )}
 
-        {/* GitHub Integration (Admin Only) */}
-        {isAdmin && (
+        {/* GitHub Integration (admin + مدثر only for now) */}
+        {canUseGithub && (
           <div className="bg-surface-container-lowest border border-outline-variant rounded-2xl p-6 mb-6">
+            {/* Card header */}
             <h2 className="font-bold text-on-background text-label-md mb-1 flex items-center gap-2 border-b border-outline-variant/30 pb-3">
               <span className="material-symbols-outlined text-primary">hub</span>
               GitHub Integration
               <span className={`ml-auto flex items-center gap-1 text-caption font-bold px-2 py-0.5 rounded-full ${
-                githubConfigured
+                githubConnected
                   ? 'bg-tertiary/10 text-tertiary'
                   : 'bg-surface-container-high text-on-surface-variant'
               }`}>
-                <span className="material-symbols-outlined text-[14px]" style={{ fontVariationSettings: githubConfigured ? "'FILL' 1" : "'FILL' 0" }}>
-                  {githubConfigured ? 'check_circle' : 'radio_button_unchecked'}
+                <span
+                  className="material-symbols-outlined text-[14px]"
+                  style={{ fontVariationSettings: githubConnected ? "'FILL' 1" : "'FILL' 0" }}
+                >
+                  {githubConnected ? 'check_circle' : 'radio_button_unchecked'}
                 </span>
-                {githubConfigured ? 'Connected' : 'Not configured'}
+                {githubConnected ? `Connected${githubLogin ? ` as @${githubLogin}` : ''}` : 'Not connected'}
               </span>
             </h2>
-            <p className="text-body-sm text-on-surface-variant mb-4">
-              Automatically push exercise solutions to a GitHub repository when you click the upload button after solving a task.
-              Requires a{' '}
-              <a
-                href="https://github.com/settings/tokens/new?scopes=repo&description=Java+Study+Tracker"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-primary underline hover:opacity-80"
-              >
-                Personal Access Token
-              </a>{' '}
-              with <code className="bg-surface-container-high px-1 rounded text-caption">repo</code> scope.
-            </p>
 
-            <div className="space-y-4">
-              {/* PAT input */}
-              <div>
-                <label className="block text-caption font-bold text-on-surface-variant mb-1.5">Personal Access Token</label>
-                <div className="relative">
-                  <span className="material-symbols-outlined absolute left-3.5 top-1/2 -translate-y-1/2 text-outline text-xl">key</span>
-                  <input
-                    type={showGithubToken ? 'text' : 'password'}
-                    value={githubToken}
-                    onChange={e => { setGithubToken(e.target.value); setGithubSaved(false); }}
-                    onFocus={() => { if (githubToken.includes('•')) setGithubToken(''); }}
-                    placeholder="ghp_xxxxxxxxxxxxxxxxxxxx"
-                    className="w-full pl-11 pr-11 py-2.5 bg-surface-container border border-outline-variant rounded-xl text-on-surface text-body-md focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all font-mono text-sm"
-                  />
+            {/* OAuth result toasts */}
+            {githubToast === 'connected' && (
+              <div className="flex items-center gap-2 p-3 mb-4 bg-tertiary-container text-on-tertiary-container rounded-xl text-body-sm font-bold">
+                <span className="material-symbols-outlined text-[18px]" style={{ fontVariationSettings: "'FILL' 1" }}>check_circle</span>
+                GitHub connected successfully!
+              </div>
+            )}
+            {githubToast === 'error' && (
+              <div className="flex items-center gap-2 p-3 mb-4 bg-error-container text-on-error-container rounded-xl text-body-sm">
+                <span className="material-symbols-outlined text-[18px]">error</span>
+                GitHub connection failed{githubToastMsg ? `: ${githubToastMsg}` : ''}. Please try again.
+              </div>
+            )}
+
+            {!githubConnected ? (
+              /* ── Not connected ── */
+              <div className="space-y-4">
+                <p className="text-body-sm text-on-surface-variant">
+                  Connect your GitHub account to push exercise solutions to a repository automatically after solving a task.
+                </p>
+                <a
+                  href="/api/auth/github/connect"
+                  className="inline-flex items-center gap-2.5 px-5 py-2.5 bg-[#24292f] hover:bg-[#30363d] text-white font-bold rounded-xl transition-colors shadow-sm cursor-pointer select-none"
+                >
+                  <svg viewBox="0 0 24 24" className="w-5 h-5 fill-white" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M12 0C5.37 0 0 5.37 0 12c0 5.3 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 21.795 24 17.295 24 12c0-6.63-5.37-12-12-12" />
+                  </svg>
+                  Connect with GitHub
+                </a>
+              </div>
+            ) : (
+              /* ── Connected ── */
+              <div className="space-y-5">
+                {/* GitHub user badge */}
+                {githubLogin && (
+                  <div className="flex items-center gap-3 p-3 bg-surface-container-low border border-outline-variant/60 rounded-xl">
+                    <img
+                      src={`https://github.com/${githubLogin}.png?size=40`}
+                      alt={githubLogin}
+                      className="w-9 h-9 rounded-full border border-outline-variant"
+                    />
+                    <div>
+                      <p className="font-bold text-body-sm text-on-surface">@{githubLogin}</p>
+                      <p className="text-caption text-on-surface-variant">GitHub account connected</p>
+                    </div>
+                  </div>
+                )}
+
+                {/* Repo picker */}
+                <div>
+                  <label className="block text-caption font-bold text-on-surface-variant mb-1.5">
+                    Target Repository <span className="font-normal opacity-70">(owner/repo-name)</span>
+                  </label>
+                  <div className="flex gap-2">
+                    <div className="relative flex-1">
+                      <span className="material-symbols-outlined absolute left-3.5 top-1/2 -translate-y-1/2 text-outline text-xl">folder_open</span>
+                      <input
+                        type="text"
+                        value={githubRepo}
+                        onChange={e => { setGithubRepo(e.target.value); setGithubRepoSaved(false); }}
+                        placeholder={`${githubLogin || 'owner'}/java-solutions`}
+                        className="w-full pl-11 pr-4 py-2.5 bg-surface-container border border-outline-variant rounded-xl text-on-surface text-body-md focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all font-semibold"
+                      />
+                    </div>
+                    <button
+                      onClick={handleSaveRepo}
+                      className="px-5 py-2.5 bg-primary text-on-primary font-bold rounded-xl hover:bg-primary/90 transition-all cursor-pointer shadow-sm shrink-0"
+                    >
+                      Save
+                    </button>
+                  </div>
+
+                  {githubRepoError && (
+                    <div className="flex items-center gap-2 mt-2 p-3 bg-error-container text-on-error-container rounded-xl text-body-sm">
+                      <span className="material-symbols-outlined text-[18px]">error</span>
+                      {githubRepoError}
+                    </div>
+                  )}
+                  {githubRepoSaved && (
+                    <div className="flex items-center gap-2 mt-2 p-3 bg-tertiary-container text-on-tertiary-container rounded-xl text-body-sm font-bold">
+                      <span className="material-symbols-outlined text-[18px]">check_circle</span>
+                      Repository saved!
+                    </div>
+                  )}
+                </div>
+
+                {/* Disconnect */}
+                <div className="border-t border-outline-variant/30 pt-4">
                   <button
-                    type="button"
-                    onClick={() => setShowGithubToken(!showGithubToken)}
-                    className="absolute right-3.5 top-1/2 -translate-y-1/2 text-outline hover:text-on-surface-variant transition-colors cursor-pointer bg-transparent border-0 p-0 flex items-center"
+                    onClick={handleDisconnect}
+                    className="flex items-center gap-2 px-4 py-2 bg-error/10 text-error hover:bg-error/20 border border-error/20 font-bold rounded-xl transition-all cursor-pointer text-caption"
                   >
-                    <span className="material-symbols-outlined text-xl">{showGithubToken ? 'visibility_off' : 'visibility'}</span>
+                    <span className="material-symbols-outlined text-[18px]">link_off</span>
+                    Disconnect GitHub
                   </button>
                 </div>
               </div>
-
-              {/* Repo input */}
-              <div>
-                <label className="block text-caption font-bold text-on-surface-variant mb-1.5">Repository (owner/repo-name)</label>
-                <div className="relative">
-                  <span className="material-symbols-outlined absolute left-3.5 top-1/2 -translate-y-1/2 text-outline text-xl">folder_open</span>
-                  <input
-                    type="text"
-                    value={githubRepo}
-                    onChange={e => { setGithubRepo(e.target.value); setGithubSaved(false); }}
-                    placeholder="muddathiroshey/java-solutions"
-                    className="w-full pl-11 pr-4 py-2.5 bg-surface-container border border-outline-variant rounded-xl text-on-surface text-body-md focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all font-semibold"
-                  />
-                </div>
-              </div>
-
-              {/* Error / Success */}
-              {githubError && (
-                <div className="flex items-center gap-2 p-3 bg-error-container text-on-error-container rounded-xl text-body-sm">
-                  <span className="material-symbols-outlined text-[18px]">error</span>
-                  {githubError}
-                </div>
-              )}
-              {githubSaved && (
-                <div className="flex items-center gap-2 p-3 bg-tertiary-container text-on-tertiary-container rounded-xl text-body-sm font-bold">
-                  <span className="material-symbols-outlined text-[18px]">check_circle</span>
-                  GitHub settings saved!
-                </div>
-              )}
-
-              <button
-                onClick={handleSaveGithub}
-                className="flex items-center gap-2 px-6 py-2.5 bg-primary text-on-primary font-bold rounded-xl hover:bg-primary/90 transition-all cursor-pointer shadow-sm"
-              >
-                <span className="material-symbols-outlined text-xl">save</span>
-                Save GitHub Settings
-              </button>
-            </div>
+            )}
           </div>
         )}
 
