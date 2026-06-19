@@ -1,6 +1,7 @@
 import fs from 'fs';
 import path from 'path';
 import { Pool } from 'pg';
+import { courseSchedule } from './courseData';
 
 const LOCAL_DB_PATH = path.join(process.cwd(), 'db.json');
 
@@ -192,8 +193,24 @@ export async function dbInit() {
             );
           `);
 
+          // Check if database schedule is outdated (e.g. Day 12 has duplicate full Chapter 4 video)
+          const schedRes = await client.query(`SELECT data FROM java_study_schedule WHERE key = 'course_schedule'`);
+          if (schedRes.rows[0]) {
+            const dbSched = schedRes.rows[0].data;
+            const day12 = dbSched.find(d => d.day === 12);
+            if (day12 && day12.videos && day12.videos.length > 0 && day12.videos[0].videoId === 'DeCBRPWCkoc' && day12.videos[0].assignedStart === '00:00:00' && day12.videos[0].assignedEnd === '01:19:42') {
+              console.log("Outdated schedule detected in PostgreSQL. Overwriting with new courseSchedule...");
+              await client.query(
+                `INSERT INTO java_study_schedule (key, data) VALUES ('course_schedule', $1)
+                 ON CONFLICT (key) DO UPDATE SET data = $1`,
+                [JSON.stringify(courseSchedule)]
+              );
+            }
+          }
+
           // Clean up old placeholder classmates if they exist in active DB
           await client.query("DELETE FROM java_study_users WHERE id LIKE 'classmate_%'");
+
 
           // Seed if empty
           const res = await client.query('SELECT COUNT(*) FROM java_study_users');
