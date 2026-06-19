@@ -423,7 +423,15 @@ export default function LessonView({ user, day, onBack, onComplete, onUserUpdate
   }, [activeTab]);
   const [projectRepo, setProjectRepo] = useState('');
   const [projectNotes, setProjectNotes] = useState('');
-  const [code, setCode] = useState(day?.task?.codeTemplate || '');
+  // ── Code persistence (localStorage per user+task) ──────────────────────────
+  const codeKey = user?.username && day?.task?.taskId
+    ? `editor_code_${user.username}_${day.task.taskId}`
+    : null;
+  const [code, setCode] = useState(() => {
+    if (typeof window === 'undefined') return day?.task?.codeTemplate || '';
+    const saved = codeKey ? localStorage.getItem(codeKey) : null;
+    return saved ?? (day?.task?.codeTemplate || '');
+  });
   const [testResults, setTestResults] = useState(null);
   const [runningCode, setRunningCode] = useState(false);
   const [playerReady, setPlayerReady] = useState(false);
@@ -563,7 +571,14 @@ export default function LessonView({ user, day, onBack, onComplete, onUserUpdate
     const videoKey = video?.videoId ? (video.videoId + "_day" + day?.day) : '';
     setVideoCompleted(!!user?.lessonsProgress?.[videoKey]?.completed);
     setTaskCompleted(!!user?.tasksProgress?.[day?.task?.taskId]?.completed);
-    setCode(day?.task?.codeTemplate || '');
+    // Load saved code for the new day, fall back to template
+    if (typeof window !== 'undefined' && day?.task?.taskId && user?.username) {
+      const key = `editor_code_${user.username}_${day.task.taskId}`;
+      const saved = localStorage.getItem(key);
+      setCode(saved ?? (day?.task?.codeTemplate || ''));
+    } else {
+      setCode(day?.task?.codeTemplate || '');
+    }
     setTestResults(null);
     setSegmentProgress(0);
     setWatchTime(0);
@@ -589,6 +604,12 @@ export default function LessonView({ user, day, onBack, onComplete, onUserUpdate
     }
     setActiveTab(targetTab);
   }, [day?.day, video?.videoId]);
+
+  // Save code to localStorage whenever it changes
+  useEffect(() => {
+    if (!codeKey || typeof window === 'undefined') return;
+    localStorage.setItem(codeKey, code);
+  }, [code, codeKey]);
 
   const handleTogglePlay = (e) => {
     if (e) e.stopPropagation();

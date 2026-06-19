@@ -62,9 +62,9 @@ export default function GitHubUploadToast({ status, url, error, onDismiss }) {
               href={url}
               target="_blank"
               rel="noopener noreferrer"
-              className="mt-1 inline-flex items-center gap-1 text-caption font-bold text-tertiary hover:underline"
+              className="mt-2 inline-flex items-center gap-1.5 px-3 py-1.5 bg-white/90 hover:bg-white text-tertiary font-bold rounded-lg text-caption transition-colors"
             >
-              <span className="material-symbols-outlined text-[14px]">open_in_new</span>
+              <span className="material-symbols-outlined text-[15px]">open_in_new</span>
               View on GitHub
             </a>
           )}
