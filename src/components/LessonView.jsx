@@ -472,8 +472,8 @@ export default function LessonView({ user, day, onBack, onComplete, onUserUpdate
   }, []);
 
   const isAdmin = user?.username?.toLowerCase() === 'muddathiradmin' || user?.isAdmin === true;
-  // GitHub upload is available to admins and مدثر (testing group) — expand to all users later
-  const canUseGithub = isAdmin || user?.username === 'مدثر';
+  // GitHub upload is available to all users
+  const canUseGithub = true;
 
   // GitHub upload state (admin only)
   const [ghUploadStatus, setGhUploadStatus] = useState(null); // null | 'uploading' | 'success' | 'error'
