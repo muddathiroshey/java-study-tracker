@@ -40,6 +40,8 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 
-# large local files
 /Introduction to Java Programming and Data Structures Textbook.pdf
-
+/public/textbook.pdf
+/public/instructions.mp4
+/instructions.mp4
+/textbook.zip

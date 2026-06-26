@@ -22,7 +22,7 @@ export default function InstructionsModal({ onClose }) {
           <div className="mb-6">
             <div className="relative w-full aspect-video bg-black rounded-xl overflow-hidden mb-4">
               <video
-                src="/instructions.mp4"
+                src="https://lfjljrzmcgdbcxqwwuec.supabase.co/storage/v1/object/public/assets/instructions.mp4"
                 controls
                 controlsList="nodownload"
                 className="w-full h-full"
