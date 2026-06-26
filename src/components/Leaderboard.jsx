@@ -2,7 +2,8 @@
 
 import { useState, useEffect } from 'react';
 import { getDB, calculateUserPoints } from '../lib/storage';
-import { getLocalDateString } from '../lib/dateUtils';
+import { getLocalDateString, getActiveStreak, allMissedDaysExcused } from '../lib/dateUtils';
+import { courseSchedule } from '../lib/courseData';
 
 const TIER_COLORS = {
   'Grandmaster': 'bg-purple-500 text-white',
@@ -52,12 +53,17 @@ export default function Leaderboard({ user }) {
     if (!db || !db.users) return;
     const scored = db.users
       .filter(u => !HIDDEN_USERNAMES.has(u.username))
-      .map(u => ({
-        ...u,
-        points: calculateUserPoints(u),
-        videoCount: Object.keys(u.lessonsProgress || {}).filter(k => !k.startsWith('review_') && u.lessonsProgress[k]?.completed).length,
-        taskCount: Object.keys(u.tasksProgress || {}).filter(k => u.tasksProgress[k]?.completed).length,
-      }))
+      .map(u => {
+        const uTodayStr = getLocalDateString(u);
+        const activeStreak = getActiveStreak(u, uTodayStr, courseSchedule);
+        return {
+          ...u,
+          streak: activeStreak,
+          points: calculateUserPoints(u),
+          videoCount: Object.keys(u.lessonsProgress || {}).filter(k => !k.startsWith('review_') && u.lessonsProgress[k]?.completed).length,
+          taskCount: Object.keys(u.tasksProgress || {}).filter(k => u.tasksProgress[k]?.completed).length,
+        };
+      })
       .sort((a, b) => b.points - a.points);
     setUsers(scored);
     setLoading(false);
@@ -71,7 +77,8 @@ export default function Leaderboard({ user }) {
 
   const currentUserIndex = users.findIndex(u => u.username.toLowerCase() === user?.username?.toLowerCase());
   const currentUserRank = currentUserIndex + 1;
-  const currentPoints = calculateUserPoints(user);
+  const currentUser = users[currentUserIndex];
+  const currentPoints = currentUser ? currentUser.points : calculateUserPoints(user);
 
   const filtered = filter === 'top5' ? users.slice(0, 5) : filter === 'active'
     ? users.filter(u => (u.streak || 0) > 0)
@@ -150,6 +157,10 @@ export default function Leaderboard({ user }) {
                   const rank = users.indexOf(u) + 1;
                   const isYou = u.username.toLowerCase() === user?.username?.toLowerCase();
                   const isStreakActive = u.lastActiveDate === todayStr;
+                  const isStreakProtected = !isStreakActive && u.lastActiveDate
+                    ? allMissedDaysExcused(u.lastActiveDate, todayStr, courseSchedule, u)
+                    : false;
+                  const showActiveFlame = isStreakActive || isStreakProtected;
                   const trend = getTrend(u);
                   return (
                     <tr 
@@ -187,15 +198,15 @@ export default function Leaderboard({ user }) {
                       </td>
                       <td className="py-md px-lg text-center">
                         <div className={`inline-flex items-center gap-0.5 text-caption font-bold transition-all duration-300 ${
-                          isStreakActive ? 'text-orange-color' : 'text-slate-400 dark:text-zinc-500'
+                          showActiveFlame ? 'text-orange-color' : 'text-slate-400 dark:text-zinc-500'
                         }`}>
                           <span 
                             className="material-symbols-outlined text-[16px] transition-all duration-300"
-                            style={{ fontVariationSettings: isStreakActive ? "'FILL' 1" : "'FILL' 0" }}
+                            style={{ fontVariationSettings: showActiveFlame ? "'FILL' 1" : "'FILL' 0" }}
                           >
                             local_fire_department
                           </span>
-                          <span>{u.streak || 0}d</span>
+                          <span>{u.streak || 0}d{isStreakProtected ? ' 🛡️' : ''}</span>
                         </div>
                       </td>
                       <td className={`py-md px-lg text-right font-bold text-title-md ${isYou ? 'text-primary' : 'text-on-surface'}`}>

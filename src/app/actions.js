@@ -1,7 +1,7 @@
 'use server';
 
 import { cookies } from 'next/headers';
-import { getLocalDateString, getLocalISOString, allMissedDaysExcused } from '../lib/dateUtils';
+import { getLocalDateString, getLocalISOString, allMissedDaysExcused, getActiveStreak } from '../lib/dateUtils';
 import {
   dbGetUserByUsernameOrEmail,
   dbCreateUser,
@@ -35,7 +35,9 @@ function calculateUserPoints(user) {
     id => id.startsWith('review_') && user.lessonsProgress[id]?.completed
   ).length;
 
-  const streakPoints = (user.streak || 0) * 5;
+  const todayStr = getLocalDateString(user);
+  const activeStreak = getActiveStreak(user, todayStr, courseSchedule);
+  const streakPoints = activeStreak * 5;
   const compProjects = Object.keys(user.submissions || {}).length;
 
   return (compVideos * 10) + (compTasks * 25) + (compReviews * 15) + (compProjects * 50) + streakPoints;

@@ -1,5 +1,5 @@
 // Database helper mapping client actions to server-side SQL/Actions
-import { getLocalDateString, allMissedDaysExcused } from './dateUtils';
+import { getLocalDateString, allMissedDaysExcused, getActiveStreak } from './dateUtils';
 import { courseSchedule } from './courseData';
 import {
   getCurrentUserSessionAction,
@@ -143,7 +143,9 @@ export function calculateUserPoints(user) {
   ).length;
 
   // 4. Streak points
-  const streakPoints = (user.streak || 0) * 5;
+  const todayStr = getLocalDateString(user);
+  const activeStreak = getActiveStreak(user, todayStr, courseSchedule);
+  const streakPoints = activeStreak * 5;
 
   // 5. Project submissions
   const compProjects = Object.keys(user.submissions || {}).length;

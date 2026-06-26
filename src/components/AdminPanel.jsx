@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import { getDB, saveDB, saveStoredSchedule, getStoredSchedule, calculateUserPoints, createAdminAccount } from '../lib/storage';
 import { courseSchedule } from '../lib/courseData';
+import { getLocalDateString, getActiveStreak } from '../lib/dateUtils';
 
 export default function AdminPanel({ user, schedule, onScheduleUpdate }) {
   const [tab, setTab] = useState('overview'); // 'overview' | 'users' | 'schedule' | 'editor'
@@ -62,12 +63,17 @@ export default function AdminPanel({ user, schedule, onScheduleUpdate }) {
 
   const loadUsers = async () => {
     const db = await getDB();
-    const scored = db.users.map(u => ({
-      ...u,
-      points: calculateUserPoints(u),
-      videoCount: Object.keys(u.lessonsProgress || {}).filter(k => !k.startsWith('review_') && u.lessonsProgress[k]?.completed).length,
-      taskCount: Object.keys(u.tasksProgress || {}).filter(k => u.tasksProgress[k]?.completed).length,
-    })).sort((a, b) => b.points - a.points);
+    const scored = db.users.map(u => {
+      const todayStr = getLocalDateString(u);
+      const activeStreak = getActiveStreak(u, todayStr, courseSchedule);
+      return {
+        ...u,
+        streak: activeStreak,
+        points: calculateUserPoints(u),
+        videoCount: Object.keys(u.lessonsProgress || {}).filter(k => !k.startsWith('review_') && u.lessonsProgress[k]?.completed).length,
+        taskCount: Object.keys(u.tasksProgress || {}).filter(k => u.tasksProgress[k]?.completed).length,
+      };
+    }).sort((a, b) => b.points - a.points);
     setUsers(scored);
     setDbLoaded(true);
   };

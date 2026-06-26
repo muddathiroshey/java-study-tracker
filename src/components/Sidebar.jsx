@@ -1,7 +1,7 @@
 'use client';
 
 import { useApp } from '../context/AppContext';
-import { getLocalDateString, allMissedDaysExcused } from '../lib/dateUtils';
+import { getLocalDateString, allMissedDaysExcused, getActiveStreak } from '../lib/dateUtils';
 import { courseSchedule } from '../lib/courseData';
 
 // Material Symbols used via className="material-symbols-outlined"
@@ -28,6 +28,7 @@ export default function Sidebar({
     ? allMissedDaysExcused(user.lastActiveDate, todayStr, courseSchedule, user)
     : false;
   const showActiveFlame = isStreakActive || isStreakProtected;
+  const activeStreak = getActiveStreak(user, todayStr, courseSchedule);
 
   const menuItems = [
     { id: 'dashboard', name: 'Daily Lessons', icon: 'calendar_today' },
@@ -104,7 +105,7 @@ export default function Sidebar({
           >
             local_fire_department
           </span>
-          <span>{user?.streak || 0} Day Streak{isStreakProtected ? ' 🛡️' : ''}</span>
+          <span>{activeStreak || 0} Day Streak{isStreakProtected ? ' 🛡️' : ''}</span>
         </div>
       </div>
 

@@ -4,7 +4,8 @@ import { useState, useEffect, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import { useApp } from '../context/AppContext';
 import { updateUserProgress, checkAndUpdateStreak, getCurrentUserSession, runJavaCode } from '../lib/storage';
-import { getLocalDateString, getLocalISOString } from '../lib/dateUtils';
+import { getLocalDateString, getLocalISOString, getActiveStreak } from '../lib/dateUtils';
+import { courseSchedule } from '../lib/courseData';
 import { githubPushSolutionAction } from '../app/actions';
 import GitHubUploadToast from './GitHubUploadToast';
 
@@ -458,6 +459,8 @@ export default function LessonView({ user, day, onBack, onComplete, onUserUpdate
   const qualityMenuRef = useRef(null);
 
   const { schedule, currentDate, globalConfig } = useApp();
+  const todayStr = getLocalDateString(user);
+  const activeStreak = getActiveStreak(user, todayStr, schedule || courseSchedule);
   const router = useRouter();
 
   // Close quality menu on click outside
@@ -2037,7 +2040,7 @@ export default function LessonView({ user, day, onBack, onComplete, onUserUpdate
                   <p className="font-caption text-caption opacity-90">Keep maintaining your focus streak!</p>
                 </div>
                 <div className="w-full bg-white/20 h-2 rounded-full overflow-hidden">
-                  <div className="bg-tertiary h-full transition-all" style={{ width: `${user?.streak > 0 ? Math.min(100, user.streak * 10) : 10}%` }}></div>
+                  <div className="bg-tertiary h-full transition-all" style={{ width: `${activeStreak > 0 ? Math.min(100, activeStreak * 10) : 10}%` }}></div>
                 </div>
               </div>
             </div>

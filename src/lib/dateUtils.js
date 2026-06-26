@@ -156,3 +156,25 @@ export function allMissedDaysExcused(lastActiveDate, todayStr, schedule, user) {
   // All missed days were excused
   return true;
 }
+
+export function getActiveStreak(user, todayStr, schedule) {
+  if (!user || !user.lastActiveDate || !user.streak) return 0;
+  
+  const lastActive = user.lastActiveDate;
+  if (lastActive === todayStr) return user.streak;
+  
+  const last = new Date(lastActive);
+  const today = new Date(todayStr);
+  const diffMs = today - last;
+  const diffDays = Math.round(diffMs / (1000 * 60 * 60 * 24));
+  
+  if (diffDays <= 1) {
+    return user.streak;
+  }
+  
+  if (allMissedDaysExcused(lastActive, todayStr, schedule, user)) {
+    return user.streak;
+  }
+  
+  return 0;
+}
