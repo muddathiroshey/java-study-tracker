@@ -35,8 +35,9 @@ export default function ResourcesView() {
             
             <div>
               <a
-                href="/textbook.pdf"
-                download="Introduction to Java Programming and Data Structures Textbook.pdf"
+                href="https://github.com/muddathiroshey/java-study-tracker/releases/download/assets/Introduction.to.Java.Programming.and.Data.Structures.Textbook.pdf"
+                target="_blank"
+                rel="noopener noreferrer"
                 className="w-full px-lg py-3.5 bg-primary text-on-primary hover:bg-primary-hover font-bold text-label-md rounded-xl transition-all shadow-sm hover:shadow flex items-center justify-center gap-2 cursor-pointer border border-primary-hover active:scale-[0.98]"
               >
                 <span className="material-symbols-outlined font-black">download</span>
