@@ -25,6 +25,32 @@ const weekTitles = {
   9: "Final Capstone Project & Graduation"
 };
 
+const getProjectBlockInfo = (day, weekDays) => {
+  const isMP1 = weekDays.some(d => d.day === 24) && [24, 25, 26, 27, 28].includes(day.day);
+  const isCapstone = weekDays.some(d => d.day === 60) && [60, 61, 62, 63].includes(day.day);
+  
+  if (isMP1) {
+    return {
+      inBlock: true,
+      projectTitle: "Mini-Project 1: Class Grade Toolkit",
+      firstDay: 24,
+      lastDay: 28,
+      isFirst: day.day === 24,
+      isLast: day.day === 28
+    };
+  }
+  if (isCapstone) {
+    return {
+      inBlock: true,
+      projectTitle: "Final Capstone Project",
+      firstDay: 60,
+      lastDay: 63,
+      isFirst: day.day === 60,
+      isLast: day.day === 63
+    };
+  }
+  return { inBlock: false };
+};
 
 export default function DailyLessons({ 
   user, 
@@ -469,8 +495,26 @@ export default function DailyLessons({
                       const isReview = day.type === 'review';
                       const isProject = day.type === 'project';
 
+                      const blockInfo = getProjectBlockInfo(day, filteredDays);
+                      const rowClassName = `relative flex gap-lg group ${
+                        blockInfo.inBlock && !blockInfo.isFirst ? '!mt-0' : ''
+                      }`;
+
+                      let cardStyle = "glass-card p-lg flex flex-col gap-sm transition-all duration-200 bg-surface-container-lowest ";
+                      if (blockInfo.inBlock) {
+                        if (blockInfo.isFirst) {
+                          cardStyle += "rounded-t-2xl rounded-b-none border-t border-x border-b-0 border-outline-variant/50 ";
+                        } else if (blockInfo.isLast) {
+                          cardStyle += "rounded-b-2xl rounded-t-none border-b border-x border-t border-outline-variant/50 border-t-outline-variant/20 ";
+                        } else {
+                          cardStyle += "rounded-none border-x border-t border-b-0 border-outline-variant/50 border-t-outline-variant/20 ";
+                        }
+                      } else {
+                        cardStyle += "rounded-xl border border-outline-variant/50 ";
+                      }
+
                       return (
-                        <div key={day.day} id={`day-${day.day}`} className="relative flex gap-lg group">
+                        <div key={day.day} id={`day-${day.day}`} className={rowClassName}>
                           {/* Timeline connector line (Ends at the last element of this week) */}
                           {idx < filteredDays.length - 1 && (
                             <div className={`timeline-connector ${
@@ -496,36 +540,49 @@ export default function DailyLessons({
                           </div>
 
                           {/* Right side content */}
-                          <div className="flex-grow pb-4 min-w-0">
+                          <div className={`flex-grow min-w-0 ${blockInfo.inBlock ? 'pb-0' : 'pb-4'}`}>
                             {/* Row Header */}
-                            <div className="flex flex-wrap items-center gap-sm mb-md">
-                              <span className="text-caption font-mono font-bold text-muted-text uppercase tracking-wider bg-surface-container-low px-2 py-0.5 rounded border border-outline-variant/50">
-                                {day.dayOfWeek.slice(0, 3)}
-                              </span>
-                              <h3 className="text-title-md font-title-md font-bold truncate text-on-background">
-                                Day {day.day}: {day.title}
-                              </h3>
-                              
-                              {/* Status badges */}
-                              {isOff ? (
-                                <span className="px-sm py-xs bg-amber-color/10 text-amber-color border border-amber-color/20 text-caption rounded-lg font-bold">Rest Day</span>
-                              ) : dayCompleted ? (
-                                <span className="px-sm py-xs bg-tertiary-container text-on-tertiary-container text-caption rounded-lg font-bold">Completed</span>
-                              ) : (
-                                <span className="px-sm py-xs bg-secondary-container text-on-secondary-container text-caption rounded-lg font-bold">Ready to Study</span>
-                              )}
-
-                              {/* Chapter Title */}
-                              {day.chapterTitle && !isOff && (
-                                <span className="text-caption text-on-surface-variant/80 ml-auto hidden sm:inline truncate max-w-[200px]">
-                                  {day.chapterTitle}
+                            {!blockInfo.inBlock && (
+                              <div className="flex flex-wrap items-center gap-sm mb-md">
+                                <span className="text-caption font-mono font-bold text-muted-text uppercase tracking-wider bg-surface-container-low px-2 py-0.5 rounded border border-outline-variant/50">
+                                  {day.dayOfWeek.slice(0, 3)}
                                 </span>
-                              )}
-                            </div>
+                                <h3 className="text-title-md font-title-md font-bold truncate text-on-background">
+                                  Day {day.day}: {day.title}
+                                </h3>
+                                
+                                {/* Status badges */}
+                                {isOff ? (
+                                  <span className="px-sm py-xs bg-amber-color/10 text-amber-color border border-amber-color/20 text-caption rounded-lg font-bold">Rest Day</span>
+                                ) : dayCompleted ? (
+                                  <span className="px-sm py-xs bg-tertiary-container text-on-tertiary-container text-caption rounded-lg font-bold">Completed</span>
+                                ) : (
+                                  <span className="px-sm py-xs bg-secondary-container text-on-secondary-container text-caption rounded-lg font-bold">Ready to Study</span>
+                                )}
+
+                                {/* Chapter Title */}
+                                {day.chapterTitle && !isOff && (
+                                  <span className="text-caption text-on-surface-variant/80 ml-auto hidden sm:inline truncate max-w-[200px]">
+                                    {day.chapterTitle}
+                                  </span>
+                                )}
+                              </div>
+                            )}
 
                             {/* Day Content Area */}
                             {isOff ? (
-                              <div className="glass-card p-lg rounded-xl border border-outline-variant/50 flex flex-col gap-sm bg-amber-color/[0.01]">
+                              <div className={blockInfo.inBlock ? cardStyle + "bg-amber-color/[0.005]" : "glass-card p-lg rounded-xl border border-outline-variant/50 flex flex-col gap-sm bg-amber-color/[0.01]"}>
+                                {blockInfo.inBlock && (
+                                  <div className="flex flex-wrap items-center gap-sm mb-sm">
+                                    <span className="text-caption font-mono font-bold text-muted-text uppercase tracking-wider bg-surface-container-low px-2 py-0.5 rounded border border-outline-variant/50">
+                                      {day.dayOfWeek.slice(0, 3)}
+                                    </span>
+                                    <h4 className="text-body-md font-bold text-on-surface">
+                                      Day {day.day}: Rest Day
+                                    </h4>
+                                    <span className="px-sm py-xs bg-amber-color/10 text-amber-color border border-amber-color/20 text-caption rounded-lg font-bold">Rest Day</span>
+                                  </div>
+                                )}
                                 <div className="flex justify-between items-start gap-4">
                                   <div>
                                     <h4 className="text-body-md font-bold text-on-surface">Weekly Rest & Recharge</h4>
@@ -556,11 +613,42 @@ export default function DailyLessons({
                             ) : isProject ? (
                               <div 
                                 onClick={() => onSelectDay(day.day)}
-                                className="glass-card p-lg rounded-xl border border-outline-variant/50 flex flex-col gap-sm bg-primary/[0.01] cursor-pointer hover:bg-surface-container-low hover:-translate-y-0.5 transition-all duration-200"
+                                className={blockInfo.inBlock 
+                                  ? cardStyle + "bg-primary/[0.005] cursor-pointer hover:bg-surface-container-low/60" 
+                                  : "glass-card p-lg rounded-xl border border-outline-variant/50 flex flex-col gap-sm bg-primary/[0.01] cursor-pointer hover:bg-surface-container-low hover:-translate-y-0.5 transition-all duration-200"
+                                }
                               >
+                                {blockInfo.inBlock && blockInfo.isFirst && (
+                                  <div className="pb-4 mb-3 border-b border-outline-variant/30 flex items-center justify-between">
+                                    <div>
+                                      <span className="text-[10px] font-bold uppercase tracking-wider text-primary bg-primary/10 px-2.5 py-1 rounded-full">
+                                        Multi-Day Project
+                                      </span>
+                                      <h3 className="text-lg font-bold text-on-surface mt-2">{blockInfo.projectTitle}</h3>
+                                    </div>
+                                    <span className="material-symbols-outlined text-primary text-display-sm opacity-40">assignment</span>
+                                  </div>
+                                )}
+                                
+                                {blockInfo.inBlock && (
+                                  <div className="flex flex-wrap items-center gap-sm mb-sm">
+                                    <span className="text-caption font-mono font-bold text-muted-text uppercase tracking-wider bg-surface-container-low px-2 py-0.5 rounded border border-outline-variant/50">
+                                      {day.dayOfWeek.slice(0, 3)}
+                                    </span>
+                                    <h4 className="text-body-md font-bold text-on-surface">
+                                      Day {day.day}: {day.task?.title || day.title}
+                                    </h4>
+                                    {dayCompleted ? (
+                                      <span className="px-sm py-xs bg-tertiary-container text-on-tertiary-container text-caption rounded-lg font-bold">Completed</span>
+                                    ) : (
+                                      <span className="px-sm py-xs bg-secondary-container text-on-secondary-container text-caption rounded-lg font-bold">Ready to Study</span>
+                                    )}
+                                  </div>
+                                )}
+                                
                                 <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-md">
                                   <div className="flex-grow min-w-0 pr-4">
-                                    <h4 className="text-body-md font-bold text-on-surface">{day.title}</h4>
+                                    {!blockInfo.inBlock && <h4 className="text-body-md font-bold text-on-surface">{day.title}</h4>}
                                     <p className="text-caption text-on-surface-variant mt-1 leading-relaxed">
                                       {day.task?.description || 'Build and submit your OOP mini-project.'}
                                     </p>
