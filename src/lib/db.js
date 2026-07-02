@@ -193,12 +193,18 @@ export async function dbInit() {
             );
           `);
 
-          // Check if database schedule is outdated (e.g. Day 12 has duplicate full Chapter 4 video)
+          // Check if database schedule is outdated
           const schedRes = await client.query(`SELECT data FROM java_study_schedule WHERE key = 'course_schedule'`);
           if (schedRes.rows[0]) {
             const dbSched = schedRes.rows[0].data;
             const day12 = dbSched.find(d => d.day === 12);
-            if (day12 && day12.videos && day12.videos.length > 0 && day12.videos[0].videoId === 'DeCBRPWCkoc' && day12.videos[0].assignedStart === '00:00:00' && day12.videos[0].assignedEnd === '01:19:42') {
+            const day24Obj = dbSched.find(d => d.day === 24);
+            const needsUpdate = (
+              dbSched.length < 64 ||
+              (day24Obj && day24Obj.type === 'video') ||
+              (day12 && day12.videos && day12.videos.length > 0 && day12.videos[0].videoId === 'DeCBRPWCkoc' && day12.videos[0].assignedStart === '00:00:00' && day12.videos[0].assignedEnd === '01:19:42')
+            );
+            if (needsUpdate) {
               console.log("Outdated schedule detected in PostgreSQL. Overwriting with new courseSchedule...");
               await client.query(
                 `INSERT INTO java_study_schedule (key, data) VALUES ('course_schedule', $1)
