@@ -857,41 +857,6 @@
       "day": 24,
       "date": "2026-07-07",
       "dayOfWeek": "Tuesday",
-      "type": "video",
-      "chapterNum": 9,
-      "chapterTitle": "Objects and Classes",
-      "title": "Ch 9: Objects and Classes (Part 1)",
-      "slides": "https://fcai.smartpharaohs.com/pl2/2025/Slides/09slide.ppt",
-      "videos": [
-        {
-          "videoId": "RK2ABib7pmI",
-          "title": "Java | Chapter 9 | Objects and Classes",
-          "duration": "00:35:04",
-          "assignedStart": "00:00:00",
-          "assignedEnd": "00:35:04",
-          "thumbnail": "https://i.ytimg.com/vi/RK2ABib7pmI/hqdefault.jpg",
-          "url": "https://www.youtube.com/watch?v=RK2ABib7pmI"
-        }
-      ],
-      "task": {
-        "taskId": "task_9_1",
-        "title": "Exercise 9.1: Rectangle Class",
-        "description": "Define a Rectangle class with width and height (default 1.0), a no-arg constructor, a constructor with width and height, getArea(), and getPerimeter(). Instantiate two rectangles (4.0x40.0 and 3.5x35.9). The class name must be Exercise09_01.",
-        "codeTemplate": "public class Exercise09_01 {\n    public static void main(String[] args) {\n        // Instantiate both Rectangles, print width, height, area, perimeter\n        \n    }\n}\n\nclass Rectangle {\n    // Write fields, constructors and helper methods here\n    \n}",
-        "testCases": [
-          {
-            "id": 1,
-            "input": "",
-            "expected": "Area: 160.0",
-            "description": "Checks first Rectangle area calculation (160.0)"
-          }
-        ]
-      }
-    },
-    {
-      "day": 25,
-      "date": "2026-07-08",
-      "dayOfWeek": "Wednesday",
       "type": "project",
       "chapterNum": null,
       "chapterTitle": "Mini Project 1",
@@ -899,9 +864,9 @@
       "slides": null,
       "videos": [],
       "task": {
-        "taskId": "proj_grade_start",
-        "title": "Class Grade Toolkit (Setup & Statistics)",
-        "description": "Build a command-line program that helps a student analyze a set of exam scores and course credit hours, and produces a GPA report. Initiate your setup: read valid positive course counts, implement validation rules to reject any scores outside 0-100 and non-positive credit hours, and calculate basic statistics (weighted average, highest, lowest, and count above 80).",
+        "taskId": "proj_grade_setup",
+        "title": "Class Grade Toolkit (Setup & Input Collection)",
+        "description": "Build a command-line program that helps a student analyze exam scores and credit hours. Setup: prompt user for positive course count, read scores (0-100) and credit hours (>0) sequentially, rejecting invalid values with an error message and re-prompting until valid.",
         "projectInfo": {
           "covers": "Ch 1–8 (Java basics, variables, I/O, expressions, conditionals, math/strings, loops, methods, arrays, matrices)",
           "goal": "Build a command-line program that helps a student analyze a set of exam scores and course credit hours, and produces a GPA report based on university grading regulations.",
@@ -940,11 +905,65 @@
         "checklist": [
           "App asks how many courses, and rejects 0 or negative values",
           "App reads that many scores and credit hours from the user sequentially",
-          "Any score outside 0–100 or credit hours <= 0 is rejected with a message, and the app re-asks for that value until valid",
+          "Any score outside 0–100 or credit hours <= 0 is rejected with a message, and the app re-asks for that value until valid"
+        ]
+      }
+    },
+    {
+      "day": 25,
+      "date": "2026-07-08",
+      "dayOfWeek": "Wednesday",
+      "type": "project",
+      "chapterNum": null,
+      "chapterTitle": "Mini Project 1",
+      "title": "Mini-Project 1: Class Grade Toolkit",
+      "slides": null,
+      "videos": [],
+      "task": {
+        "taskId": "proj_grade_stats",
+        "title": "Class Grade Toolkit (Basic Statistics & Palindrome Check)",
+        "description": "Flesh out student details: calculate basic statistics (weighted average score, highest, lowest, and count above 80). Also, ask for the user's name and check if it is a case-insensitive palindrome.",
+        "projectInfo": {
+          "covers": "Ch 1–8 (Java basics, variables, I/O, expressions, conditionals, math/strings, loops, methods, arrays, matrices)",
+          "goal": "Build a command-line program that helps a student analyze a set of exam scores and course credit hours, and produces a GPA report based on university grading regulations.",
+          "requirements": [
+            {
+              "title": "1. Collecting scores & credit hours",
+              "description": "Ask the user how many courses they want to enter. If the number entered is 0 or negative, keep asking until a valid positive number is given. Then ask the user to enter each course's score (percentage) and credit hours. For each course, first ask for the score (percentage), and immediately after, ask for the credit hours of that course. Scores must be between 0 and 100, and credit hours must be greater than 0. Reject invalid values and ask again until valid."
+            },
+            {
+              "title": "2. Basic statistics",
+              "description": "After all course data is collected, the app should report: the weighted average score of all the courses (weighted by credit hours: sum(score * credit hours) / sum(credit hours)), the highest score, the lowest score, and the number of courses with a score higher than 80 (this threshold of 80 is fixed — the app doesn't need to ask the user for it)."
+            },
+            {
+              "title": "3. Letter grades per course",
+              "description": "For each individual score entered, the app assigns a letter grade using the university scale:\n- 90% and above → A+\n- 85% to < 90% → A\n- 80% to < 85% → B+\n- 75% to < 80% → B\n- 70% to < 75% → C+\n- 65% to < 70% → C\n- 60% to < 65% → D+\n- 50% to < 60% → D\n- Below 50% → F\nThe app should display the full list of letter grades, one per course, in the same order the scores were entered (e.g., [B+, A, C+, D+, A+])."
+            },
+            {
+              "title": "4. A 'bonus number'",
+              "description": "The app should take the highest score and produce a 'bonus number' by adding together its individual digits (e.g., a score of 92 produces a bonus number of 11, since 9 + 2 = 11)."
+            },
+            {
+              "title": "5. Name check",
+              "description": "Ask the user for their name. The app should check whether the name reads the same forwards and backwards (ignoring case), and tell the user whether their name is a 'palindrome' or not."
+            },
+            {
+              "title": "6. GPA calculator",
+              "description": "For each course, determine its grade points using this scale:\n- 90% and above → 4.0\n- 85% to < 90% → 3.75\n- 80% to < 85% → 3.4\n- 75% to < 80% → 3.1\n- 70% to < 75% → 2.8\n- 65% to < 70% → 2.5\n- 60% to < 65% → 2.25\n- 50% to < 60% → 2.0\n- Below 50% → 1.0\nCalculate the Cumulative GPA using the formula: GPA = sum(Grade Points * Credit Hours) / sum(Credit Hours). Determine the Overall General Estimate (التقدير العام): GPA >= 3.4 is Excellent (ممتاز), 2.8 to < 3.4 is Very Good (جيد جداً), 2.4 to < 2.8 is Good (جيد), 2.0 to < 2.4 is Pass (مقبول), 1.4 to < 2.0 is Weak (ضعيف), and GPA < 1.4 is Very Weak (ضعيف جداً)."
+            },
+            {
+              "title": "7. Final report",
+              "description": "At the end, the app prints a single clean summary that includes all of the above: the list of courses with scores and credit hours, the weighted average score, highest score, lowest score, count of courses above 80, the list of letter grades (one per course), the bonus number, the palindrome result, the weighted GPA, and the Overall General Estimate."
+            }
+          ],
+          "sampleRun": "How many courses? 5\nEnter score for course 1: 83\nEnter credit hours for course 1: 3\nEnter score for course 2: 150\nInvalid score, please enter a value between 0 and 100:\nEnter score for course 2: 86\nEnter credit hours for course 2: 4\nEnter score for course 3: 72\nEnter credit hours for course 3: 2\nEnter score for course 4: 60\nEnter credit hours for course 4: 3\nEnter score for course 5: 92\nEnter credit hours for course 5: 3\n\nWhat's your name? Ahmed\n\n===== GRADE REPORT =====\nStudent: Ahmed\nIs your name a palindrome? false\nScores & Credits: [83% (3 hrs), 86% (4 hrs), 72% (2 hrs), 60% (3 hrs), 92% (3 hrs)]\nAverage Score (Weighted): 79.53\nHighest Score: 92   Lowest Score: 60\nCourses with score above 80: 3\nLetter Grades: [B+, A, C+, D+, A+]\nBonus number (digit sum of highest score): 11\nWeighted GPA: 3.30\nOverall Grade: Very Good (جيد جداً)\n========================="
+        },
+        "checklist": [
           "App correctly reports the weighted average score of the courses entered",
           "App correctly reports the highest score",
           "App correctly reports the lowest score",
-          "App correctly reports the number of courses with a score higher than 80 (fixed threshold of 80)"
+          "App correctly reports the number of courses with a score higher than 80 (fixed threshold of 80)",
+          "App asks for the user's name and correctly identifies whether it's a palindrome (case-insensitive)"
         ]
       }
     },
@@ -959,9 +978,9 @@
       "slides": null,
       "videos": [],
       "task": {
-        "taskId": "proj_grade_dev",
+        "taskId": "proj_grade_gpa",
         "title": "Class Grade Toolkit (Grades & GPA)",
-        "description": "Flesh out student details: calculate standard letter grades (A+/A/B+/B/C+/C/D+/D/F) for each course, calculate a 'bonus number' by summing the digits of the highest score (e.g. 92 -> 11), perform a case-insensitive palindrome check on the student's name, and compute GPA as the credit-weighted average of course grade points.",
+        "description": "For each course, assign a letter grade based on the university scale. Calculate cumulative GPA as the credit-weighted average of course grade points, and determine the Overall General Estimate (Excellent, Very Good, Good, Pass, Weak, Very Weak).",
         "projectInfo": {
           "covers": "Ch 1–8 (Java basics, variables, I/O, expressions, conditionals, math/strings, loops, methods, arrays, matrices)",
           "goal": "Build a command-line program that helps a student analyze a set of exam scores and course credit hours, and produces a GPA report based on university grading regulations.",
@@ -999,9 +1018,8 @@
         },
         "checklist": [
           "App correctly assigns a letter grade (A+/A/B+/B/C+/C/D+/D/F) to each individual score and displays the list in entry order",
-          "App displays a correct 'bonus number' (digit sum of the highest score)",
-          "App asks for the user's name and correctly identifies whether it's a palindrome (case-insensitive)",
-          "App correctly converts each score to grade points (4.0/3.75/3.4/3.1/2.8/2.5/2.25/2.0/1.0) and calculates GPA as the credit-weighted average"
+          "App correctly converts each score to grade points (4.0/3.75/3.4/3.1/2.8/2.5/2.25/2.0/1.0) and calculates GPA as the credit-weighted average",
+          "App determines and displays the correct Overall General Estimate based on the GPA"
         ]
       }
     },
@@ -1012,7 +1030,10 @@
       "type": "off",
       "chapterNum": null,
       "chapterTitle": "Rest",
-      "title": "🏖️ Rest Day"
+      "title": "🏖️ Rest Day",
+      "slides": null,
+      "videos": [],
+      "task": null
     },
     {
       "day": 28,
@@ -1027,7 +1048,7 @@
       "task": {
         "taskId": "proj_grade_submit",
         "title": "Class Grade Toolkit Submission",
-        "description": "Complete and publish your Grade Toolkit command-line Java program to GitHub. Write a clear README.md with run instructions and a sample screenshot or execution log. Submit your repository link and development summary below to complete Mini-Project 1.",
+        "description": "Complete your Class Grade Toolkit: calculate a 'bonus number' (digit sum of the highest score), print a single clean summary report, verify all inputs, and publish your project to GitHub with a solid README.md.",
         "projectInfo": {
           "covers": "Ch 1–8 (Java basics, variables, I/O, expressions, conditionals, math/strings, loops, methods, arrays, matrices)",
           "goal": "Build a command-line program that helps a student analyze a set of exam scores and course credit hours, and produces a GPA report based on university grading regulations.",
@@ -1064,7 +1085,7 @@
           "sampleRun": "How many courses? 5\nEnter score for course 1: 83\nEnter credit hours for course 1: 3\nEnter score for course 2: 150\nInvalid score, please enter a value between 0 and 100:\nEnter score for course 2: 86\nEnter credit hours for course 2: 4\nEnter score for course 3: 72\nEnter credit hours for course 3: 2\nEnter score for course 4: 60\nEnter credit hours for course 4: 3\nEnter score for course 5: 92\nEnter credit hours for course 5: 3\n\nWhat's your name? Ahmed\n\n===== GRADE REPORT =====\nStudent: Ahmed\nIs your name a palindrome? false\nScores & Credits: [83% (3 hrs), 86% (4 hrs), 72% (2 hrs), 60% (3 hrs), 92% (3 hrs)]\nAverage Score (Weighted): 79.53\nHighest Score: 92   Lowest Score: 60\nCourses with score above 80: 3\nLetter Grades: [B+, A, C+, D+, A+]\nBonus number (digit sum of highest score): 11\nWeighted GPA: 3.30\nOverall Grade: Very Good (جيد جداً)\n========================="
         },
         "checklist": [
-          "App determines and displays the correct Overall General Estimate based on the GPA",
+          "App displays a correct 'bonus number' (digit sum of the highest score)",
           "App prints one final report containing all results together, in a readable format",
           "Running the program multiple times with different inputs gives correct, consistent results",
           "Git repository initialized and pushed to GitHub with a solid README.md"
@@ -1075,6 +1096,41 @@
       "day": 29,
       "date": "2026-07-12",
       "dayOfWeek": "Sunday",
+      "type": "video",
+      "chapterNum": 9,
+      "chapterTitle": "Objects and Classes",
+      "title": "Ch 9: Objects and Classes (Part 1)",
+      "slides": "https://fcai.smartpharaohs.com/pl2/2025/Slides/09slide.ppt",
+      "videos": [
+        {
+          "videoId": "RK2ABib7pmI",
+          "title": "Java | Chapter 9 | Objects and Classes",
+          "duration": "00:35:04",
+          "assignedStart": "00:00:00",
+          "assignedEnd": "00:35:04",
+          "thumbnail": "https://i.ytimg.com/vi/RK2ABib7pmI/hqdefault.jpg",
+          "url": "https://www.youtube.com/watch?v=RK2ABib7pmI"
+        }
+      ],
+      "task": {
+        "taskId": "task_9_1",
+        "title": "Exercise 9.1: Rectangle Class",
+        "description": "Define a Rectangle class with width and height (default 1.0), a no-arg constructor, a constructor with width and height, getArea(), and getPerimeter(). Instantiate two rectangles (4.0x40.0 and 3.5x35.9). The class name must be Exercise09_01.",
+        "codeTemplate": "public class Exercise09_01 {\n    public static void main(String[] args) {\n        // Instantiate both Rectangles, print width, height, area, perimeter\n        \n    }\n}\n\nclass Rectangle {\n    // Write fields, constructors and helper methods here\n    \n}",
+        "testCases": [
+          {
+            "id": 1,
+            "input": "",
+            "expected": "Area: 160.0",
+            "description": "Checks first Rectangle area calculation (160.0)"
+          }
+        ]
+      }
+    },
+    {
+      "day": 30,
+      "date": "2026-07-13",
+      "dayOfWeek": "Monday",
       "type": "video",
       "chapterNum": 9,
       "chapterTitle": "Objects and Classes",
@@ -1107,9 +1163,9 @@
       }
     },
     {
-      "day": 30,
-      "date": "2026-07-13",
-      "dayOfWeek": "Monday",
+      "day": 31,
+      "date": "2026-07-14",
+      "dayOfWeek": "Tuesday",
       "type": "video",
       "chapterNum": 9,
       "chapterTitle": "Objects and Classes",
@@ -1142,9 +1198,9 @@
       }
     },
     {
-      "day": 31,
-      "date": "2026-07-14",
-      "dayOfWeek": "Tuesday",
+      "day": 32,
+      "date": "2026-07-15",
+      "dayOfWeek": "Wednesday",
       "type": "video",
       "chapterNum": 9,
       "chapterTitle": "Objects and Classes",
@@ -1177,9 +1233,9 @@
       }
     },
     {
-      "day": 32,
-      "date": "2026-07-15",
-      "dayOfWeek": "Wednesday",
+      "day": 33,
+      "date": "2026-07-16",
+      "dayOfWeek": "Thursday",
       "type": "video",
       "chapterNum": 9,
       "chapterTitle": "Objects and Classes",
@@ -1212,48 +1268,16 @@
       }
     },
     {
-      "day": 33,
-      "date": "2026-07-16",
-      "dayOfWeek": "Thursday",
-      "type": "video",
-      "chapterNum": 10,
-      "chapterTitle": "Thinking in Objects",
-      "title": "Ch 10: Thinking in Objects (Part 1)",
-      "slides": "https://fcai.smartpharaohs.com/pl2/2025/Slides/10slide.ppt",
-      "videos": [
-        {
-          "videoId": "6hQ2pw4LqYk",
-          "title": "Java | Chapter 10 | Thinking in Objects",
-          "duration": "00:38:18",
-          "assignedStart": "00:00:00",
-          "assignedEnd": "00:38:18",
-          "thumbnail": "https://i.ytimg.com/vi/6hQ2pw4LqYk/hqdefault.jpg",
-          "url": "https://www.youtube.com/watch?v=6hQ2pw4LqYk"
-        }
-      ],
-      "task": {
-        "taskId": "task_10_2",
-        "title": "Exercise 10.2: BMI Class Encapsulation",
-        "description": "Define a BMI class with properties name, age, weight (pounds), height (inches), constructors, getBMI(), and getStatus(). The class name must be Exercise10_02.",
-        "codeTemplate": "public class Exercise10_02 {\n    public static void main(String[] args) {\n        BMI bmi = new BMI(\"Alan\", 25, 150, 70);\n        System.out.println(\"BMI: \" + bmi.getBMI() + \" Status: \" + bmi.getStatus());\n    }\n}\n\nclass BMI {\n    // Write encapsulated BMI fields and methods here\n    \n}",
-        "testCases": [
-          {
-            "id": 1,
-            "input": "",
-            "expected": "Normal",
-            "description": "BMI category status verification"
-          }
-        ]
-      }
-    },
-    {
       "day": 34,
       "date": "2026-07-17",
       "dayOfWeek": "Friday",
       "type": "off",
       "chapterNum": null,
       "chapterTitle": "Rest",
-      "title": "🏖️ Rest Day"
+      "title": "🏖️ Rest Day",
+      "slides": null,
+      "videos": [],
+      "task": null
     },
     {
       "day": 35,
@@ -1299,6 +1323,41 @@
       "type": "video",
       "chapterNum": 10,
       "chapterTitle": "Thinking in Objects",
+      "title": "Ch 10: Thinking in Objects (Part 1)",
+      "slides": "https://fcai.smartpharaohs.com/pl2/2025/Slides/10slide.ppt",
+      "videos": [
+        {
+          "videoId": "6hQ2pw4LqYk",
+          "title": "Java | Chapter 10 | Thinking in Objects",
+          "duration": "00:38:18",
+          "assignedStart": "00:00:00",
+          "assignedEnd": "00:38:18",
+          "thumbnail": "https://i.ytimg.com/vi/6hQ2pw4LqYk/hqdefault.jpg",
+          "url": "https://www.youtube.com/watch?v=6hQ2pw4LqYk"
+        }
+      ],
+      "task": {
+        "taskId": "task_10_2",
+        "title": "Exercise 10.2: BMI Class Encapsulation",
+        "description": "Define a BMI class with properties name, age, weight (pounds), height (inches), constructors, getBMI(), and getStatus(). The class name must be Exercise10_02.",
+        "codeTemplate": "public class Exercise10_02 {\n    public static void main(String[] args) {\n        BMI bmi = new BMI(\"Alan\", 25, 150, 70);\n        System.out.println(\"BMI: \" + bmi.getBMI() + \" Status: \" + bmi.getStatus());\n    }\n}\n\nclass BMI {\n    // Write encapsulated BMI fields and methods here\n    \n}",
+        "testCases": [
+          {
+            "id": 1,
+            "input": "",
+            "expected": "Normal",
+            "description": "BMI category status verification"
+          }
+        ]
+      }
+    },
+    {
+      "day": 37,
+      "date": "2026-07-20",
+      "dayOfWeek": "Monday",
+      "type": "video",
+      "chapterNum": 10,
+      "chapterTitle": "Thinking in Objects",
       "title": "Ch 10: Thinking in Objects (Part 2)",
       "slides": "https://fcai.smartpharaohs.com/pl2/2025/Slides/10slide.ppt",
       "videos": [
@@ -1328,9 +1387,9 @@
       }
     },
     {
-      "day": 37,
-      "date": "2026-07-20",
-      "dayOfWeek": "Monday",
+      "day": 38,
+      "date": "2026-07-21",
+      "dayOfWeek": "Tuesday",
       "type": "video",
       "chapterNum": 10,
       "chapterTitle": "Thinking in Objects",
@@ -1363,9 +1422,9 @@
       }
     },
     {
-      "day": 38,
-      "date": "2026-07-21",
-      "dayOfWeek": "Tuesday",
+      "day": 39,
+      "date": "2026-07-22",
+      "dayOfWeek": "Wednesday",
       "type": "video",
       "chapterNum": 10,
       "chapterTitle": "Thinking in Objects",
@@ -1398,9 +1457,9 @@
       }
     },
     {
-      "day": 39,
-      "date": "2026-07-22",
-      "dayOfWeek": "Wednesday",
+      "day": 40,
+      "date": "2026-07-23",
+      "dayOfWeek": "Thursday",
       "type": "video",
       "chapterNum": 10,
       "chapterTitle": "Thinking in Objects",
@@ -1433,48 +1492,16 @@
       }
     },
     {
-      "day": 40,
-      "date": "2026-07-23",
-      "dayOfWeek": "Thursday",
-      "type": "video",
-      "chapterNum": 11,
-      "chapterTitle": "Inheritance and Polymorphism",
-      "title": "Ch 11: Inheritance and Polymorphism (Part 1)",
-      "slides": "https://fcai.smartpharaohs.com/pl2/2025/Slides/11slide.ppt",
-      "videos": [
-        {
-          "videoId": "Ly1wkba3EZk",
-          "title": "Java | Chapter 11 | Inheritance and Polymorphism",
-          "duration": "00:44:36",
-          "assignedStart": "00:00:00",
-          "assignedEnd": "00:44:36",
-          "thumbnail": "https://i.ytimg.com/vi/Ly1wkba3EZk/hqdefault.jpg",
-          "url": "https://www.youtube.com/watch?v=Ly1wkba3EZk"
-        }
-      ],
-      "task": {
-        "taskId": "task_11_1",
-        "title": "Exercise 11.1: Triangle & GeometricObject Class",
-        "description": "Define Triangle subclass that extends GeometricObject superclass. Include double variables side1, side2, side3, constructors, and getArea(). The class name must be Exercise11_01.",
-        "codeTemplate": "public class Exercise11_01 {\n    public static void main(String[] args) {\n        Triangle t = new Triangle(1.0, 1.5, 1.0);\n        System.out.println(\"Area: \" + t.getArea());\n    }\n}\n\nclass GeometricObject {\n    // Superclass fields and methods\n}\n\nclass Triangle extends GeometricObject {\n    // Subclass properties\n}",
-        "testCases": [
-          {
-            "id": 1,
-            "input": "",
-            "expected": "Area: 0.496",
-            "description": "Area of triangle sides (1.0, 1.5, 1.0) is ~0.496"
-          }
-        ]
-      }
-    },
-    {
       "day": 41,
       "date": "2026-07-24",
       "dayOfWeek": "Friday",
       "type": "off",
       "chapterNum": null,
       "chapterTitle": "Rest",
-      "title": "🏖️ Rest Day"
+      "title": "🏖️ Rest Day",
+      "slides": null,
+      "videos": [],
+      "task": null
     },
     {
       "day": 42,
@@ -1544,6 +1571,41 @@
       "type": "video",
       "chapterNum": 11,
       "chapterTitle": "Inheritance and Polymorphism",
+      "title": "Ch 11: Inheritance and Polymorphism (Part 1)",
+      "slides": "https://fcai.smartpharaohs.com/pl2/2025/Slides/11slide.ppt",
+      "videos": [
+        {
+          "videoId": "Ly1wkba3EZk",
+          "title": "Java | Chapter 11 | Inheritance and Polymorphism",
+          "duration": "00:44:36",
+          "assignedStart": "00:00:00",
+          "assignedEnd": "00:44:36",
+          "thumbnail": "https://i.ytimg.com/vi/Ly1wkba3EZk/hqdefault.jpg",
+          "url": "https://www.youtube.com/watch?v=Ly1wkba3EZk"
+        }
+      ],
+      "task": {
+        "taskId": "task_11_1",
+        "title": "Exercise 11.1: Triangle & GeometricObject Class",
+        "description": "Define Triangle subclass that extends GeometricObject superclass. Include double variables side1, side2, side3, constructors, and getArea(). The class name must be Exercise11_01.",
+        "codeTemplate": "public class Exercise11_01 {\n    public static void main(String[] args) {\n        Triangle t = new Triangle(1.0, 1.5, 1.0);\n        System.out.println(\"Area: \" + t.getArea());\n    }\n}\n\nclass GeometricObject {\n    // Superclass fields and methods\n}\n\nclass Triangle extends GeometricObject {\n    // Subclass properties\n}",
+        "testCases": [
+          {
+            "id": 1,
+            "input": "",
+            "expected": "Area: 0.496",
+            "description": "Area of triangle sides (1.0, 1.5, 1.0) is ~0.496"
+          }
+        ]
+      }
+    },
+    {
+      "day": 44,
+      "date": "2026-07-27",
+      "dayOfWeek": "Monday",
+      "type": "video",
+      "chapterNum": 11,
+      "chapterTitle": "Inheritance and Polymorphism",
       "title": "Ch 11: Inheritance and Polymorphism (Part 2)",
       "slides": "https://fcai.smartpharaohs.com/pl2/2025/Slides/11slide.ppt",
       "videos": [
@@ -1573,9 +1635,9 @@
       }
     },
     {
-      "day": 44,
-      "date": "2026-07-27",
-      "dayOfWeek": "Monday",
+      "day": 45,
+      "date": "2026-07-28",
+      "dayOfWeek": "Tuesday",
       "type": "video",
       "chapterNum": 11,
       "chapterTitle": "Inheritance and Polymorphism",
@@ -1608,9 +1670,9 @@
       }
     },
     {
-      "day": 45,
-      "date": "2026-07-28",
-      "dayOfWeek": "Tuesday",
+      "day": 46,
+      "date": "2026-07-29",
+      "dayOfWeek": "Wednesday",
       "type": "video",
       "chapterNum": 11,
       "chapterTitle": "Inheritance and Polymorphism",
@@ -1643,9 +1705,9 @@
       }
     },
     {
-      "day": 46,
-      "date": "2026-07-29",
-      "dayOfWeek": "Wednesday",
+      "day": 47,
+      "date": "2026-07-30",
+      "dayOfWeek": "Thursday",
       "type": "video",
       "chapterNum": 11,
       "chapterTitle": "Inheritance and Polymorphism",
@@ -1665,48 +1727,16 @@
       "task": null
     },
     {
-      "day": 47,
-      "date": "2026-07-30",
-      "dayOfWeek": "Thursday",
-      "type": "video",
-      "chapterNum": 13,
-      "chapterTitle": "Abstract Classes and Interfaces",
-      "title": "Ch 13: Abstract Classes & Geometry Rules",
-      "slides": "https://fcai.smartpharaohs.com/pl2/2025/Slides/13slide.ppt",
-      "videos": [
-        {
-          "videoId": "bfouLyURcWE",
-          "title": "Java | Chapter 13 | Abstract Classes and Interfaces",
-          "duration": "00:29:49",
-          "assignedStart": "00:00:00",
-          "assignedEnd": "00:29:49",
-          "thumbnail": "https://i.ytimg.com/vi/bfouLyURcWE/hqdefault.jpg",
-          "url": "https://www.youtube.com/watch?v=bfouLyURcWE"
-        }
-      ],
-      "task": {
-        "taskId": "task_13_1",
-        "title": "Exercise 13.1: Abstract Triangle Class",
-        "description": "Define a Triangle class that extends the abstract GeometricObject class. Implement getArea() and getPerimeter() abstract methods. The class name must be Exercise13_01.",
-        "codeTemplate": "public class Exercise13_01 {\n    public static void main(String[] args) {\n        // Test abstract implementations\n        \n    }\n}\n\nabstract class GeometricObject {\n    // Abstract superclass definition\n    public abstract double getArea();\n    public abstract double getPerimeter();\n}\n\nclass Triangle extends GeometricObject {\n    // Implement abstract methods here\n    public double getArea() { return 0.0; }\n    public double getPerimeter() { return 0.0; }\n}",
-        "testCases": [
-          {
-            "id": 1,
-            "input": "",
-            "expected": "GeometricObject",
-            "description": "Triangle implements abstract GeometricObject"
-          }
-        ]
-      }
-    },
-    {
       "day": 48,
       "date": "2026-07-31",
       "dayOfWeek": "Friday",
       "type": "off",
       "chapterNum": null,
       "chapterTitle": "Rest",
-      "title": "🏖️ Rest Day"
+      "title": "🏖️ Rest Day",
+      "slides": null,
+      "videos": [],
+      "task": null
     },
     {
       "day": 49,
@@ -1740,6 +1770,41 @@
       "type": "video",
       "chapterNum": 13,
       "chapterTitle": "Abstract Classes and Interfaces",
+      "title": "Ch 13: Abstract Classes & Geometry Rules",
+      "slides": "https://fcai.smartpharaohs.com/pl2/2025/Slides/13slide.ppt",
+      "videos": [
+        {
+          "videoId": "bfouLyURcWE",
+          "title": "Java | Chapter 13 | Abstract Classes and Interfaces",
+          "duration": "00:29:49",
+          "assignedStart": "00:00:00",
+          "assignedEnd": "00:29:49",
+          "thumbnail": "https://i.ytimg.com/vi/bfouLyURcWE/hqdefault.jpg",
+          "url": "https://www.youtube.com/watch?v=bfouLyURcWE"
+        }
+      ],
+      "task": {
+        "taskId": "task_13_1",
+        "title": "Exercise 13.1: Abstract Triangle Class",
+        "description": "Define a Triangle class that extends the abstract GeometricObject class. Implement getArea() and getPerimeter() abstract methods. The class name must be Exercise13_01.",
+        "codeTemplate": "public class Exercise13_01 {\n    public static void main(String[] args) {\n        // Test abstract implementations\n        \n    }\n}\n\nabstract class GeometricObject {\n    // Abstract superclass definition\n    public abstract double getArea();\n    public abstract double getPerimeter();\n}\n\nclass Triangle extends GeometricObject {\n    // Implement abstract methods here\n    public double getArea() { return 0.0; }\n    public double getPerimeter() { return 0.0; }\n}",
+        "testCases": [
+          {
+            "id": 1,
+            "input": "",
+            "expected": "GeometricObject",
+            "description": "Triangle implements abstract GeometricObject"
+          }
+        ]
+      }
+    },
+    {
+      "day": 51,
+      "date": "2026-08-03",
+      "dayOfWeek": "Monday",
+      "type": "video",
+      "chapterNum": 13,
+      "chapterTitle": "Abstract Classes and Interfaces",
       "title": "Ch 13: Implementing Interfaces (Comparable & Cloneable)",
       "slides": "https://fcai.smartpharaohs.com/pl2/2025/Slides/13slide.ppt",
       "videos": [
@@ -1769,9 +1834,9 @@
       }
     },
     {
-      "day": 51,
-      "date": "2026-08-03",
-      "dayOfWeek": "Monday",
+      "day": 52,
+      "date": "2026-08-04",
+      "dayOfWeek": "Tuesday",
       "type": "video",
       "chapterNum": 12,
       "chapterTitle": "Exception Handling and Text IO",
@@ -1804,9 +1869,9 @@
       }
     },
     {
-      "day": 52,
-      "date": "2026-08-04",
-      "dayOfWeek": "Tuesday",
+      "day": 53,
+      "date": "2026-08-05",
+      "dayOfWeek": "Wednesday",
       "type": "video",
       "chapterNum": 12,
       "chapterTitle": "Exception Handling and Text IO",
@@ -1839,9 +1904,9 @@
       }
     },
     {
-      "day": 53,
-      "date": "2026-08-05",
-      "dayOfWeek": "Wednesday",
+      "day": 54,
+      "date": "2026-08-06",
+      "dayOfWeek": "Thursday",
       "type": "video",
       "chapterNum": 12,
       "chapterTitle": "Exception Handling and Text IO",
@@ -1874,35 +1939,16 @@
       }
     },
     {
-      "day": 54,
-      "date": "2026-08-06",
-      "dayOfWeek": "Thursday",
-      "type": "video",
-      "chapterNum": 14,
-      "chapterTitle": "Final Course Project",
-      "title": "Final Capstone: OOP Architecture Design",
-      "slides": null,
-      "videos": [
-        {
-          "videoId": "RK2ABib7pmI",
-          "title": "OOP Design Principles Recap",
-          "duration": "00:35:04",
-          "assignedStart": "00:00:00",
-          "assignedEnd": "00:35:04",
-          "thumbnail": "https://i.ytimg.com/vi/RK2ABib7pmI/hqdefault.jpg",
-          "url": "https://www.youtube.com/watch?v=RK2ABib7pmI"
-        }
-      ],
-      "task": null
-    },
-    {
       "day": 55,
       "date": "2026-08-07",
       "dayOfWeek": "Friday",
       "type": "off",
       "chapterNum": null,
       "chapterTitle": "Rest",
-      "title": "🏖️ Rest Day"
+      "title": "🏖️ Rest Day",
+      "slides": null,
+      "videos": [],
+      "task": null
     },
     {
       "day": 56,
@@ -1973,6 +2019,28 @@
       "type": "video",
       "chapterNum": 14,
       "chapterTitle": "Final Course Project",
+      "title": "Final Capstone: OOP Architecture Design",
+      "slides": null,
+      "videos": [
+        {
+          "videoId": "RK2ABib7pmI",
+          "title": "OOP Design Principles Recap",
+          "duration": "00:35:04",
+          "assignedStart": "00:00:00",
+          "assignedEnd": "00:35:04",
+          "thumbnail": "https://i.ytimg.com/vi/RK2ABib7pmI/hqdefault.jpg",
+          "url": "https://www.youtube.com/watch?v=RK2ABib7pmI"
+        }
+      ],
+      "task": null
+    },
+    {
+      "day": 58,
+      "date": "2026-08-10",
+      "dayOfWeek": "Monday",
+      "type": "video",
+      "chapterNum": 14,
+      "chapterTitle": "Final Course Project",
       "title": "Final Capstone: Polymorphism Recap",
       "slides": null,
       "videos": [
@@ -1989,9 +2057,9 @@
       "task": null
     },
     {
-      "day": 58,
-      "date": "2026-08-10",
-      "dayOfWeek": "Monday",
+      "day": 59,
+      "date": "2026-08-11",
+      "dayOfWeek": "Tuesday",
       "type": "video",
       "chapterNum": 14,
       "chapterTitle": "Final Course Project",
@@ -2001,9 +2069,9 @@
       "task": null
     },
     {
-      "day": 59,
-      "date": "2026-08-11",
-      "dayOfWeek": "Tuesday",
+      "day": 60,
+      "date": "2026-08-12",
+      "dayOfWeek": "Wednesday",
       "type": "project",
       "chapterNum": null,
       "chapterTitle": "Final Course Project",
@@ -2022,9 +2090,9 @@
       }
     },
     {
-      "day": 60,
-      "date": "2026-08-12",
-      "dayOfWeek": "Wednesday",
+      "day": 61,
+      "date": "2026-08-13",
+      "dayOfWeek": "Thursday",
       "type": "project",
       "chapterNum": null,
       "chapterTitle": "Final Course Project",
@@ -2044,9 +2112,21 @@
       }
     },
     {
-      "day": 61,
-      "date": "2026-08-13",
-      "dayOfWeek": "Thursday",
+      "day": 62,
+      "date": "2026-08-14",
+      "dayOfWeek": "Friday",
+      "type": "off",
+      "chapterNum": null,
+      "chapterTitle": "Rest",
+      "title": "🏖️ Rest Day - Graduation Practice Complete!",
+      "slides": null,
+      "videos": [],
+      "task": null
+    },
+    {
+      "day": 63,
+      "date": "2026-08-15",
+      "dayOfWeek": "Saturday",
       "type": "project",
       "chapterNum": null,
       "chapterTitle": "Final Course Project",
@@ -2065,18 +2145,9 @@
       }
     },
     {
-      "day": 62,
-      "date": "2026-08-14",
-      "dayOfWeek": "Friday",
-      "type": "off",
-      "chapterNum": null,
-      "chapterTitle": "Rest",
-      "title": "🏖️ Rest Day - Graduation Practice Complete!"
-    },
-    {
-      "day": 63,
-      "date": "2026-08-15",
-      "dayOfWeek": "Saturday",
+      "day": 64,
+      "date": "2026-08-16",
+      "dayOfWeek": "Sunday",
       "type": "video",
       "chapterNum": 14,
       "chapterTitle": "Final Course Project",
