@@ -497,17 +497,17 @@ export default function DailyLessons({
 
                       const blockInfo = getProjectBlockInfo(day, filteredDays);
                       const rowClassName = `relative flex gap-lg group ${
-                        blockInfo.inBlock && !blockInfo.isFirst ? '!mt-0' : ''
+                        blockInfo.inBlock && !blockInfo.isFirst ? 'mt-0!' : ''
                       }`;
 
                       let cardStyle = "glass-card p-lg flex flex-col gap-sm transition-all duration-200 bg-surface-container-lowest ";
                       if (blockInfo.inBlock) {
                         if (blockInfo.isFirst) {
-                          cardStyle += "rounded-t-2xl rounded-b-none border-t border-x border-b-0 border-outline-variant/50 ";
+                          cardStyle += "rounded-t-2xl! rounded-b-none! border-t! border-x! border-b-0! border-outline-variant/50 ";
                         } else if (blockInfo.isLast) {
-                          cardStyle += "rounded-b-2xl rounded-t-none border-b border-x border-t border-outline-variant/50 border-t-outline-variant/20 ";
+                          cardStyle += "rounded-b-2xl! rounded-t-none! border-b! border-x! border-t! border-outline-variant/50 border-t-outline-variant/20 ";
                         } else {
-                          cardStyle += "rounded-none border-x border-t border-b-0 border-outline-variant/50 border-t-outline-variant/20 ";
+                          cardStyle += "rounded-none! border-x! border-t! border-b-0! border-outline-variant/50 border-t-outline-variant/20 ";
                         }
                       } else {
                         cardStyle += "rounded-xl border border-outline-variant/50 ";
@@ -540,7 +540,7 @@ export default function DailyLessons({
                           </div>
 
                           {/* Right side content */}
-                          <div className={`flex-grow min-w-0 ${blockInfo.inBlock ? 'pb-0' : 'pb-4'}`}>
+                          <div className={`flex-grow min-w-0 ${blockInfo.inBlock ? 'pb-0!' : 'pb-4'}`}>
                             {/* Row Header */}
                             {!blockInfo.inBlock && (
                               <div className="flex flex-wrap items-center gap-sm mb-md">
