@@ -697,28 +697,30 @@ export default function DailyLessons({
                           );
                         }
 
-                        // ── PROJECT BLOCK: all days in one row ──────────────────────
+                        // ── PROJECT BLOCK: single clean card ──────────────────
                         const { blockDays, startIdx } = item;
                         const firstDay = blockDays[0];
-                        const lastDay = blockDays[blockDays.length - 1];
                         const blockAllCompleted = blockDays.every(d => isDayCompleted(d));
                         const blockBi = getProjectBlockInfo(firstDay, filteredDays);
                         const lastOrigIdx = startIdx + blockDays.length - 1;
                         const hasConnector = lastOrigIdx < filteredDays.length - 1;
 
+                        // Find first non-off project day for description & click target
+                        const firstProjectDay = blockDays.find(d => d.type === 'project') || firstDay;
+                        const description = firstProjectDay.task?.description || 'Build and submit your multi-day OOP project.';
+
                         return (
                           <div key={`block-${firstDay.day}`} id={`day-${firstDay.day}`} className="relative flex gap-lg group">
-                            {/* Timeline connector that spans the full block height */}
+                            {/* Timeline connector */}
                             {hasConnector && (
                               <div className={`timeline-connector ${blockAllCompleted ? 'bg-tertiary-container' : 'bg-outline-variant/40'}`}></div>
                             )}
 
                             {/* Left column: stacked day circles */}
-                            <div className="z-10 shrink-0 flex flex-col" style={{ gap: 0 }}>
+                            <div className="z-10 shrink-0 flex flex-col items-center" style={{ gap: 0 }}>
                               {blockDays.map((d, di) => {
                                 const dc = isDayCompleted(d);
                                 const isOff = d.type === 'off';
-                                // vertical spacer between circles to align with card rows inside
                                 return (
                                   <div key={d.day} id={di > 0 ? `day-${d.day}` : undefined} className="flex flex-col items-center" style={{ paddingTop: di === 0 ? 4 : 0 }}>
                                     {isOff ? (
@@ -734,74 +736,41 @@ export default function DailyLessons({
                                         {d.day}
                                       </div>
                                     )}
-                                    {/* thin connector between circles inside the block */}
                                     {di < blockDays.length - 1 && (
-                                      <div className="w-0.5 flex-1 bg-outline-variant/40" style={{ minHeight: 0 }}></div>
+                                      <div className="w-0.5 flex-1 bg-outline-variant/40" style={{ minHeight: 8 }}></div>
                                     )}
                                   </div>
                                 );
                               })}
                             </div>
 
-                            {/* Right: single unified card */}
+                            {/* Right: ONE card */}
                             <div className="flex-grow pb-4 min-w-0">
-                              <div className="glass-card rounded-2xl border border-outline-variant/50 overflow-hidden bg-primary/[0.005]">
-                                {/* Card header */}
-                                <div className="px-lg pt-lg pb-4 border-b border-outline-variant/20 flex items-center justify-between">
+                              <div
+                                onClick={() => onSelectDay(firstProjectDay.day)}
+                                className="glass-card p-lg rounded-2xl border border-outline-variant/50 bg-primary/[0.01] cursor-pointer hover:bg-surface-container-low hover:-translate-y-0.5 transition-all duration-200 flex flex-col gap-sm"
+                              >
+                                {/* Badge + title */}
+                                <div className="flex items-start justify-between gap-4">
                                   <div>
                                     <span className="text-[10px] font-bold uppercase tracking-wider text-primary bg-primary/10 px-2.5 py-1 rounded-full">
                                       Multi-Day Project
                                     </span>
-                                    <h3 className="text-lg font-bold text-on-surface mt-2">{blockBi.projectTitle}</h3>
+                                    <h3 className="text-body-md font-bold text-on-surface mt-2">
+                                      {blockBi.projectTitle}
+                                    </h3>
                                   </div>
-                                  <span className="material-symbols-outlined text-primary text-[40px] opacity-20">assignment</span>
+                                  {blockAllCompleted ? (
+                                    <span className="material-symbols-outlined text-tertiary text-[22px] shrink-0 mt-1" style={{ fontVariationSettings: "'FILL' 1" }}>check_circle</span>
+                                  ) : (
+                                    <span className="material-symbols-outlined text-primary text-[22px] shrink-0 mt-1">arrow_forward</span>
+                                  )}
                                 </div>
 
-                                {/* Each day as a row inside the card */}
-                                {blockDays.map((d, di) => {
-                                  const dc = isDayCompleted(d);
-                                  const isOff = d.type === 'off';
-                                  return (
-                                    <div
-                                      key={d.day}
-                                      onClick={() => !isOff && onSelectDay(d.day)}
-                                      className={`px-lg py-md flex flex-col gap-xs ${di < blockDays.length - 1 ? 'border-b border-outline-variant/15' : ''} ${!isOff ? 'cursor-pointer hover:bg-surface-container-low/50 transition-colors' : ''}`}
-                                    >
-                                      {/* Day row header */}
-                                      <div className="flex flex-wrap items-center gap-sm">
-                                        <span className="text-caption font-mono font-bold text-muted-text uppercase tracking-wider bg-surface-container-low px-2 py-0.5 rounded border border-outline-variant/50">
-                                          {d.dayOfWeek.slice(0, 3)}
-                                        </span>
-                                        <span className="text-body-md font-bold text-on-surface">
-                                          Day {d.day}: {isOff ? 'Rest Day' : (d.task?.title || d.title)}
-                                        </span>
-                                        {isOff ? (
-                                          <span className="px-sm py-xs bg-amber-color/10 text-amber-color border border-amber-color/20 text-caption rounded-lg font-bold">Rest Day</span>
-                                        ) : dc ? (
-                                          <span className="px-sm py-xs bg-tertiary-container text-on-tertiary-container text-caption rounded-lg font-bold">Completed</span>
-                                        ) : (
-                                          <span className="px-sm py-xs bg-secondary-container text-on-secondary-container text-caption rounded-lg font-bold">Ready to Study</span>
-                                        )}
-                                        {!isOff && !dc && (
-                                          <span className="ml-auto material-symbols-outlined text-primary text-[18px]">arrow_forward</span>
-                                        )}
-                                        {!isOff && dc && (
-                                          <span className="ml-auto material-symbols-outlined text-tertiary text-[18px]">check_circle</span>
-                                        )}
-                                      </div>
-                                      {/* Description */}
-                                      {isOff ? (
-                                        <p className="text-caption text-on-surface-variant leading-relaxed">
-                                          Take a complete break from active lectures. Rest up!
-                                        </p>
-                                      ) : (
-                                        <p className="text-caption text-on-surface-variant leading-relaxed">
-                                          {d.task?.description || 'Build and submit your OOP mini-project.'}
-                                        </p>
-                                      )}
-                                    </div>
-                                  );
-                                })}
+                                {/* Description */}
+                                <p className="text-caption text-on-surface-variant leading-relaxed">
+                                  {description}
+                                </p>
                               </div>
                             </div>
                           </div>
