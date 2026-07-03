@@ -487,289 +487,329 @@ export default function DailyLessons({
                 </div>
 
                 {/* Week Expanded Contents (List of Days) */}
-                {expanded && !locked && (
-                  <div className="p-lg pt-4 border-t border-outline-variant/30 bg-surface-container-lowest/30 space-y-8 relative">
-                    {filteredDays.map((day, idx) => {
-                      const dayCompleted = isDayCompleted(day);
-                      const isOff = day.type === 'off';
-                      const isReview = day.type === 'review';
-                      const isProject = day.type === 'project';
-
-                      const blockInfo = getProjectBlockInfo(day, filteredDays);
-                      const rowClassName = `relative flex gap-lg group ${
-                        blockInfo.inBlock && !blockInfo.isFirst ? 'project-group-row-touch' : ''
-                      }`;
-
-                      let cardStyle = "glass-card p-lg flex flex-col gap-sm transition-all duration-200 bg-surface-container-lowest ";
-                      if (blockInfo.inBlock) {
-                        if (blockInfo.isFirst) {
-                          cardStyle += "project-group-first ";
-                        } else if (blockInfo.isLast) {
-                          cardStyle += "project-group-last ";
-                        } else {
-                          cardStyle += "project-group-middle ";
-                        }
-                      } else {
-                        cardStyle += "rounded-xl border border-outline-variant/50 ";
+                {expanded && !locked && (() => {
+                  // Pre-group days: collapse consecutive project-block days into single render items
+                  const renderItems = [];
+                  let i = 0;
+                  while (i < filteredDays.length) {
+                    const day = filteredDays[i];
+                    const blockInfo = getProjectBlockInfo(day, filteredDays);
+                    if (blockInfo.inBlock && blockInfo.isFirst) {
+                      // Collect all days in this block
+                      const blockDays = [];
+                      let j = i;
+                      while (j < filteredDays.length) {
+                        const bi = getProjectBlockInfo(filteredDays[j], filteredDays);
+                        if (!bi.inBlock) break;
+                        blockDays.push(filteredDays[j]);
+                        if (bi.isLast) { j++; break; }
+                        j++;
                       }
+                      renderItems.push({ type: 'block', blockDays, startIdx: i });
+                      i = j;
+                    } else if (!blockInfo.inBlock) {
+                      renderItems.push({ type: 'single', day, idx: i });
+                      i++;
+                    } else {
+                      // orphaned mid/last block day (shouldn't happen), skip
+                      i++;
+                    }
+                  }
 
-                      return (
-                        <div key={day.day} id={`day-${day.day}`} className={rowClassName}>
-                          {/* Timeline connector line (Ends at the last element of this week) */}
-                          {idx < filteredDays.length - 1 && (
-                            <div className={`timeline-connector ${
-                              dayCompleted ? 'bg-tertiary-container' : 'bg-outline-variant/40'
-                            }`}></div>
-                          )}
+                  return (
+                    <div className="p-lg pt-4 border-t border-outline-variant/30 bg-surface-container-lowest/30 space-y-8 relative">
+                      {renderItems.map((item, renderIdx) => {
+                        if (item.type === 'single') {
+                          const { day, idx } = item;
+                          const dayCompleted = isDayCompleted(day);
+                          const isOff = day.type === 'off';
+                          const isReview = day.type === 'review';
+                          const isProject = day.type === 'project';
 
-                          {/* Left side dot */}
-                          <div className="z-10 mt-1 shrink-0">
-                            {isOff ? (
-                              <div className="w-12 h-12 rounded-full bg-amber-color/10 border-2 border-amber-color/40 flex items-center justify-center text-amber-color">
-                                <span className="material-symbols-outlined text-[20px]">coffee</span>
-                              </div>
-                            ) : dayCompleted ? (
-                              <div className="w-12 h-12 rounded-full bg-tertiary flex items-center justify-center text-on-tertiary">
-                                <span className="material-symbols-outlined text-[20px]" style={{ fontVariationSettings: "'FILL' 1" }}>check_circle</span>
-                              </div>
-                            ) : (
-                              <div className="w-12 h-12 rounded-full bg-primary flex items-center justify-center text-on-primary active-dot font-extrabold text-label-md">
-                                {day.day}
-                              </div>
-                            )}
-                          </div>
+                          return (
+                            <div key={day.day} id={`day-${day.day}`} className="relative flex gap-lg group">
+                              {/* Timeline connector */}
+                              {idx < filteredDays.length - 1 && (
+                                <div className={`timeline-connector ${dayCompleted ? 'bg-tertiary-container' : 'bg-outline-variant/40'}`}></div>
+                              )}
 
-                          {/* Right side content */}
-                          <div className={`flex-grow min-w-0 ${blockInfo.inBlock ? 'project-group-wrapper' : 'pb-4'}`}>
-                            {/* Row Header */}
-                            {!blockInfo.inBlock && (
-                              <div className="flex flex-wrap items-center gap-sm mb-md">
-                                <span className="text-caption font-mono font-bold text-muted-text uppercase tracking-wider bg-surface-container-low px-2 py-0.5 rounded border border-outline-variant/50">
-                                  {day.dayOfWeek.slice(0, 3)}
-                                </span>
-                                <h3 className="text-title-md font-title-md font-bold truncate text-on-background">
-                                  Day {day.day}: {day.title}
-                                </h3>
-                                
-                                {/* Status badges */}
+                              {/* Left dot */}
+                              <div className="z-10 mt-1 shrink-0">
                                 {isOff ? (
-                                  <span className="px-sm py-xs bg-amber-color/10 text-amber-color border border-amber-color/20 text-caption rounded-lg font-bold">Rest Day</span>
+                                  <div className="w-12 h-12 rounded-full bg-amber-color/10 border-2 border-amber-color/40 flex items-center justify-center text-amber-color">
+                                    <span className="material-symbols-outlined text-[20px]">coffee</span>
+                                  </div>
                                 ) : dayCompleted ? (
-                                  <span className="px-sm py-xs bg-tertiary-container text-on-tertiary-container text-caption rounded-lg font-bold">Completed</span>
+                                  <div className="w-12 h-12 rounded-full bg-tertiary flex items-center justify-center text-on-tertiary">
+                                    <span className="material-symbols-outlined text-[20px]" style={{ fontVariationSettings: "'FILL' 1" }}>check_circle</span>
+                                  </div>
                                 ) : (
-                                  <span className="px-sm py-xs bg-secondary-container text-on-secondary-container text-caption rounded-lg font-bold">Ready to Study</span>
+                                  <div className="w-12 h-12 rounded-full bg-primary flex items-center justify-center text-on-primary active-dot font-extrabold text-label-md">
+                                    {day.day}
+                                  </div>
                                 )}
+                              </div>
 
-                                {/* Chapter Title */}
-                                {day.chapterTitle && !isOff && (
-                                  <span className="text-caption text-on-surface-variant/80 ml-auto hidden sm:inline truncate max-w-[200px]">
-                                    {day.chapterTitle}
+                              {/* Right content */}
+                              <div className="flex-grow pb-4 min-w-0">
+                                <div className="flex flex-wrap items-center gap-sm mb-md">
+                                  <span className="text-caption font-mono font-bold text-muted-text uppercase tracking-wider bg-surface-container-low px-2 py-0.5 rounded border border-outline-variant/50">
+                                    {day.dayOfWeek.slice(0, 3)}
                                   </span>
-                                )}
-                              </div>
-                            )}
-
-                            {/* Day Content Area */}
-                            {isOff ? (
-                              <div className={blockInfo.inBlock ? cardStyle + "bg-amber-color/[0.005]" : "glass-card p-lg rounded-xl border border-outline-variant/50 flex flex-col gap-sm bg-amber-color/[0.01]"}>
-                                {blockInfo.inBlock && (
-                                  <div className="flex flex-wrap items-center gap-sm mb-sm">
-                                    <span className="text-caption font-mono font-bold text-muted-text uppercase tracking-wider bg-surface-container-low px-2 py-0.5 rounded border border-outline-variant/50">
-                                      {day.dayOfWeek.slice(0, 3)}
-                                    </span>
-                                    <h4 className="text-body-md font-bold text-on-surface">
-                                      Day {day.day}: Rest Day
-                                    </h4>
+                                  <h3 className="text-title-md font-title-md font-bold truncate text-on-background">
+                                    Day {day.day}: {day.title}
+                                  </h3>
+                                  {isOff ? (
                                     <span className="px-sm py-xs bg-amber-color/10 text-amber-color border border-amber-color/20 text-caption rounded-lg font-bold">Rest Day</span>
-                                  </div>
-                                )}
-                                <div className="flex justify-between items-start gap-4">
-                                  <div>
-                                    <h4 className="text-body-md font-bold text-on-surface">Weekly Rest & Recharge</h4>
-                                    <p className="text-caption text-on-surface-variant mt-1 leading-relaxed">
-                                      Take a complete break from active lectures. Revise notes, work on lightweight OOP practice projects, or rest up!
-                                    </p>
-                                  </div>
-                                  <span className="material-symbols-outlined text-amber-color text-display-lg opacity-40 shrink-0">relax</span>
-                                </div>
-                              </div>
-                            ) : isReview ? (
-                              <div className="glass-card p-lg rounded-xl border border-outline-variant/50 flex flex-col gap-sm bg-indigo-500/[0.01]">
-                                <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-md">
-                                  <div>
-                                    <h4 className="text-body-md font-bold text-on-surface">OOP Synthesis & Knowledge Recap</h4>
-                                    <p className="text-caption text-on-surface-variant mt-1">
-                                      Review notes, check code tasks, and ensure core concepts are consolidated.
-                                    </p>
-                                  </div>
-                                  <button 
-                                    onClick={() => onSelectDay(day.day)}
-                                    className="px-lg py-sm bg-primary text-on-primary font-bold rounded-lg text-caption hover:opacity-90 transition-opacity cursor-pointer whitespace-nowrap"
-                                  >
-                                    Start Review
-                                  </button>
-                                </div>
-                              </div>
-                            ) : isProject ? (
-                              <div 
-                                onClick={() => onSelectDay(day.day)}
-                                className={blockInfo.inBlock 
-                                  ? cardStyle + "bg-primary/[0.005] cursor-pointer hover:bg-surface-container-low/60" 
-                                  : "glass-card p-lg rounded-xl border border-outline-variant/50 flex flex-col gap-sm bg-primary/[0.01] cursor-pointer hover:bg-surface-container-low hover:-translate-y-0.5 transition-all duration-200"
-                                }
-                              >
-                                {blockInfo.inBlock && blockInfo.isFirst && (
-                                  <div className="pb-4 mb-3 border-b border-outline-variant/30 flex items-center justify-between">
-                                    <div>
-                                      <span className="text-[10px] font-bold uppercase tracking-wider text-primary bg-primary/10 px-2.5 py-1 rounded-full">
-                                        Multi-Day Project
-                                      </span>
-                                      <h3 className="text-lg font-bold text-on-surface mt-2">{blockInfo.projectTitle}</h3>
-                                    </div>
-                                    <span className="material-symbols-outlined text-primary text-display-sm opacity-40">assignment</span>
-                                  </div>
-                                )}
-                                
-                                {blockInfo.inBlock && (
-                                  <div className="flex flex-wrap items-center gap-sm mb-sm">
-                                    <span className="text-caption font-mono font-bold text-muted-text uppercase tracking-wider bg-surface-container-low px-2 py-0.5 rounded border border-outline-variant/50">
-                                      {day.dayOfWeek.slice(0, 3)}
+                                  ) : dayCompleted ? (
+                                    <span className="px-sm py-xs bg-tertiary-container text-on-tertiary-container text-caption rounded-lg font-bold">Completed</span>
+                                  ) : (
+                                    <span className="px-sm py-xs bg-secondary-container text-on-secondary-container text-caption rounded-lg font-bold">Ready to Study</span>
+                                  )}
+                                  {day.chapterTitle && !isOff && (
+                                    <span className="text-caption text-on-surface-variant/80 ml-auto hidden sm:inline truncate max-w-[200px]">
+                                      {day.chapterTitle}
                                     </span>
-                                    <h4 className="text-body-md font-bold text-on-surface">
-                                      Day {day.day}: {day.task?.title || day.title}
-                                    </h4>
-                                    {dayCompleted ? (
-                                      <span className="px-sm py-xs bg-tertiary-container text-on-tertiary-container text-caption rounded-lg font-bold">Completed</span>
-                                    ) : (
-                                      <span className="px-sm py-xs bg-secondary-container text-on-secondary-container text-caption rounded-lg font-bold">Ready to Study</span>
+                                  )}
+                                </div>
+
+                                {isOff ? (
+                                  <div className="glass-card p-lg rounded-xl border border-outline-variant/50 flex flex-col gap-sm bg-amber-color/[0.01]">
+                                    <div className="flex justify-between items-start gap-4">
+                                      <div>
+                                        <h4 className="text-body-md font-bold text-on-surface">Weekly Rest & Recharge</h4>
+                                        <p className="text-caption text-on-surface-variant mt-1 leading-relaxed">
+                                          Take a complete break from active lectures. Revise notes, work on lightweight OOP practice projects, or rest up!
+                                        </p>
+                                      </div>
+                                      <span className="material-symbols-outlined text-amber-color text-display-lg opacity-40 shrink-0">relax</span>
+                                    </div>
+                                  </div>
+                                ) : isReview ? (
+                                  <div className="glass-card p-lg rounded-xl border border-outline-variant/50 flex flex-col gap-sm bg-indigo-500/[0.01]">
+                                    <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-md">
+                                      <div>
+                                        <h4 className="text-body-md font-bold text-on-surface">OOP Synthesis & Knowledge Recap</h4>
+                                        <p className="text-caption text-on-surface-variant mt-1">
+                                          Review notes, check code tasks, and ensure core concepts are consolidated.
+                                        </p>
+                                      </div>
+                                      <button
+                                        onClick={() => onSelectDay(day.day)}
+                                        className="px-lg py-sm bg-primary text-on-primary font-bold rounded-lg text-caption hover:opacity-90 transition-opacity cursor-pointer whitespace-nowrap"
+                                      >
+                                        Start Review
+                                      </button>
+                                    </div>
+                                  </div>
+                                ) : isProject ? (
+                                  <div
+                                    onClick={() => onSelectDay(day.day)}
+                                    className="glass-card p-lg rounded-xl border border-outline-variant/50 flex flex-col gap-sm bg-primary/[0.01] cursor-pointer hover:bg-surface-container-low hover:-translate-y-0.5 transition-all duration-200"
+                                  >
+                                    <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-md">
+                                      <div className="flex-grow min-w-0 pr-4">
+                                        <h4 className="text-body-md font-bold text-on-surface">{day.title}</h4>
+                                        <p className="text-caption text-on-surface-variant mt-1 leading-relaxed">
+                                          {day.task?.description || 'Build and submit your OOP mini-project.'}
+                                        </p>
+                                      </div>
+                                    </div>
+                                  </div>
+                                ) : (
+                                  <div className="grid grid-cols-1 md:grid-cols-2 gap-md">
+                                    {day.videos?.map((vid) => {
+                                      const isVidCompleted = !!user.lessonsProgress?.[vid.videoId + "_day" + day.day]?.completed;
+                                      const savedProg = user.lessonsProgress?.[vid.videoId + "_day" + day.day];
+                                      const vStart = timeToSecs(vid.assignedStart || '00:00:00');
+                                      const vEnd = timeToSecs(vid.assignedEnd || vid.duration || '00:00:00');
+                                      const vDur = Math.max(1, vEnd - vStart);
+                                      const hasStarted = savedProg && !savedProg.completed && savedProg.lastPosition > vStart + 1;
+                                      const currentPos = savedProg ? (savedProg.lastPosition - vStart) : 0;
+                                      const pct = Math.min(100, Math.max(0, (currentPos / vDur) * 100));
+                                      return (
+                                        <div key={vid.videoId} onClick={() => onSelectDay(day.day)} className="p-lg rounded-xl flex flex-col gap-sm transition-all duration-200 cursor-pointer glass-card hover:bg-surface-container-low hover:-translate-y-0.5">
+                                          <div className="flex justify-between items-start min-w-0">
+                                            <h4 className="text-body-md font-bold text-on-surface truncate pr-2" title={vid.title}>{vid.title}</h4>
+                                            {(() => {
+                                              const start = timeToSecs(vid.assignedStart || '00:00:00');
+                                              const end = timeToSecs(vid.assignedEnd || vid.duration || '00:00:00');
+                                              const segDur = Math.max(0, end - start);
+                                              const h = Math.floor(segDur / 3600);
+                                              const m = Math.floor((segDur % 3600) / 60);
+                                              const s = segDur % 60;
+                                              const formatted = h > 0 ? `${h}:${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}` : `${m}:${s.toString().padStart(2, '0')}`;
+                                              return <span className="text-caption text-on-surface-variant shrink-0">{formatted}</span>;
+                                            })()}
+                                          </div>
+                                          <div className="mt-auto flex items-center justify-between pt-2 border-t border-outline-variant/30">
+                                            {isVidCompleted ? (
+                                              <div className="flex items-center gap-1.5 text-tertiary font-bold">
+                                                <span className="material-symbols-outlined text-[18px]">verified</span>
+                                                <span className="text-caption">Completed</span>
+                                              </div>
+                                            ) : hasStarted ? (
+                                              <div className="flex-1 pr-4">
+                                                <div className="w-full bg-surface-container h-1.5 rounded-full overflow-hidden">
+                                                  <div className="bg-error h-full rounded-full" style={{ width: `${pct}%`, backgroundColor: 'var(--color-error, #ba1a1a)' }}></div>
+                                                </div>
+                                                <span className="text-[10px] text-error font-bold mt-1 block">Resume ({Math.round(pct)}% watched)</span>
+                                              </div>
+                                            ) : (
+                                              <div className="flex-1">
+                                                <span className="text-[11px] text-primary font-bold flex items-center gap-0.5">
+                                                  <span className="material-symbols-outlined text-[15px]">play_arrow</span>
+                                                  Start Lesson
+                                                </span>
+                                              </div>
+                                            )}
+                                            <span className="material-symbols-outlined text-primary text-[20px] ml-auto">play_circle</span>
+                                          </div>
+                                        </div>
+                                      );
+                                    })}
+                                    {day.task && (
+                                      <div onClick={() => onSelectDay(day.day, 'code')} className={`p-lg rounded-xl flex flex-col gap-sm transition-all duration-200 cursor-pointer glass-card hover:bg-surface-container-low hover:-translate-y-0.5 ${!user.tasksProgress?.[day.task.taskId]?.completed ? 'bg-primary-fixed/5' : ''}`}>
+                                        <div className="flex justify-between items-start min-w-0">
+                                          <h4 className="text-body-md font-bold text-on-surface truncate pr-2" title={day.task.title}>{day.task.title}</h4>
+                                          <span className="px-sm py-xs bg-primary-fixed text-on-primary-fixed-variant text-[10px] rounded-lg font-bold shrink-0">Task</span>
+                                        </div>
+                                        <div className="mt-auto flex items-center justify-between pt-2 border-t border-outline-variant/30">
+                                          {user.tasksProgress?.[day.task.taskId]?.completed ? (
+                                            <div className="flex items-center gap-1 text-tertiary font-bold text-caption">
+                                              <span className="material-symbols-outlined text-[18px]" style={{ fontVariationSettings: "'FILL' 1" }}>check_circle</span>
+                                              <span>Task Solved</span>
+                                            </div>
+                                          ) : (
+                                            <div className="flex items-center gap-1 text-on-surface-variant text-caption">
+                                              <span className="material-symbols-outlined text-[18px]">radio_button_unchecked</span>
+                                              <span>Task Pending</span>
+                                            </div>
+                                          )}
+                                          <span className="material-symbols-outlined text-primary text-[20px]">arrow_forward</span>
+                                        </div>
+                                      </div>
                                     )}
                                   </div>
                                 )}
-                                
-                                <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-md">
-                                  <div className="flex-grow min-w-0 pr-4">
-                                    {!blockInfo.inBlock && <h4 className="text-body-md font-bold text-on-surface">{day.title}</h4>}
-                                    <p className="text-caption text-on-surface-variant mt-1 leading-relaxed">
-                                      {day.task?.description || 'Build and submit your OOP mini-project.'}
-                                    </p>
-                                  </div>
-                                </div>
                               </div>
-                            ) : (
-                              /* Active Video/Task Day Content */
-                              <div className="grid grid-cols-1 md:grid-cols-2 gap-md">
-                                {/* Video Item(s) Card */}
-                                {day.videos?.map((vid) => {
-                                  const isVidCompleted = !!user.lessonsProgress?.[vid.videoId + "_day" + day.day]?.completed;
-                                  const savedProg = user.lessonsProgress?.[vid.videoId + "_day" + day.day];
-                                  
-                                  const vStart = timeToSecs(vid.assignedStart || '00:00:00');
-                                  const vEnd = timeToSecs(vid.assignedEnd || vid.duration || '00:00:00');
-                                  const vDur = Math.max(1, vEnd - vStart);
-                                  
-                                  // Check if they started the video
-                                  const hasStarted = savedProg && !savedProg.completed && savedProg.lastPosition > vStart + 1;
-                                  const currentPos = savedProg ? (savedProg.lastPosition - vStart) : 0;
-                                  const pct = Math.min(100, Math.max(0, (currentPos / vDur) * 100));
+                            </div>
+                          );
+                        }
 
+                        // ── PROJECT BLOCK: all days in one row ──────────────────────
+                        const { blockDays, startIdx } = item;
+                        const firstDay = blockDays[0];
+                        const lastDay = blockDays[blockDays.length - 1];
+                        const blockAllCompleted = blockDays.every(d => isDayCompleted(d));
+                        const blockBi = getProjectBlockInfo(firstDay, filteredDays);
+                        const lastOrigIdx = startIdx + blockDays.length - 1;
+                        const hasConnector = lastOrigIdx < filteredDays.length - 1;
+
+                        return (
+                          <div key={`block-${firstDay.day}`} id={`day-${firstDay.day}`} className="relative flex gap-lg group">
+                            {/* Timeline connector that spans the full block height */}
+                            {hasConnector && (
+                              <div className={`timeline-connector ${blockAllCompleted ? 'bg-tertiary-container' : 'bg-outline-variant/40'}`}></div>
+                            )}
+
+                            {/* Left column: stacked day circles */}
+                            <div className="z-10 shrink-0 flex flex-col" style={{ gap: 0 }}>
+                              {blockDays.map((d, di) => {
+                                const dc = isDayCompleted(d);
+                                const isOff = d.type === 'off';
+                                // vertical spacer between circles to align with card rows inside
+                                return (
+                                  <div key={d.day} id={di > 0 ? `day-${d.day}` : undefined} className="flex flex-col items-center" style={{ paddingTop: di === 0 ? 4 : 0 }}>
+                                    {isOff ? (
+                                      <div className="w-12 h-12 rounded-full bg-amber-color/10 border-2 border-amber-color/40 flex items-center justify-center text-amber-color">
+                                        <span className="material-symbols-outlined text-[20px]">coffee</span>
+                                      </div>
+                                    ) : dc ? (
+                                      <div className="w-12 h-12 rounded-full bg-tertiary flex items-center justify-center text-on-tertiary">
+                                        <span className="material-symbols-outlined text-[20px]" style={{ fontVariationSettings: "'FILL' 1" }}>check_circle</span>
+                                      </div>
+                                    ) : (
+                                      <div className="w-12 h-12 rounded-full bg-primary flex items-center justify-center text-on-primary active-dot font-extrabold text-label-md">
+                                        {d.day}
+                                      </div>
+                                    )}
+                                    {/* thin connector between circles inside the block */}
+                                    {di < blockDays.length - 1 && (
+                                      <div className="w-0.5 flex-1 bg-outline-variant/40" style={{ minHeight: 0 }}></div>
+                                    )}
+                                  </div>
+                                );
+                              })}
+                            </div>
+
+                            {/* Right: single unified card */}
+                            <div className="flex-grow pb-4 min-w-0">
+                              <div className="glass-card rounded-2xl border border-outline-variant/50 overflow-hidden bg-primary/[0.005]">
+                                {/* Card header */}
+                                <div className="px-lg pt-lg pb-4 border-b border-outline-variant/20 flex items-center justify-between">
+                                  <div>
+                                    <span className="text-[10px] font-bold uppercase tracking-wider text-primary bg-primary/10 px-2.5 py-1 rounded-full">
+                                      Multi-Day Project
+                                    </span>
+                                    <h3 className="text-lg font-bold text-on-surface mt-2">{blockBi.projectTitle}</h3>
+                                  </div>
+                                  <span className="material-symbols-outlined text-primary text-[40px] opacity-20">assignment</span>
+                                </div>
+
+                                {/* Each day as a row inside the card */}
+                                {blockDays.map((d, di) => {
+                                  const dc = isDayCompleted(d);
+                                  const isOff = d.type === 'off';
                                   return (
-                                    <div 
-                                      key={vid.videoId}
-                                      onClick={() => onSelectDay(day.day)}
-                                      className="p-lg rounded-xl flex flex-col gap-sm transition-all duration-200 cursor-pointer glass-card hover:bg-surface-container-low hover:-translate-y-0.5"
+                                    <div
+                                      key={d.day}
+                                      onClick={() => !isOff && onSelectDay(d.day)}
+                                      className={`px-lg py-md flex flex-col gap-xs ${di < blockDays.length - 1 ? 'border-b border-outline-variant/15' : ''} ${!isOff ? 'cursor-pointer hover:bg-surface-container-low/50 transition-colors' : ''}`}
                                     >
-                                      <div className="flex justify-between items-start min-w-0">
-                                        <h4 className="text-body-md font-bold text-on-surface truncate pr-2" title={vid.title}>
-                                          {vid.title}
-                                        </h4>
-                                        {/* Calculate actual assigned segment duration */}
-                                        {(() => {
-                                          const start = timeToSecs(vid.assignedStart || '00:00:00');
-                                          const end = timeToSecs(vid.assignedEnd || vid.duration || '00:00:00');
-                                          const segDur = Math.max(0, end - start);
-                                          const h = Math.floor(segDur / 3600);
-                                          const m = Math.floor((segDur % 3600) / 60);
-                                          const s = segDur % 60;
-                                          const formatted = h > 0 
-                                            ? `${h}:${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`
-                                            : `${m}:${s.toString().padStart(2, '0')}`;
-                                          return (
-                                            <span className="text-caption text-on-surface-variant shrink-0">{formatted}</span>
-                                          );
-                                        })()}
-                                      </div>
-                                      
-                                      <div className="mt-auto flex items-center justify-between pt-2 border-t border-outline-variant/30">
-                                        {isVidCompleted ? (
-                                          <div className="flex items-center gap-1.5 text-tertiary font-bold">
-                                            <span className="material-symbols-outlined text-[18px]">verified</span>
-                                            <span className="text-caption">Completed</span>
-                                          </div>
-                                        ) : hasStarted ? (
-                                          <div className="flex-1 pr-4">
-                                            {/* Progress bar accurate to where they stopped (RED color) */}
-                                            <div className="w-full bg-surface-container h-1.5 rounded-full overflow-hidden">
-                                              <div className="bg-error h-full rounded-full" style={{ width: `${pct}%`, backgroundColor: 'var(--color-error, #ba1a1a)' }}></div>
-                                            </div>
-                                            <span className="text-[10px] text-error font-bold mt-1 block">Resume ({Math.round(pct)}% watched)</span>
-                                          </div>
+                                      {/* Day row header */}
+                                      <div className="flex flex-wrap items-center gap-sm">
+                                        <span className="text-caption font-mono font-bold text-muted-text uppercase tracking-wider bg-surface-container-low px-2 py-0.5 rounded border border-outline-variant/50">
+                                          {d.dayOfWeek.slice(0, 3)}
+                                        </span>
+                                        <span className="text-body-md font-bold text-on-surface">
+                                          Day {d.day}: {isOff ? 'Rest Day' : (d.task?.title || d.title)}
+                                        </span>
+                                        {isOff ? (
+                                          <span className="px-sm py-xs bg-amber-color/10 text-amber-color border border-amber-color/20 text-caption rounded-lg font-bold">Rest Day</span>
+                                        ) : dc ? (
+                                          <span className="px-sm py-xs bg-tertiary-container text-on-tertiary-container text-caption rounded-lg font-bold">Completed</span>
                                         ) : (
-                                          <div className="flex-1">
-                                            <span className="text-[11px] text-primary font-bold flex items-center gap-0.5">
-                                              <span className="material-symbols-outlined text-[15px]">play_arrow</span>
-                                              Start Lesson
-                                            </span>
-                                          </div>
+                                          <span className="px-sm py-xs bg-secondary-container text-on-secondary-container text-caption rounded-lg font-bold">Ready to Study</span>
                                         )}
-                                        
-                                        <span className="material-symbols-outlined text-primary text-[20px] ml-auto">play_circle</span>
+                                        {!isOff && !dc && (
+                                          <span className="ml-auto material-symbols-outlined text-primary text-[18px]">arrow_forward</span>
+                                        )}
+                                        {!isOff && dc && (
+                                          <span className="ml-auto material-symbols-outlined text-tertiary text-[18px]">check_circle</span>
+                                        )}
                                       </div>
+                                      {/* Description */}
+                                      {isOff ? (
+                                        <p className="text-caption text-on-surface-variant leading-relaxed">
+                                          Take a complete break from active lectures. Rest up!
+                                        </p>
+                                      ) : (
+                                        <p className="text-caption text-on-surface-variant leading-relaxed">
+                                          {d.task?.description || 'Build and submit your OOP mini-project.'}
+                                        </p>
+                                      )}
                                     </div>
                                   );
                                 })}
-
-                                {/* Day Task Card */}
-                                {day.task && (
-                                  <div 
-                                    onClick={() => onSelectDay(day.day, 'code')}
-                                    className={`p-lg rounded-xl flex flex-col gap-sm transition-all duration-200 cursor-pointer glass-card hover:bg-surface-container-low hover:-translate-y-0.5 ${
-                                      !user.tasksProgress?.[day.task.taskId]?.completed ? 'bg-primary-fixed/5' : ''
-                                    }`}
-                                  >
-                                    <div className="flex justify-between items-start min-w-0">
-                                      <h4 className="text-body-md font-bold text-on-surface truncate pr-2" title={day.task.title}>
-                                        {day.task.title}
-                                      </h4>
-                                      <span className="px-sm py-xs bg-primary-fixed text-on-primary-fixed-variant text-[10px] rounded-lg font-bold shrink-0">
-                                        Task
-                                      </span>
-                                    </div>
-
-                                    <div className="mt-auto flex items-center justify-between pt-2 border-t border-outline-variant/30">
-                                      {user.tasksProgress?.[day.task.taskId]?.completed ? (
-                                        <div className="flex items-center gap-1 text-tertiary font-bold text-caption">
-                                          <span className="material-symbols-outlined text-[18px]" style={{ fontVariationSettings: "'FILL' 1" }}>check_circle</span>
-                                          <span>Task Solved</span>
-                                        </div>
-                                      ) : (
-                                        <div className="flex items-center gap-1 text-on-surface-variant text-caption">
-                                          <span className="material-symbols-outlined text-[18px]">radio_button_unchecked</span>
-                                          <span>Task Pending</span>
-                                        </div>
-                                      )}
-
-                                      <span className="material-symbols-outlined text-primary text-[20px]">arrow_forward</span>
-                                    </div>
-                                  </div>
-                                )}
                               </div>
-                            )}
+                            </div>
                           </div>
-                        </div>
-                      );
-                    })}
-                  </div>
-                )}
+                        );
+                      })}
+                    </div>
+                  );
+                })()}
               </div>
             );
           })}
