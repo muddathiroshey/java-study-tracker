@@ -745,10 +745,10 @@ export default function DailyLessons({
                             </div>
 
                             {/* Right: ONE card */}
-                            <div className="flex-grow pb-4 min-w-0">
+                            <div className="flex-grow pb-4 min-w-0 flex flex-col">
                               <div
                                 onClick={() => onSelectDay(firstProjectDay.day)}
-                                className="glass-card p-lg rounded-2xl border border-outline-variant/50 bg-primary/[0.01] cursor-pointer hover:bg-surface-container-low hover:-translate-y-0.5 transition-all duration-200 flex flex-col gap-sm"
+                                className="glass-card p-lg rounded-2xl border border-outline-variant/50 bg-primary/[0.01] cursor-pointer hover:bg-surface-container-low hover:-translate-y-0.5 transition-all duration-200 flex flex-col gap-sm flex-1"
                               >
                                 {/* Badge + title */}
                                 <div className="flex items-start justify-between gap-4">
