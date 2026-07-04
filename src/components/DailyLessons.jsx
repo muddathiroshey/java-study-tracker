@@ -721,7 +721,7 @@ export default function DailyLessons({
                             )}
 
                             {/* Left column: first circle, dots, last circle */}
-                            <div className="z-10 shrink-0 flex flex-col items-center" style={{ paddingTop: 4 }}>
+                            <div className="z-10 shrink-0 flex flex-col items-center">
                               {/* First day circle */}
                               {(() => {
                                 const d = blockDays[0];
