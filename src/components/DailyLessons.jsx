@@ -36,7 +36,9 @@ const getProjectBlockInfo = (day, weekDays) => {
       firstDay: 24,
       lastDay: 28,
       isFirst: day.day === 24,
-      isLast: day.day === 28
+      isLast: day.day === 28,
+      goal: "Build a command-line program that helps a student analyze a set of exam scores and course credit hours, and produces a GPA report based on university grading regulations.",
+      topics: "Ch 1–8 (Java basics, variables, I/O, expressions, conditionals, math/strings, loops, methods, arrays, matrices)"
     };
   }
   if (isCapstone) {
@@ -46,7 +48,9 @@ const getProjectBlockInfo = (day, weekDays) => {
       firstDay: 60,
       lastDay: 63,
       isFirst: day.day === 60,
-      isLast: day.day === 63
+      isLast: day.day === 63,
+      goal: "Design and build a full-featured Java application that demonstrates mastery of OOP principles including inheritance, polymorphism, interfaces, and exception handling.",
+      topics: "Ch 1–12 (All core Java topics: OOP, inheritance, polymorphism, interfaces, exceptions, abstract classes, file I/O)"
     };
   }
   return { inBlock: false };
@@ -767,10 +771,25 @@ export default function DailyLessons({
                                   )}
                                 </div>
 
-                                {/* Description */}
-                                <p className="text-caption text-on-surface-variant leading-relaxed">
-                                  {description}
-                                </p>
+                                {/* Goal & Topics panels */}
+                                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-1">
+                                  <div className="rounded-xl border-l-[3px] border-primary/40 bg-surface-container-lowest/60 px-4 py-3">
+                                    <p className="text-[10px] font-bold uppercase tracking-wider text-primary/80 mb-1.5 flex items-center gap-1">
+                                      <span className="text-[13px]">🎯</span> Goal
+                                    </p>
+                                    <p className="text-caption text-on-surface-variant leading-relaxed">
+                                      {blockBi.goal || description}
+                                    </p>
+                                  </div>
+                                  <div className="rounded-xl border-l-[3px] border-tertiary/40 bg-surface-container-lowest/60 px-4 py-3">
+                                    <p className="text-[10px] font-bold uppercase tracking-wider text-tertiary/80 mb-1.5 flex items-center gap-1">
+                                      <span className="text-[13px]">📚</span> Topics Covered
+                                    </p>
+                                    <p className="text-caption text-on-surface-variant leading-relaxed">
+                                      {blockBi.topics || 'Core OOP concepts and Java fundamentals'}
+                                    </p>
+                                  </div>
+                                </div>
                               </div>
                             </div>
                           </div>
