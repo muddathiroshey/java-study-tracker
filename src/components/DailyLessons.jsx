@@ -734,7 +734,7 @@ export default function DailyLessons({
                               })()}
 
                               {/* Dotted spacer */}
-                              <div className="flex flex-col items-center gap-1.5 py-2 flex-1" style={{ minHeight: 40 }}>
+                              <div className="flex flex-col items-center justify-center gap-1.5 py-2 flex-1" style={{ minHeight: 40 }}>
                                 <div className="w-1.5 h-1.5 rounded-full bg-outline-variant/60"></div>
                                 <div className="w-1.5 h-1.5 rounded-full bg-outline-variant/50"></div>
                                 <div className="w-1.5 h-1.5 rounded-full bg-outline-variant/40"></div>
