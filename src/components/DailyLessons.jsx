@@ -720,32 +720,36 @@ export default function DailyLessons({
                               <div className={`timeline-connector ${blockAllCompleted ? 'bg-tertiary-container' : 'bg-outline-variant/40'}`}></div>
                             )}
 
-                            {/* Left column: stacked day circles */}
-                            <div className="z-10 shrink-0 flex flex-col items-center" style={{ gap: 0 }}>
-                              {blockDays.map((d, di) => {
+                            {/* Left column: first circle, dots, last circle */}
+                            <div className="z-10 shrink-0 flex flex-col items-center" style={{ paddingTop: 4 }}>
+                              {/* First day circle */}
+                              {(() => {
+                                const d = blockDays[0];
                                 const dc = isDayCompleted(d);
-                                const isOff = d.type === 'off';
                                 return (
-                                  <div key={d.day} id={di > 0 ? `day-${d.day}` : undefined} className="flex flex-col items-center" style={{ paddingTop: di === 0 ? 4 : 0 }}>
-                                    {isOff ? (
-                                      <div className="w-12 h-12 rounded-full bg-amber-color/10 border-2 border-amber-color/40 flex items-center justify-center text-amber-color">
-                                        <span className="material-symbols-outlined text-[20px]">coffee</span>
-                                      </div>
-                                    ) : dc ? (
-                                      <div className="w-12 h-12 rounded-full bg-tertiary flex items-center justify-center text-on-tertiary">
-                                        <span className="material-symbols-outlined text-[20px]" style={{ fontVariationSettings: "'FILL' 1" }}>check_circle</span>
-                                      </div>
-                                    ) : (
-                                      <div className="w-12 h-12 rounded-full bg-primary flex items-center justify-center text-on-primary active-dot font-extrabold text-label-md">
-                                        {d.day}
-                                      </div>
-                                    )}
-                                    {di < blockDays.length - 1 && (
-                                      <div className="w-0.5 flex-1 bg-outline-variant/40" style={{ minHeight: 8 }}></div>
-                                    )}
+                                  <div id={`day-${d.day}`} className="w-12 h-12 rounded-full bg-primary flex items-center justify-center text-on-primary active-dot font-extrabold text-label-md shrink-0">
+                                    {dc ? <span className="material-symbols-outlined text-[20px]" style={{ fontVariationSettings: "'FILL' 1" }}>check_circle</span> : d.day}
                                   </div>
                                 );
-                              })}
+                              })()}
+
+                              {/* Dotted spacer */}
+                              <div className="flex flex-col items-center gap-1.5 py-2 flex-1" style={{ minHeight: 40 }}>
+                                <div className="w-1.5 h-1.5 rounded-full bg-outline-variant/60"></div>
+                                <div className="w-1.5 h-1.5 rounded-full bg-outline-variant/50"></div>
+                                <div className="w-1.5 h-1.5 rounded-full bg-outline-variant/40"></div>
+                              </div>
+
+                              {/* Last day circle */}
+                              {(() => {
+                                const d = blockDays[blockDays.length - 1];
+                                const dc = isDayCompleted(d);
+                                return (
+                                  <div id={`day-${d.day}`} className="w-12 h-12 rounded-full bg-primary flex items-center justify-center text-on-primary active-dot font-extrabold text-label-md shrink-0">
+                                    {dc ? <span className="material-symbols-outlined text-[20px]" style={{ fontVariationSettings: "'FILL' 1" }}>check_circle</span> : d.day}
+                                  </div>
+                                );
+                              })()}
                             </div>
 
                             {/* Right: ONE card */}
