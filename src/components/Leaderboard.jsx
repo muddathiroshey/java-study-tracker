@@ -39,8 +39,9 @@ const getTrend = (u) => {
   return { icon: 'trending_down', color: 'text-error' };
 };
 
-// Accounts hidden from the leaderboard (not deleted, just not shown)
-const HIDDEN_USERNAMES = new Set(['admin', 'محمد هاشم', 'مدثر', 'Mustafa Mustafa']);
+// Returns true for any admin account — hides them from the leaderboard
+const isAdminUser = (u) =>
+  u.isAdmin === true || u.username?.toLowerCase().includes('admin');
 
 export default function Leaderboard({ user }) {
   const [users, setUsers] = useState([]);
@@ -52,7 +53,7 @@ export default function Leaderboard({ user }) {
     const db = await getDB();
     if (!db || !db.users) return;
     const scored = db.users
-      .filter(u => !HIDDEN_USERNAMES.has(u.username))
+      .filter(u => !isAdminUser(u))
       .map(u => {
         const uTodayStr = getLocalDateString(u);
         const activeStreak = getActiveStreak(u, uTodayStr, courseSchedule);
