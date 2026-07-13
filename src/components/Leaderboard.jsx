@@ -39,9 +39,14 @@ const getTrend = (u) => {
   return { icon: 'trending_down', color: 'text-error' };
 };
 
-// Returns true for any admin account — hides them from the leaderboard
-const isAdminUser = (u) =>
-  u.isAdmin === true || u.username?.toLowerCase().includes('admin');
+// Returns true for any admin account or excluded accounts — hides them from the leaderboard
+const isAdminUser = (u) => {
+  const name = u.username?.toLowerCase() || '';
+  return u.isAdmin === true ||
+         name.includes('admin') ||
+         name === 'مدثر' ||
+         name === 'محمد هاشم';
+};
 
 export default function Leaderboard({ user }) {
   const [users, setUsers] = useState([]);
