@@ -543,7 +543,7 @@ export default function ProjectView({ user }) {
 // ── Sub-components ─────────────────────────────────────────────────────────────
 
 function ProjectCard({ project, gradient, isAdmin }) {
-  const [openModule, setOpenModule] = useState(null);
+  const [openModules, setOpenModules] = useState({});
 
   return (
     <div className="space-y-6">
@@ -560,7 +560,7 @@ function ProjectCard({ project, gradient, isAdmin }) {
                 {project.icon}
               </span>
             </div>
-            <div className="flex-1 min-w-0">
+            <div className="flex-grow min-w-0">
               <div className="flex items-center gap-2 mb-1">
                 <span className="px-3 py-0.5 bg-white/20 backdrop-blur-sm border border-white/20 rounded-full text-white font-black text-[11px] uppercase tracking-wider">
                   Final Project #{project.id}
@@ -600,11 +600,11 @@ function ProjectCard({ project, gradient, isAdmin }) {
           System Modules
         </h2>
         {project.modules.map((mod, idx) => {
-          const isOpen = openModule === idx;
+          const isOpen = !!openModules[idx];
           return (
             <div key={idx} className="bg-surface-container-lowest border border-outline-variant rounded-2xl overflow-hidden shadow-sm transition-all duration-200">
               <button
-                onClick={() => setOpenModule(isOpen ? null : idx)}
+                onClick={() => setOpenModules(prev => ({ ...prev, [idx]: !prev[idx] }))}
                 className="w-full flex items-center justify-between px-6 py-4 text-left cursor-pointer hover:bg-surface-container-low transition-colors"
               >
                 <div className="flex items-center gap-3">
