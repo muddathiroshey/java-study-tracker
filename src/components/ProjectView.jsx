@@ -378,8 +378,6 @@ export default function ProjectView({ user }) {
               …and {PROJECTS_LIST.length - 4} more possible projects. Which one will you get? 🎲
             </p>
           </div>
-
-          </div>
         </main>
       </div>
     );
