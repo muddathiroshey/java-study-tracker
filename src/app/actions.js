@@ -573,3 +573,117 @@ export async function githubPushSolutionAction(filePath, fileContent, commitMsg)
     return { success: false, error: `Network error: ${err.message}` };
   }
 }
+
+// ─── Project Assignment Actions ───────────────────────────────────────────────
+
+/**
+ * Get the project assigned to a user.
+ * - Admin callers: always see the full project number (no lock condition).
+ * - Student callers: only see the project if they have completed all course videos.
+ *   Otherwise returns { locked: true, videosCompleted, totalVideos }.
+ *
+ * @param {string|null} targetUsername  If provided (admin only), fetch that user's project.
+ */
+export async function getProjectAssignmentAction(targetUsername = null) {
+  const cookieStore = await cookies();
+  const session = cookieStore.get(SESSION_COOKIE_NAME);
+  if (!session?.value) return { success: false, error: 'Not authenticated' };
+
+  const caller = await dbGetUserByUsernameOrEmail(session.value);
+  if (!caller) return { success: false, error: 'User not found' };
+
+  const isAdmin = caller.isAdmin === true;
+
+  // Determine which user's project we are checking
+  const subjectUsername = targetUsername && isAdmin ? targetUsername : caller.username;
+  const subject = targetUsername && isAdmin
+    ? await dbGetUserByUsernameOrEmail(targetUsername)
+    : caller;
+
+  if (!subject) return { success: false, error: 'Target user not found' };
+
+  const projectNum = subject.settings?.assignedProject ?? null;
+
+  // Admins can always see — no lock
+  if (isAdmin) {
+    return { success: true, locked: false, projectNumber: projectNum, username: subject.username };
+  }
+
+  // For students: check if all course videos are completed
+  const videoOnlyDays = courseSchedule.filter(d => d.type === 'video' && d.videos && d.videos.length > 0);
+  const totalVideos = videoOnlyDays.reduce((acc, day) => acc + day.videos.length, 0);
+
+  const completedVideoKeys = Object.keys(subject.lessonsProgress || {}).filter(
+    key => !key.startsWith('review_') && subject.lessonsProgress[key]?.completed
+  );
+  const videosCompleted = completedVideoKeys.length;
+  const allDone = videosCompleted >= totalVideos;
+
+  if (!allDone) {
+    return {
+      success: true,
+      locked: true,
+      videosCompleted,
+      totalVideos,
+      projectNumber: null,
+    };
+  }
+
+  return { success: true, locked: false, projectNumber: projectNum, username: subject.username };
+}
+
+/**
+ * Admin-only: Assign (or re-assign) a specific project number (1–13) to a user.
+ */
+export async function assignProjectAction(targetUsername, projectNumber) {
+  const cookieStore = await cookies();
+  const session = cookieStore.get(SESSION_COOKIE_NAME);
+  if (!session?.value) return { success: false, error: 'Not authenticated' };
+
+  const caller = await dbGetUserByUsernameOrEmail(session.value);
+  if (!caller?.isAdmin) return { success: false, error: 'Admin access required' };
+
+  const target = await dbGetUserByUsernameOrEmail(targetUsername);
+  if (!target) return { success: false, error: 'User not found' };
+
+  const updatedSettings = { ...target.settings, assignedProject: Number(projectNumber) };
+  const updated = await dbUpdateUserProgress(
+    target.username,
+    target.lessonsProgress,
+    target.tasksProgress,
+    target.submissions,
+    updatedSettings,
+    target.streak,
+    target.lastActiveDate
+  );
+
+  if (!updated) return { success: false, error: 'Failed to assign project' };
+  return { success: true, user: updated };
+}
+
+/**
+ * Admin-only: Assign random projects to ALL users that don't have one yet.
+ * Also re-randomises users where assignedProject is null/undefined.
+ */
+export async function bulkAssignProjectsAction() {
+  const cookieStore = await cookies();
+  const session = cookieStore.get(SESSION_COOKIE_NAME);
+  if (!session?.value) return { success: false, error: 'Not authenticated' };
+
+  const caller = await dbGetUserByUsernameOrEmail(session.value);
+  if (!caller?.isAdmin) return { success: false, error: 'Admin access required' };
+
+  const users = await dbGetLeaderboard();
+
+  let assignedCount = 0;
+  for (const u of users) {
+    if (!u.isAdmin && (u.settings?.assignedProject == null)) {
+      const projectNum = Math.floor(Math.random() * 13) + 1;
+      const updatedSettings = { ...u.settings, assignedProject: projectNum };
+      await dbUpdateUserProgress(u.username, u.lessonsProgress, u.tasksProgress, u.submissions, updatedSettings, u.streak, u.lastActiveDate);
+      assignedCount++;
+    }
+  }
+
+  return { success: true, assignedCount };
+}

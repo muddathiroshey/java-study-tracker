@@ -291,6 +291,9 @@ export async function dbCreateUser(name, email, password, isAdmin = false) {
   await dbInit();
   const p = getPool();
 
+  // Randomly assign one of the 13 projects (1–13) to non-admin users
+  const assignedProject = isAdmin ? null : (Math.floor(Math.random() * 13) + 1);
+
   const newUser = {
     id: Date.now().toString(),
     username: name,
@@ -308,7 +311,8 @@ export async function dbCreateUser(name, email, password, isAdmin = false) {
       dailyTargetMinutes: 60,
       devWarpTime: false,
       currentFakeDate: null,
-      openAvailability: false
+      openAvailability: false,
+      assignedProject,
     }
   };
 

@@ -34,6 +34,7 @@ export default function Sidebar({
     { id: 'dashboard', name: 'Daily Lessons', icon: 'calendar_today' },
     { id: 'leaderboard', name: 'Leaderboard', icon: 'leaderboard' },
     { id: 'resources', name: 'Resources', icon: 'menu_book' },
+    { id: 'project', name: isAdmin ? 'Projects' : 'My Project', icon: 'assignment' },
     { id: 'settings', name: 'Settings', icon: 'settings' },
   ];
 

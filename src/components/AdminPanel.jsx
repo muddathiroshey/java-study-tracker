@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { getDB, saveDB, saveStoredSchedule, getStoredSchedule, calculateUserPoints, createAdminAccount } from '../lib/storage';
 import { courseSchedule } from '../lib/courseData';
 import { getLocalDateString, getActiveStreak } from '../lib/dateUtils';
+import { PROJECTS_LIST } from '../lib/projectsData';
 
 export default function AdminPanel({ user, schedule, onScheduleUpdate }) {
   const [tab, setTab] = useState('overview'); // 'overview' | 'users' | 'schedule' | 'editor'
@@ -390,38 +391,62 @@ export default function AdminPanel({ user, schedule, onScheduleUpdate }) {
                       <th className="py-3 px-6 text-center">Active Streak</th>
                       <th className="py-3 px-6 text-center">Video Progress</th>
                       <th className="py-3 px-6 text-center">Tasks Solved</th>
+                      <th className="py-3 px-6 text-center">Project #</th>
                       <th className="py-3 px-6 text-right">Points Score</th>
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-outline-variant/50 text-caption font-semibold">
-                    {users.map((u, i) => (
-                      <tr key={u.username} className="hover:bg-surface-container transition-colors">
-                        <td className="py-4 px-6 text-on-surface-variant">#{i + 1}</td>
-                        <td className="py-4 px-6">
-                          <div className="flex items-center gap-3">
-                            <div className="w-8 h-8 rounded-full bg-primary/10 text-primary flex items-center justify-center font-black text-xs shrink-0">
-                              {u.username[0].toUpperCase()}
+                    {users.map((u, i) => {
+                      const pNum = u.settings?.assignedProject ?? null;
+                      const pInfo = pNum ? PROJECTS_LIST.find(p => p.id === pNum) : null;
+                      return (
+                        <tr key={u.username} className="hover:bg-surface-container transition-colors">
+                          <td className="py-4 px-6 text-on-surface-variant">#{i + 1}</td>
+                          <td className="py-4 px-6">
+                            <div className="flex items-center gap-3">
+                              <div className="w-8 h-8 rounded-full bg-primary/10 text-primary flex items-center justify-center font-black text-xs shrink-0">
+                                {u.username[0].toUpperCase()}
+                              </div>
+                              <div>
+                                <p className="font-bold text-on-surface">{u.username}</p>
+                                {(u.username.toLowerCase() === 'muddathiradmin' || u.isAdmin) && (
+                                  <span className="text-[8px] bg-primary text-on-primary px-1 rounded-full font-bold">ADMIN</span>
+                                )}
+                              </div>
                             </div>
-                            <div>
-                              <p className="font-bold text-on-surface">{u.username}</p>
-                              {(u.username.toLowerCase() === 'muddathiradmin' || u.isAdmin) && (
-                                <span className="text-[8px] bg-primary text-on-primary px-1 rounded-full font-bold">ADMIN</span>
-                              )}
-                            </div>
-                          </div>
-                        </td>
-                        <td className="py-4 px-6 text-on-surface-variant font-mono">{u.enrolledDate || 'N/A'}</td>
-                        <td className="py-4 px-6 text-center">
-                          <span className="inline-flex items-center gap-0.5 text-error font-bold">
-                            <span className="material-symbols-outlined text-[15px]" style={{ fontVariationSettings: "'FILL' 1" }}>local_fire_department</span>
-                            {u.streak || 0}d
-                          </span>
-                        </td>
-                        <td className="py-4 px-6 text-center text-on-surface">{u.videoCount} / {totalVideos}</td>
-                        <td className="py-4 px-6 text-center text-on-surface">{u.taskCount} / {totalTasks}</td>
-                        <td className="py-4 px-6 text-right text-primary font-black text-body-md">{u.points} XP</td>
-                      </tr>
-                    ))}
+                          </td>
+                          <td className="py-4 px-6 text-on-surface-variant font-mono">{u.enrolledDate || 'N/A'}</td>
+                          <td className="py-4 px-6 text-center">
+                            <span className="inline-flex items-center gap-0.5 text-error font-bold">
+                              <span className="material-symbols-outlined text-[15px]" style={{ fontVariationSettings: "'FILL' 1" }}>local_fire_department</span>
+                              {u.streak || 0}d
+                            </span>
+                          </td>
+                          <td className="py-4 px-6 text-center text-on-surface">{u.videoCount} / {totalVideos}</td>
+                          <td className="py-4 px-6 text-center text-on-surface">{u.taskCount} / {totalTasks}</td>
+                          <td className="py-4 px-6 text-center">
+                            {u.isAdmin ? (
+                              <span className="text-outline italic text-[10px]">Admin</span>
+                            ) : pNum ? (
+                              <div className="flex flex-col items-center gap-0.5">
+                                <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-primary/10 text-primary font-black text-[10px]">
+                                  <span className="material-symbols-outlined text-[11px]" style={{ fontVariationSettings: "'FILL' 1" }}>{pInfo?.icon || 'assignment'}</span>
+                                  #{pNum}
+                                </span>
+                                {pInfo && (
+                                  <span className="text-[9px] text-on-surface-variant font-semibold max-w-[100px] text-center leading-tight line-clamp-2">
+                                    {pInfo.title.length > 20 ? pInfo.title.slice(0, 20) + '…' : pInfo.title}
+                                  </span>
+                                )}
+                              </div>
+                            ) : (
+                              <span className="text-outline italic text-[10px]">Unassigned</span>
+                            )}
+                          </td>
+                          <td className="py-4 px-6 text-right text-primary font-black text-body-md">{u.points} XP</td>
+                        </tr>
+                      );
+                    })}
                   </tbody>
                 </table>
               </div>

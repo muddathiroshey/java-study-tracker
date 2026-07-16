@@ -23,7 +23,8 @@
         "dailyTargetMinutes": 60,
         "devWarpTime": false,
         "currentFakeDate": null,
-        "openAvailability": true
+        "openAvailability": true,
+        "assignedProject": null
       }
     },
     {
@@ -93,7 +94,8 @@
         "dailyTargetMinutes": 60,
         "devWarpTime": false,
         "currentFakeDate": null,
-        "openAvailability": false
+        "openAvailability": false,
+        "assignedProject": 7
       }
     }
   ],

@@ -116,6 +116,7 @@ export default function AppLayoutWrapper({ children }) {
     if (pathname === '/resources') return 'Resources';
     if (pathname === '/settings') return 'Settings';
     if (pathname === '/admin') return 'Admin Panel';
+    if (pathname === '/project') return user?.isAdmin ? 'Project Assignments' : 'My Final Project';
     return 'Java Mastery';
   };
 

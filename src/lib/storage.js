@@ -16,7 +16,10 @@ import {
   getGlobalConfigAction,
   saveGlobalConfigAction,
   runJavaCodeAction,
-  deleteUserAccountAction
+  deleteUserAccountAction,
+  getProjectAssignmentAction,
+  assignProjectAction,
+  bulkAssignProjectsAction
 } from '../app/actions';
 
 export async function getDB() {
@@ -167,4 +170,24 @@ export async function runJavaCode(code) {
 
 export async function deleteUserAccount(username) {
   return await deleteUserAccountAction(username);
+}
+
+// ─── Project Assignment Helpers ────────────────────────────────────────────
+
+/**
+ * Get the logged-in user's project assignment.
+ * Pass targetUsername to let admins query another user's project.
+ */
+export async function getProjectAssignment(targetUsername = null) {
+  return await getProjectAssignmentAction(targetUsername);
+}
+
+/** Admin-only: assign a specific project (1–13) to a user. */
+export async function assignProject(username, projectNumber) {
+  return await assignProjectAction(username, projectNumber);
+}
+
+/** Admin-only: bulk-assign random projects to all unassigned users. */
+export async function bulkAssignProjects() {
+  return await bulkAssignProjectsAction();
 }
