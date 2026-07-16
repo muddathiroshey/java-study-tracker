@@ -27,6 +27,10 @@ export default function ProjectView({ user }) {
   const [loading, setLoading] = useState(true);
   const [result, setResult] = useState(null);
   const [project, setProject] = useState(null);
+  const [refreshTrigger, setRefreshTrigger] = useState(0);
+
+  // Admin sub-tab: 'assignments' | 'my-project'
+  const [adminTab, setAdminTab] = useState('assignments');
 
   // Admin: list of all students with their project assignments
   const [allUsers, setAllUsers]   = useState([]);
@@ -41,7 +45,9 @@ export default function ProjectView({ user }) {
   useEffect(() => {
     async function load() {
       setLoading(true);
-      const res = await getProjectAssignment(selectedUser || null);
+      // If admin is previewing their own project, pass null to load current logged-in user
+      const target = (isAdmin && adminTab === 'assignments') ? selectedUser : null;
+      const res = await getProjectAssignment(target || null);
       setResult(res);
       if (res?.success && !res.locked && res.projectNumber) {
         setProject(PROJECTS_LIST.find(p => p.id === res.projectNumber) || null);
@@ -55,7 +61,7 @@ export default function ProjectView({ user }) {
       setLoading(false);
     }
     load();
-  }, [selectedUser]);
+  }, [selectedUser, adminTab, refreshTrigger]);
 
   // ── Admin: reassign project ─────────────────────────────────────────────────
   const handleAssign = async (username) => {
@@ -86,6 +92,14 @@ export default function ProjectView({ user }) {
     }
     setBulkLoading(false);
     setTimeout(() => setBulkMsg(''), 4000);
+  };
+
+  const handleAdminSelfAssign = async (projectNum) => {
+    if (!projectNum) return;
+    const res = await assignProject(user.username, parseInt(projectNum));
+    if (res.success) {
+      setRefreshTrigger(prev => prev + 1);
+    }
   };
 
   // ── Loading state ──────────────────────────────────────────────────────────
@@ -120,176 +134,255 @@ export default function ProjectView({ user }) {
               </div>
               <div>
                 <h1 className="text-display-lg font-headline-lg font-black text-on-background">
-                  Final Project Assignments
+                  {adminTab === 'assignments' ? 'Final Project Assignments' : 'My Final Project'}
                 </h1>
                 <p className="text-body-sm text-on-surface-variant mt-0.5">
-                  View and manage project assignments for all students — Dr. Mohammed El-Said
+                  {adminTab === 'assignments'
+                    ? 'View and manage project assignments for all students — Dr. Mohammed El-Said'
+                    : 'Inspect and preview project layouts and content details'
+                  }
                 </p>
               </div>
             </div>
-            <div className="flex flex-col items-end gap-2">
-              <button
-                onClick={handleBulkAssign}
-                disabled={bulkLoading}
-                className="px-4 py-2 bg-primary text-on-primary rounded-xl font-bold text-caption flex items-center gap-2 cursor-pointer hover:opacity-90 transition-all shadow-md disabled:opacity-60"
-              >
-                <span className="material-symbols-outlined text-xl">shuffle</span>
-                {bulkLoading ? 'Assigning…' : 'Auto-Assign Missing Projects'}
-              </button>
-              {bulkMsg && (
-                <span className="text-caption font-bold text-tertiary">{bulkMsg}</span>
-              )}
-              {assignMsg && (
-                <span className="text-caption font-bold text-tertiary">{assignMsg}</span>
-              )}
-            </div>
+            {adminTab === 'assignments' && (
+              <div className="flex flex-col items-end gap-2">
+                <button
+                  onClick={handleBulkAssign}
+                  disabled={bulkLoading}
+                  className="px-4 py-2 bg-primary text-on-primary rounded-xl font-bold text-caption flex items-center gap-2 cursor-pointer hover:opacity-90 transition-all shadow-md disabled:opacity-60"
+                >
+                  <span className="material-symbols-outlined text-xl">shuffle</span>
+                  {bulkLoading ? 'Assigning…' : 'Auto-Assign Missing Projects'}
+                </button>
+                {bulkMsg && (
+                  <span className="text-caption font-bold text-tertiary">{bulkMsg}</span>
+                )}
+                {assignMsg && (
+                  <span className="text-caption font-bold text-tertiary">{assignMsg}</span>
+                )}
+              </div>
+            )}
           </header>
 
-          {/* Admin: view selected student's project details */}
-          <div className="bg-surface-container-lowest border border-outline-variant rounded-2xl p-6 shadow-sm">
-            <h2 className="font-bold text-on-surface text-title-md mb-4 flex items-center gap-2">
-              <span className="material-symbols-outlined text-primary">person_search</span>
-              Preview Any Student's Project
-            </h2>
-            <div className="flex flex-col sm:flex-row gap-4 items-start sm:items-center">
-              <select
-                value={selectedUser}
-                onChange={e => { setSelectedUser(e.target.value); setProject(null); }}
-                className="px-3 py-2.5 bg-surface-container border border-outline-variant rounded-xl text-on-surface text-body-sm focus:outline-none focus:border-primary font-semibold w-full sm:w-72"
-              >
-                <option value="">— Select a student —</option>
-                {allUsers.map(u => (
-                  <option key={u.username} value={u.username}>
-                    {u.username} → Project #{u.settings?.assignedProject ?? 'Unassigned'}
-                  </option>
-                ))}
-              </select>
-              {selectedUser && result?.success && !result.locked && project && (
-                <div className="flex items-center gap-2 px-4 py-2 bg-secondary-container text-on-secondary-container rounded-xl font-bold text-caption">
-                  <span className="material-symbols-outlined text-lg" style={{ fontVariationSettings: "'FILL' 1" }}>{project.icon}</span>
-                  {project.title}
+          {/* Sub Tabs for Admin */}
+          <div className="flex gap-2">
+            <button
+              onClick={() => { setAdminTab('assignments'); setProject(null); setSelectedUser(''); }}
+              className={`px-4 py-2 rounded-xl text-label-md font-bold border transition-colors cursor-pointer ${
+                adminTab === 'assignments'
+                  ? 'bg-primary text-on-primary shadow-sm border-transparent'
+                  : 'bg-surface-container-lowest text-on-surface border-outline-variant hover:bg-surface-container-low'
+              }`}
+            >
+              Student Assignments
+            </button>
+            <button
+              onClick={() => { setAdminTab('my-project'); setProject(null); }}
+              className={`px-4 py-2 rounded-xl text-label-md font-bold border transition-colors cursor-pointer ${
+                adminTab === 'my-project'
+                  ? 'bg-primary text-on-primary shadow-sm border-transparent'
+                  : 'bg-surface-container-lowest text-on-surface border-outline-variant hover:bg-surface-container-low'
+              }`}
+            >
+              My Project (Preview & Layout Check)
+            </button>
+          </div>
+
+          {adminTab === 'assignments' ? (
+            <>
+              {/* Admin: view selected student's project details */}
+              <div className="bg-surface-container-lowest border border-outline-variant rounded-2xl p-6 shadow-sm">
+                <h2 className="font-bold text-on-surface text-title-md mb-4 flex items-center gap-2">
+                  <span className="material-symbols-outlined text-primary">person_search</span>
+                  Preview Any Student's Project
+                </h2>
+                <div className="flex flex-col sm:flex-row gap-4 items-start sm:items-center">
+                  <select
+                    value={selectedUser}
+                    onChange={e => { setSelectedUser(e.target.value); setProject(null); }}
+                    className="px-3 py-2.5 bg-surface-container border border-outline-variant rounded-xl text-on-surface text-body-sm focus:outline-none focus:border-primary font-semibold w-full sm:w-72"
+                  >
+                    <option value="">— Select a student —</option>
+                    {allUsers.map(u => (
+                      <option key={u.username} value={u.username}>
+                        {u.username} → Project #{u.settings?.assignedProject ?? 'Unassigned'}
+                      </option>
+                    ))}
+                  </select>
+                  {selectedUser && result?.success && !result.locked && project && (
+                    <div className="flex items-center gap-2 px-4 py-2 bg-secondary-container text-on-secondary-container rounded-xl font-bold text-caption">
+                      <span className="material-symbols-outlined text-lg" style={{ fontVariationSettings: "'FILL' 1" }}>{project.icon}</span>
+                      {project.title}
+                    </div>
+                  )}
+                </div>
+              </div>
+
+              {/* Project details for selected student */}
+              {selectedUser && project && (
+                <ProjectCard project={project} gradient={PROJECT_GRADIENTS[project.id]} isAdmin={true} />
+              )}
+              {selectedUser && result?.success && !project && (
+                <div className="bg-surface-container-lowest border border-outline-variant rounded-2xl p-8 text-center text-on-surface-variant shadow-sm">
+                  <span className="material-symbols-outlined text-4xl text-outline mb-3 block">assignment_late</span>
+                  <p className="font-bold text-on-surface">No project assigned to this student yet.</p>
+                  <p className="text-caption mt-1">Use the reassign button in the table below, or click Auto-Assign.</p>
+                </div>
+              )}
+
+              {/* Students Table */}
+              <div className="bg-surface-container-lowest border border-outline-variant rounded-2xl overflow-hidden shadow-sm">
+                <div className="overflow-x-auto">
+                  <table className="w-full border-collapse text-left">
+                    <thead>
+                      <tr className="bg-surface-container-low text-on-surface-variant border-b border-outline-variant text-caption font-bold uppercase">
+                        <th className="py-3 px-5">#</th>
+                        <th className="py-3 px-5">Student</th>
+                        <th className="py-3 px-5">Assigned Project</th>
+                        <th className="py-3 px-5">Project Name</th>
+                        <th className="py-3 px-5 text-right">Reassign</th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-outline-variant/50 text-caption font-semibold">
+                      {allUsers.length === 0 && (
+                        <tr>
+                          <td colSpan="5" className="py-8 text-center text-on-surface-variant italic">
+                            No student accounts found.
+                          </td>
+                        </tr>
+                      )}
+                      {allUsers.map((u, i) => {
+                        const pNum = u.settings?.assignedProject ?? null;
+                        const pInfo = pNum ? PROJECTS_LIST.find(p => p.id === pNum) : null;
+                        const isReassigning = assigningTo === u.username;
+                        return (
+                          <tr key={u.username} className="hover:bg-surface-container transition-colors align-middle">
+                            <td className="py-3 px-5 text-on-surface-variant">{i + 1}</td>
+                            <td className="py-3 px-5">
+                              <div className="flex items-center gap-3">
+                                <div className="w-8 h-8 rounded-full bg-primary/10 text-primary flex items-center justify-center font-black text-xs shrink-0">
+                                  {u.username[0].toUpperCase()}
+                                </div>
+                                <span className="font-bold text-on-surface">{u.username}</span>
+                              </div>
+                            </td>
+                            <td className="py-3 px-5">
+                              {pNum ? (
+                                <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-primary/10 text-primary font-black text-[11px]">
+                                  <span className="material-symbols-outlined text-[14px]">tag</span>
+                                  Project {pNum}
+                                </span>
+                              ) : (
+                                <span className="text-outline italic text-[11px]">Unassigned</span>
+                              )}
+                            </td>
+                            <td className="py-3 px-5 text-on-surface max-w-[240px]">
+                              {pInfo ? (
+                                <span className="flex items-center gap-1.5">
+                                  <span className="material-symbols-outlined text-[14px] text-primary" style={{ fontVariationSettings: "'FILL' 1" }}>{pInfo.icon}</span>
+                                  <span className="truncate">{pInfo.title}</span>
+                                </span>
+                              ) : (
+                                <span className="text-outline italic">—</span>
+                              )}
+                            </td>
+                            <td className="py-3 px-5 text-right">
+                              {isReassigning ? (
+                                <div className="flex items-center gap-2 justify-end">
+                                  <select
+                                    value={newProjectNum}
+                                    onChange={e => setNewProjectNum(e.target.value)}
+                                    className="px-2 py-1 bg-surface-container border border-outline-variant rounded-lg text-on-surface text-[11px] font-semibold focus:outline-none focus:border-primary"
+                                  >
+                                    <option value="">Pick project…</option>
+                                    {PROJECTS_LIST.map(p => (
+                                      <option key={p.id} value={p.id}>
+                                        #{p.id} — {p.title.length > 28 ? p.title.slice(0, 28) + '…' : p.title}
+                                      </option>
+                                    ))}
+                                  </select>
+                                  <button
+                                    onClick={() => handleAssign(u.username)}
+                                    disabled={!newProjectNum}
+                                    className="px-2 py-1 bg-primary text-on-primary rounded-lg text-[11px] font-bold cursor-pointer disabled:opacity-50"
+                                  >
+                                    Save
+                                  </button>
+                                  <button
+                                    onClick={() => { setAssigningTo(null); setNewProjectNum(''); }}
+                                    className="px-2 py-1 bg-surface-container border border-outline-variant text-on-surface-variant rounded-lg text-[11px] font-bold cursor-pointer"
+                                  >
+                                    Cancel
+                                  </button>
+                                </div>
+                              ) : (
+                                <button
+                                  onClick={() => { setAssigningTo(u.username); setNewProjectNum(pNum ? String(pNum) : ''); }}
+                                  className="px-3 py-1 border border-outline-variant text-on-surface-variant hover:text-primary hover:border-primary rounded-lg text-[11px] font-bold cursor-pointer transition-colors flex items-center gap-1 ml-auto"
+                                >
+                                  <span className="material-symbols-outlined text-[13px]">swap_horiz</span>
+                                  Reassign
+                                </button>
+                              )}
+                            </td>
+                          </tr>
+                        );
+                      })}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+
+              {/* Cover Sheet Checklist Info */}
+              <CoverSheetSection />
+            </>
+          ) : (
+            // ─── ADMIN'S SELF PREVIEW PREVIEW ───
+            <div className="space-y-6">
+              <div className="bg-surface-container-lowest border border-outline-variant rounded-2xl p-6 shadow-sm">
+                <h2 className="font-bold text-on-surface text-title-md mb-2 flex items-center gap-2">
+                  <span className="material-symbols-outlined text-primary">design_services</span>
+                  Layout & Idea Verification Panel
+                </h2>
+                <p className="text-caption text-on-surface-variant mb-4 leading-relaxed">
+                  Choose any of the 13 project ideas below to immediately assign it to your admin account. This allows you to inspect the layout structure, details, icons, and specifications.
+                </p>
+                <div className="flex flex-col sm:flex-row gap-4 items-start sm:items-center">
+                  <select
+                    value={result?.projectNumber || ''}
+                    onChange={e => handleAdminSelfAssign(e.target.value)}
+                    className="px-3 py-2.5 bg-surface-container border border-outline-variant rounded-xl text-on-surface text-body-sm focus:outline-none focus:border-primary font-semibold w-full sm:w-80"
+                  >
+                    <option value="">— Select project to inspect —</option>
+                    {PROJECTS_LIST.map(p => (
+                      <option key={p.id} value={p.id}>
+                        Project #{p.id}: {p.title}
+                      </option>
+                    ))}
+                  </select>
+                  {project && (
+                    <div className="flex items-center gap-2 px-4 py-2 bg-emerald-500/10 text-emerald-700 dark:text-emerald-400 border border-emerald-500/20 rounded-xl font-bold text-caption">
+                      <span className="material-symbols-outlined text-lg" style={{ fontVariationSettings: "'FILL' 1" }}>check_circle</span>
+                      Previewing Project {project.id} layout
+                    </div>
+                  )}
+                </div>
+              </div>
+
+              {project ? (
+                <>
+                  <ProjectCard project={project} gradient={PROJECT_GRADIENTS[project.id]} isAdmin={true} />
+                  <CoverSheetSection />
+                </>
+              ) : (
+                <div className="bg-surface-container-lowest border border-outline-variant rounded-2xl p-8 text-center text-on-surface-variant shadow-sm">
+                  <span className="material-symbols-outlined text-4xl text-outline mb-3 block">preview</span>
+                  <p className="font-bold text-on-surface">No project selected for preview.</p>
+                  <p className="text-caption mt-1">Select one of the 13 projects from the dropdown menu above to test its display.</p>
                 </div>
               )}
             </div>
-          </div>
-
-          {/* Project details for selected student */}
-          {selectedUser && project && (
-            <ProjectCard project={project} gradient={gradient} isAdmin={true} />
           )}
-          {selectedUser && result?.success && !project && (
-            <div className="bg-surface-container-lowest border border-outline-variant rounded-2xl p-8 text-center text-on-surface-variant shadow-sm">
-              <span className="material-symbols-outlined text-4xl text-outline mb-3 block">assignment_late</span>
-              <p className="font-bold text-on-surface">No project assigned to this student yet.</p>
-              <p className="text-caption mt-1">Use the reassign button in the table below, or click Auto-Assign.</p>
-            </div>
-          )}
-
-          {/* Students Table */}
-          <div className="bg-surface-container-lowest border border-outline-variant rounded-2xl overflow-hidden shadow-sm">
-            <div className="overflow-x-auto">
-              <table className="w-full border-collapse text-left">
-                <thead>
-                  <tr className="bg-surface-container-low text-on-surface-variant border-b border-outline-variant text-caption font-bold uppercase">
-                    <th className="py-3 px-5">#</th>
-                    <th className="py-3 px-5">Student</th>
-                    <th className="py-3 px-5">Assigned Project</th>
-                    <th className="py-3 px-5">Project Name</th>
-                    <th className="py-3 px-5 text-right">Reassign</th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-outline-variant/50 text-caption font-semibold">
-                  {allUsers.length === 0 && (
-                    <tr>
-                      <td colSpan="5" className="py-8 text-center text-on-surface-variant italic">
-                        No student accounts found.
-                      </td>
-                    </tr>
-                  )}
-                  {allUsers.map((u, i) => {
-                    const pNum = u.settings?.assignedProject ?? null;
-                    const pInfo = pNum ? PROJECTS_LIST.find(p => p.id === pNum) : null;
-                    const isReassigning = assigningTo === u.username;
-                    return (
-                      <tr key={u.username} className="hover:bg-surface-container transition-colors align-middle">
-                        <td className="py-3 px-5 text-on-surface-variant">{i + 1}</td>
-                        <td className="py-3 px-5">
-                          <div className="flex items-center gap-3">
-                            <div className="w-8 h-8 rounded-full bg-primary/10 text-primary flex items-center justify-center font-black text-xs shrink-0">
-                              {u.username[0].toUpperCase()}
-                            </div>
-                            <span className="font-bold text-on-surface">{u.username}</span>
-                          </div>
-                        </td>
-                        <td className="py-3 px-5">
-                          {pNum ? (
-                            <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-primary/10 text-primary font-black text-[11px]">
-                              <span className="material-symbols-outlined text-[14px]">tag</span>
-                              Project {pNum}
-                            </span>
-                          ) : (
-                            <span className="text-outline italic text-[11px]">Unassigned</span>
-                          )}
-                        </td>
-                        <td className="py-3 px-5 text-on-surface max-w-[240px]">
-                          {pInfo ? (
-                            <span className="flex items-center gap-1.5">
-                              <span className="material-symbols-outlined text-[14px] text-primary" style={{ fontVariationSettings: "'FILL' 1" }}>{pInfo.icon}</span>
-                              <span className="truncate">{pInfo.title}</span>
-                            </span>
-                          ) : (
-                            <span className="text-outline italic">—</span>
-                          )}
-                        </td>
-                        <td className="py-3 px-5 text-right">
-                          {isReassigning ? (
-                            <div className="flex items-center gap-2 justify-end">
-                              <select
-                                value={newProjectNum}
-                                onChange={e => setNewProjectNum(e.target.value)}
-                                className="px-2 py-1 bg-surface-container border border-outline-variant rounded-lg text-on-surface text-[11px] font-semibold focus:outline-none focus:border-primary"
-                              >
-                                <option value="">Pick project…</option>
-                                {PROJECTS_LIST.map(p => (
-                                  <option key={p.id} value={p.id}>
-                                    #{p.id} — {p.title.length > 28 ? p.title.slice(0, 28) + '…' : p.title}
-                                  </option>
-                                ))}
-                              </select>
-                              <button
-                                onClick={() => handleAssign(u.username)}
-                                disabled={!newProjectNum}
-                                className="px-2 py-1 bg-primary text-on-primary rounded-lg text-[11px] font-bold cursor-pointer disabled:opacity-50"
-                              >
-                                Save
-                              </button>
-                              <button
-                                onClick={() => { setAssigningTo(null); setNewProjectNum(''); }}
-                                className="px-2 py-1 bg-surface-container border border-outline-variant text-on-surface-variant rounded-lg text-[11px] font-bold cursor-pointer"
-                              >
-                                Cancel
-                              </button>
-                            </div>
-                          ) : (
-                            <button
-                              onClick={() => { setAssigningTo(u.username); setNewProjectNum(pNum ? String(pNum) : ''); }}
-                              className="px-3 py-1 border border-outline-variant text-on-surface-variant hover:text-primary hover:border-primary rounded-lg text-[11px] font-bold cursor-pointer transition-colors flex items-center gap-1 ml-auto"
-                            >
-                              <span className="material-symbols-outlined text-[13px]">swap_horiz</span>
-                              Reassign
-                            </button>
-                          )}
-                        </td>
-                      </tr>
-                    );
-                  })}
-                </tbody>
-              </table>
-            </div>
-          </div>
-
-          {/* Cover Sheet Checklist Info */}
-          <CoverSheetSection />
         </main>
       </div>
     );
