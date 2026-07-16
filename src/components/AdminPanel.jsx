@@ -352,7 +352,7 @@ export default function AdminPanel({ user, schedule, onScheduleUpdate }) {
                     placeholder="At least 6 characters"
                     value={adminPassword}
                     onChange={e => setAdminPassword(e.target.value)}
-                    className="w-full max-w-xs px-3 py-2 bg-surface-container border border-outline-variant rounded-xl text-on-surface text-body-sm focus:outline-none focus:border-primary transition-all font-semibold"
+                    className="w-full max-w-[240px] px-3 py-2 bg-surface-container border border-outline-variant rounded-xl text-on-surface text-body-sm focus:outline-none focus:border-primary transition-all font-semibold"
                   />
                 </div>
 
@@ -812,7 +812,7 @@ export default function AdminPanel({ user, schedule, onScheduleUpdate }) {
                               Repository
                             </a>
                           </td>
-                          <td className="py-4 px-6 text-on-surface-variant max-w-xs whitespace-pre-wrap select-text leading-relaxed font-semibold">
+                          <td className="py-4 px-6 text-on-surface-variant max-w-[240px] whitespace-pre-wrap select-text leading-relaxed font-semibold">
                             {sub.notes || <span className="italic text-outline">No notes provided.</span>}
                           </td>
                         </tr>

@@ -231,7 +231,7 @@ export default function ProjectView({ user }) {
                             <span className="text-outline italic text-[11px]">Unassigned</span>
                           )}
                         </td>
-                        <td className="py-3 px-5 text-on-surface max-w-xs">
+                        <td className="py-3 px-5 text-on-surface max-w-[240px]">
                           {pInfo ? (
                             <span className="flex items-center gap-1.5">
                               <span className="material-symbols-outlined text-[14px] text-primary" style={{ fontVariationSettings: "'FILL' 1" }}>{pInfo.icon}</span>
@@ -329,13 +329,13 @@ export default function ProjectView({ user }) {
             <h1 className="text-2xl font-black text-white mb-3 relative">
               Your Final Project is Locked
             </h1>
-            <p className="text-slate-300 text-sm leading-relaxed relative max-w-md mx-auto mb-8">
+            <p className="text-slate-300 text-sm leading-relaxed relative max-w-[480px] mx-auto mb-8">
               Complete <strong className="text-white">all course videos</strong> to unlock your randomly assigned final project.
               Keep studying — you're almost there!
             </p>
 
             {/* Progress ring area */}
-            <div className="relative bg-white/5 border border-white/10 rounded-2xl p-6 backdrop-blur-sm mx-auto max-w-sm">
+            <div className="relative bg-white/5 border border-white/10 rounded-2xl p-6 backdrop-blur-sm mx-auto max-w-[380px]">
               <div className="flex items-center justify-between mb-3">
                 <span className="text-slate-300 text-sm font-bold">Videos Watched</span>
                 <span className="text-indigo-300 font-black text-lg">{videosCompleted} / {totalVideos}</span>
@@ -379,9 +379,6 @@ export default function ProjectView({ user }) {
             </p>
           </div>
 
-          {/* Cover sheet info */}
-          <div className="mt-6">
-            <CoverSheetSection />
           </div>
         </main>
       </div>
