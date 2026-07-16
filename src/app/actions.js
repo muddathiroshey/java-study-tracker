@@ -619,7 +619,10 @@ export async function getProjectAssignmentAction(targetUsername = null) {
   const videosCompleted = completedVideoKeys.length;
   const allDone = videosCompleted >= totalVideos;
 
-  if (!allDone) {
+  // Manual unlock bypass by Admin
+  const isUnlockedByAdmin = subject.settings?.projectUnlocked === true;
+
+  if (!allDone && !isUnlockedByAdmin) {
     return {
       success: true,
       locked: true,
@@ -687,3 +690,40 @@ export async function bulkAssignProjectsAction() {
 
   return { success: true, assignedCount };
 }
+
+/**
+ * Admin-only: Toggle project unlock status for 'مدثر' and 'محمد هاشم' only.
+ */
+export async function toggleProjectUnlockAction(targetUsername) {
+  const cookieStore = await cookies();
+  const session = cookieStore.get(SESSION_COOKIE_NAME);
+  if (!session?.value) return { success: false, error: 'Not authenticated' };
+
+  const caller = await dbGetUserByUsernameOrEmail(session.value);
+  if (!caller?.isAdmin) return { success: false, error: 'Admin access required' };
+
+  const allowedUsernames = ['مدثر', 'محمد هاشم'];
+  if (!allowedUsernames.includes(targetUsername)) {
+    return { success: false, error: 'Manual unlocking is not permitted for this user' };
+  }
+
+  const target = await dbGetUserByUsernameOrEmail(targetUsername);
+  if (!target) return { success: false, error: 'User not found' };
+
+  const currentUnlocked = target.settings?.projectUnlocked === true;
+  const updatedSettings = { ...target.settings, projectUnlocked: !currentUnlocked };
+
+  const updated = await dbUpdateUserProgress(
+    target.username,
+    target.lessonsProgress,
+    target.tasksProgress,
+    target.submissions,
+    updatedSettings,
+    target.streak,
+    target.lastActiveDate
+  );
+
+  if (!updated) return { success: false, error: 'Failed to toggle project unlock' };
+  return { success: true, user: updated };
+}
+

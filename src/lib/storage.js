@@ -19,7 +19,8 @@ import {
   deleteUserAccountAction,
   getProjectAssignmentAction,
   assignProjectAction,
-  bulkAssignProjectsAction
+  bulkAssignProjectsAction,
+  toggleProjectUnlockAction
 } from '../app/actions';
 
 export async function getDB() {
@@ -190,4 +191,9 @@ export async function assignProject(username, projectNumber) {
 /** Admin-only: bulk-assign random projects to all unassigned users. */
 export async function bulkAssignProjects() {
   return await bulkAssignProjectsAction();
+}
+
+/** Admin-only: toggle project unlock state for 'مدثر' or 'محمد هاشم' */
+export async function toggleProjectUnlock(username) {
+  return await toggleProjectUnlockAction(username);
 }

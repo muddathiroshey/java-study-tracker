@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect, useRef, useCallback } from 'react';
+import { useRouter } from 'next/navigation';
 import { useApp } from '../context/AppContext';
 import { getLocalDateString, getLocalISOString } from '../lib/dateUtils';
 
@@ -63,6 +64,7 @@ export default function DailyLessons({
   onSelectDay,
   searchQuery = ''
 }) {
+  const router = useRouter();
   const { globalConfig } = useApp();
   const current = new Date(currentDate);
   const [expandedWeeks, setExpandedWeeks] = useState(() => {
@@ -712,6 +714,7 @@ export default function DailyLessons({
                         // Find first non-off project day for description & click target
                         const firstProjectDay = blockDays.find(d => d.type === 'project') || firstDay;
                         const description = firstProjectDay.task?.description || 'Build and submit your multi-day OOP project.';
+                        const isCapstoneCard = blockBi.projectTitle === "Final Capstone Project";
 
                         return (
                           <div key={`block-${firstDay.day}`} id={`day-${firstDay.day}`} className="relative flex gap-lg group">
@@ -758,14 +761,20 @@ export default function DailyLessons({
                             {/* Right: ONE card */}
                             <div className="flex-grow pb-4 min-w-0 flex flex-col">
                               <div
-                                onClick={() => onSelectDay(firstProjectDay.day)}
+                                onClick={() => {
+                                  if (isCapstoneCard) {
+                                    router.push('/project');
+                                  } else {
+                                    onSelectDay(firstProjectDay.day);
+                                  }
+                                }}
                                 className="glass-card p-lg rounded-2xl border border-outline-variant/50 bg-primary/[0.01] cursor-pointer hover:bg-surface-container-low hover:-translate-y-0.5 transition-all duration-200 flex flex-col gap-sm flex-1"
                               >
                                 {/* Badge + title */}
                                 <div className="flex items-start justify-between gap-4">
                                   <div>
                                     <span className="text-[10px] font-bold uppercase tracking-wider text-primary bg-primary/10 px-2.5 py-1 rounded-full">
-                                      Multi-Day Project
+                                      {isCapstoneCard ? 'Multi-Day Project (reveals assignment)' : 'Multi-Day Project'}
                                     </span>
                                     <h3 className="text-body-md font-bold text-on-surface mt-2">
                                       {blockBi.projectTitle}
@@ -778,25 +787,27 @@ export default function DailyLessons({
                                   )}
                                 </div>
 
-                                {/* Goal & Topics panels */}
-                                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-1">
-                                  <div className="rounded-xl border-l-[3px] border-primary/40 bg-surface-container-lowest/60 px-4 py-3">
-                                    <p className="text-[10px] font-bold uppercase tracking-wider text-primary/80 mb-1.5 flex items-center gap-1">
-                                      <span className="text-[13px]">🎯</span> Goal
-                                    </p>
-                                    <p className="text-caption text-on-surface-variant leading-relaxed">
-                                      {blockBi.goal || description}
-                                    </p>
+                                {/* Goal & Topics panels (Only show for mini-projects, hide for Capstone) */}
+                                {!isCapstoneCard && (
+                                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-1">
+                                    <div className="rounded-xl border-l-[3px] border-primary/40 bg-surface-container-lowest/60 px-4 py-3">
+                                      <p className="text-[10px] font-bold uppercase tracking-wider text-primary/80 mb-1.5 flex items-center gap-1">
+                                        <span className="text-[13px]">🎯</span> Goal
+                                      </p>
+                                      <p className="text-caption text-on-surface-variant leading-relaxed">
+                                        {blockBi.goal || description}
+                                      </p>
+                                    </div>
+                                    <div className="rounded-xl border-l-[3px] border-tertiary/40 bg-surface-container-lowest/60 px-4 py-3">
+                                      <p className="text-[10px] font-bold uppercase tracking-wider text-tertiary/80 mb-1.5 flex items-center gap-1">
+                                        <span className="text-[13px]">📚</span> Topics Covered
+                                      </p>
+                                      <p className="text-caption text-on-surface-variant leading-relaxed">
+                                        {blockBi.topics || 'Core OOP concepts and Java fundamentals'}
+                                      </p>
+                                    </div>
                                   </div>
-                                  <div className="rounded-xl border-l-[3px] border-tertiary/40 bg-surface-container-lowest/60 px-4 py-3">
-                                    <p className="text-[10px] font-bold uppercase tracking-wider text-tertiary/80 mb-1.5 flex items-center gap-1">
-                                      <span className="text-[13px]">📚</span> Topics Covered
-                                    </p>
-                                    <p className="text-caption text-on-surface-variant leading-relaxed">
-                                      {blockBi.topics || 'Core OOP concepts and Java fundamentals'}
-                                    </p>
-                                  </div>
-                                </div>
+                                )}
                               </div>
                             </div>
                           </div>

@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { PROJECTS_LIST, COVER_SHEET_CHECKLIST, COVER_SHEET_NOTES, TOTAL_POINTS } from '../lib/projectsData';
-import { getProjectAssignment, assignProject, bulkAssignProjects, getDB } from '../lib/storage';
+import { getProjectAssignment, assignProject, bulkAssignProjects, getDB, toggleProjectUnlock } from '../lib/storage';
 
 // ── Gradient palettes per project ID (1-13) ──────────────────────────────────
 const PROJECT_GRADIENTS = {
@@ -99,6 +99,14 @@ export default function ProjectView({ user }) {
     const res = await assignProject(user.username, parseInt(projectNum));
     if (res.success) {
       setRefreshTrigger(prev => prev + 1);
+    }
+  };
+
+  const handleToggleUnlock = async (username) => {
+    const res = await toggleProjectUnlock(username);
+    if (res.success) {
+      const db = await getDB();
+      setAllUsers(db.users.filter(u => !u.isAdmin));
     }
   };
 
@@ -240,6 +248,7 @@ export default function ProjectView({ user }) {
                         <th className="py-3 px-5">Student</th>
                         <th className="py-3 px-5">Assigned Project</th>
                         <th className="py-3 px-5">Project Name</th>
+                        <th className="py-3 px-5 text-center">Manual Unlock</th>
                         <th className="py-3 px-5 text-right">Reassign</th>
                       </tr>
                     </thead>
@@ -284,6 +293,25 @@ export default function ProjectView({ user }) {
                                 </span>
                               ) : (
                                 <span className="text-outline italic">—</span>
+                              )}
+                            </td>
+                            <td className="py-3 px-5 text-center">
+                              {['مدثر', 'محمد هاشم'].includes(u.username) ? (
+                                <button
+                                  onClick={() => handleToggleUnlock(u.username)}
+                                  className={`px-3 py-1.5 rounded-xl text-[10px] font-black cursor-pointer border transition-all flex items-center gap-1 mx-auto ${
+                                    u.settings?.projectUnlocked
+                                      ? 'bg-emerald-500/15 border-emerald-500/30 text-emerald-600 dark:text-emerald-400'
+                                      : 'bg-outline-variant/10 border-outline-variant/20 text-on-surface-variant'
+                                  }`}
+                                >
+                                  <span className="material-symbols-outlined text-[13px]">
+                                    {u.settings?.projectUnlocked ? 'lock_open' : 'lock'}
+                                  </span>
+                                  {u.settings?.projectUnlocked ? 'Unlocked' : 'Locked'}
+                                </button>
+                              ) : (
+                                <span className="text-[10px] text-outline italic">Auto-Lock Only</span>
                               )}
                             </td>
                             <td className="py-3 px-5 text-right">
